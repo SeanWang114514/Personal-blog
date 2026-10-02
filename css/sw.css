@@ -473,10 +473,14 @@ h6 {
   border-bottom: 1px solid var(--separator);
 }
 
+/* 浅色主题下的吸顶导航用一层极轻的毛玻璃，这是 macOS 工具栏的常规做法
+   （也见于参考的 GitCloud 项目）。这里是有意保留的唯一一处模糊效果：
+   内容从下面穿过时能看出层级，又不会像深色玻璃拟态那样抢戏。
+   深色主题下顶栏是纯色，不做任何模糊。 */
 html[data-theme="light"] .topbar {
-  background: rgba(255, 255, 255, 0.86);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: saturate(160%) blur(12px);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
 }
 
 .topbar__inner {
