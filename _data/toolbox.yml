@@ -1,0 +1,154 @@
+# ============================================================================
+#  工具箱 —— 驱动 /toolbox/ 页面
+#  纯外链导航，本地不引入任何脚本，打开即跳转。
+# ============================================================================
+
+- key: dev
+  title: 开发 & 代码
+  icon: code
+  desc: 写代码时最常打开的站点
+  items:
+    - name: GitHub
+      url: https://github.com
+      desc: 代码托管与协作
+    - name: Stack Overflow
+      url: https://stackoverflow.com
+      desc: 提问与查错
+    - name: MDN Web Docs
+      url: https://developer.mozilla.org
+      desc: Web 平台权威文档
+    - name: Can I use
+      url: https://caniuse.com
+      desc: 浏览器兼容性查询
+    - name: RegExr
+      url: https://regexr.com
+      desc: 在线正则调试
+    - name: Carbon
+      url: https://carbon.now.sh
+      desc: 代码截图美化
+    - name: JSON Crack
+      url: https://jsoncrack.com
+      desc: JSON 可视化
+    - name: CodePen
+      url: https://codepen.io
+      desc: 前端在线试验场
+
+- key: ai
+  title: AI 与大模型
+  icon: zap
+  desc: 日常调用的模型与工具
+  items:
+    - name: DeepSeek
+      url: https://chat.deepseek.com
+      desc: 主力对话模型
+    - name: Claude
+      url: https://claude.ai
+      desc: 长文本与代码
+    - name: ChatGPT
+      url: https://chat.openai.com
+      desc: 通用助手
+    - name: Kimi
+      url: https://kimi.moonshot.cn
+      desc: 长文档阅读
+    - name: Hugging Face
+      url: https://huggingface.co
+      desc: 模型与数据集
+    - name: Ollama
+      url: https://ollama.com
+      desc: 本地跑大模型
+
+- key: design
+  title: 设计 & 素材
+  icon: pen
+  desc: 找配色、图标与灵感
+  items:
+    - name: Figma
+      url: https://figma.com
+      desc: 协作设计
+    - name: Coolors
+      url: https://coolors.co
+      desc: 配色方案生成
+    - name: Lucide Icons
+      url: https://lucide.dev
+      desc: 开源矢量图标
+    - name: unDraw
+      url: https://undraw.co
+      desc: 免费插画
+    - name: Google Fonts
+      url: https://fonts.google.com
+      desc: 免费字体
+    - name: Haikei
+      url: https://haikei.app
+      desc: 生成 SVG 背景
+
+- key: media
+  title: 影音 & 图像
+  icon: image
+  desc: 处理图片、音频与视频
+  items:
+    - name: Squoosh
+      url: https://squoosh.app
+      desc: 图片压缩（本地）
+    - name: TinyPNG
+      url: https://tinypng.com
+      desc: PNG / JPG 压缩
+    - name: remove.bg
+      url: https://remove.bg
+      desc: 一键抠图
+    - name: Photopea
+      url: https://photopea.com
+      desc: 网页版 PS
+    - name: CloudConvert
+      url: https://cloudconvert.com
+      desc: 格式转换
+    - name: Excalidraw
+      url: https://excalidraw.com
+      desc: 手绘风白板
+
+- key: ops
+  title: 运维 & 网络
+  icon: shield
+  desc: 排查问题与网络诊断
+  items:
+    - name: IT Dog
+      url: https://www.itdog.cn
+      desc: 全国 Ping / 测速
+    - name: Ping.pe
+      url: https://ping.pe
+      desc: 全球线路检测
+    - name: crt.sh
+      url: https://crt.sh
+      desc: 证书透明度查询
+    - name: DNSChecker
+      url: https://dnschecker.org
+      desc: 全球 DNS 解析
+    - name: SSL Labs
+      url: https://www.ssllabs.com/ssltest/
+      desc: TLS 配置评级
+    - name: Regex101
+      url: https://regex101.com
+      desc: 正则解释器
+
+- key: life
+  title: 生活 & 效率
+  icon: coffee
+  desc: 与写代码无关但很常用
+  items:
+    - name: 什么值得买
+      url: https://www.smzdm.com
+      desc: 比价与爆料
+    - name: 少数派
+      url: https://sspai.com
+      desc: 效率工具内容
+    - name: AlternativeTo
+      url: https://alternativeto.net
+      desc: 找软件替代品
+    - name: DeepL
+      url: https://deepl.com
+      desc: 高质量翻译
+    - name: 一起听歌吧
+      url: https://music.alang.run
+      desc: 同步听歌
+    - name: 时间戳转换
+      url: https://tool.lu/timestamp/
+      desc: Unix 时间戳

@@ -1,0 +1,109 @@
+---
+layout: default
+hero: false
+nav: bookmarks
+title: 收藏夹
+description: "长期沉淀的学习资料、文档与阅读源"
+permalink: /bookmarks/
+---
+
+{%- assign groups = site.data.bookmarks -%}
+{%- assign total = 0 -%}
+{%- for g in groups -%}{%- assign total = total | plus: g.items.size -%}{%- endfor -%}
+
+<section class="hero hero--compact">
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero__inner">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-bookmark"></use></svg>
+        Bookmarks
+      </span>
+      <h1 class="hero__title">收藏夹</h1>
+      <p class="hero__sub">
+        {{ total }} 个值得回看的站点，分 {{ groups | size }} 类。
+        和工具箱的区别是：这里的更偏「沉淀」，不是每天都要开。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap section-tight">
+
+  {%- comment -%} 搜索 {%- endcomment -%}
+  <div class="controls" data-filter-group data-filter-target=".friend-grid-wrap"
+    data-filter-search="#sw-bm-search" data-filter-empty="#sw-bm-empty">
+    <div class="controls__search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true"><use href="#i-search"></use></svg>
+      <label class="sr-only" for="sw-bm-search">搜索收藏</label>
+      <input id="sw-bm-search" type="search" placeholder="搜索站点名称或用途…" autocomplete="off">
+    </div>
+    <div class="chips" role="group" aria-label="只看收藏">
+      <button class="chip" type="button" data-pins-only aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-star"></use></svg>
+        只看收藏
+      </button>
+    </div>
+  </div>
+
+  <div class="friend-grid-wrap">
+    {% for g in groups %}
+    <section class="section-tight" aria-labelledby="bm-{{ g.key }}">
+      <div class="sec-head" data-reveal>
+        <div>
+          <h2 class="sec-head__title"
+            id="bm-{{ g.key }}" style="font-size:var(--t-xl);display:flex;align-items:center;gap:10px">
+            <span class="card__icon" style="width:34px;height:34px;border-radius:var(--r-sm)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true"><use href="#i-{{ g.icon }}"></use></svg>
+            </span>
+            {{ g.title }}
+          </h2>
+          <p class="sec-head__desc">{{ g.desc }}</p>
+        </div>
+      </div>
+
+      <div class="friend-grid">
+        {% for item in g.items %}
+        <div class="friend-card" data-cat="{{ g.key }}"
+          data-search="{{ item.name | escape }} {{ item.desc | escape }}"
+          data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 3 | times: 50 }}">
+
+          <span class="tool-tile__icon" style="width:44px;height:44px;border-radius:var(--r-sm)" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round"><use href="#i-link"></use></svg>
+          </span>
+
+          <div style="flex:1;min-width:0">
+            <a class="friend-card__name" href="{{ item.url }}" rel="noopener noreferrer"
+              style="display:block;color:var(--text)">{{ item.name }}</a>
+            <div class="friend-card__desc">{{ item.desc }}</div>
+          </div>
+
+          <button class="share-btn" type="button" data-pin="bm-{{ g.key }}-{{ forloop.index }}"
+            aria-label="收藏" style="width:32px;height:32px;flex-shrink:0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+              stroke-linejoin="round" style="width:15px;height:15px" aria-hidden="true">
+              <use href="#i-star"></use>
+            </svg>
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endfor %}
+  </div>
+
+  <div class="empty hidden" id="sw-bm-empty">
+    <div class="empty__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true"><use href="#i-bookmark"></use></svg>
+    </div>
+    <p class="empty__title">没有匹配的收藏</p>
+    <p class="empty__desc">换个关键词，或者关掉「只看收藏」。</p>
+  </div>
+
+</div>

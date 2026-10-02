@@ -1,0 +1,24 @@
+{
+  "name": "Sean Wang Blog",
+  "short_name": "Sean Wang",
+  "description": "Sean Wang 的个人站点 —— 博客、软件、工具与折腾记录",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "icons/128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "background_color": "#080b14",
+  "theme_color": "#0b0f19",
+  "start_url": "/Personal-blog/",
+  "scope": "/Personal-blog/",
+  "display": "standalone",
+  "orientation": "any"
+}

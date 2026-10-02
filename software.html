@@ -1,0 +1,213 @@
+---
+layout: default
+hero: false
+nav: software
+title: 软件
+description: "自研工具合集 —— 离线优先、开源、可直接下载"
+permalink: /software/
+---
+
+{%- assign all_soft = site.data.software -%}
+
+<section class="hero hero--compact">
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero__inner">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-box"></use></svg>
+        Software
+      </span>
+      <h1 class="hero__title">软件合集</h1>
+      <p class="hero__sub">
+        一共 {{ all_soft | size }} 款自研工具，全部开源。
+        共同点是离线优先 —— 不联网也能用，数据留在本机。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap section-tight">
+
+  <div class="notice mb-8" data-reveal>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+      aria-hidden="true"><use href="#i-info"></use></svg>
+    <div>
+      <strong>下载提示：</strong>所有安装包都直链 GitHub Releases，版本可追溯。
+      如果下载缓慢，可以到 <a href="{{ '/drive/' | relative_url }}">云盘页</a> 找不限速的镜像渠道。
+    </div>
+  </div>
+
+  {%- comment -%} 筛选 {%- endcomment -%}
+  <div class="controls" data-filter-group data-filter-target="#sw-soft-grid"
+    data-filter-search="#sw-soft-search" data-filter-empty="#sw-soft-empty">
+    <div class="controls__search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true"><use href="#i-search"></use></svg>
+      <label class="sr-only" for="sw-soft-search">搜索软件</label>
+      <input id="sw-soft-search" type="search" placeholder="搜索软件名称或功能…" autocomplete="off">
+    </div>
+
+    <div class="chips" role="group" aria-label="按分类筛选">
+      <button class="chip is-active" type="button" data-filter="all" aria-pressed="true">全部</button>
+      <button class="chip" type="button" data-filter="desktop" aria-pressed="false">桌面端</button>
+      <button class="chip" type="button" data-filter="web" aria-pressed="false">网页工具</button>
+      <button class="chip" type="button" data-filter="ai" aria-pressed="false">AI</button>
+      <button class="chip" type="button" data-filter="dev" aria-pressed="false">开发</button>
+    </div>
+  </div>
+
+  {%- comment -%} 软件卡片网格 {%- endcomment -%}
+  <div class="grid grid-3" id="sw-soft-grid">
+    {% for soft in all_soft %}
+    <article class="soft-card" data-cat="{{ soft.category }}"
+      data-search="{{ soft.name | escape }} {{ soft.tagline | escape }} {{ soft.desc | escape }} {{ soft.tags | join: ' ' | escape }}"
+      data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 3 | times: 70 }}">
+
+      <div class="soft-card__top">
+        <div class="soft-card__logo {{ soft.logoClass }}" aria-hidden="true">{{ soft.logo }}</div>
+        <div class="soft-card__head">
+          <h2 class="soft-card__name">{{ soft.name }}</h2>
+          <p class="soft-card__pub">{{ soft.platform }} · v{{ soft.version }}</p>
+        </div>
+      </div>
+
+      <p class="soft-card__desc">{{ soft.desc }}</p>
+
+      <div class="soft-card__tags" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:16px">
+        {% for tag in soft.tags limit: 4 %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+
+      <div class="soft-card__specs">
+        <span class="soft-card__spec" title="体积">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-hard-drive"></use></svg>
+          {{ soft.size }}
+        </span>
+        <span class="soft-card__spec" title="技术栈">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-code"></use></svg>
+          {{ soft.lang }}
+        </span>
+        {% if soft.license %}
+        <span class="soft-card__spec" title="授权">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-shield"></use></svg>
+          {{ soft.license }}
+        </span>
+        {% endif %}
+      </div>
+
+      <div class="soft-card__actions">
+        <a class="btn btn--primary btn--sm" href="{{ '/download/' | relative_url }}#{{ soft.slug }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
+          下载
+        </a>
+        {% if soft.postTitle %}
+        {%- capture _posturl %}{% include post-url.html title=soft.postTitle %}{% endcapture -%}
+        {% if _posturl != "" %}
+        <a class="btn btn--ghost btn--sm" href="{{ _posturl | strip }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-book"></use></svg>
+          介绍
+        </a>
+        {% endif %}
+        {% endif %}
+        {% if soft.repo %}
+        <a class="btn btn--ghost btn--sm" href="{{ soft.repo }}" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-github"></use></svg>
+          源码
+        </a>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="empty hidden" id="sw-soft-empty">
+    <div class="empty__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true"><use href="#i-box"></use></svg>
+    </div>
+    <p class="empty__title">没有匹配的软件</p>
+    <p class="empty__desc">换个分类或关键词试试。</p>
+  </div>
+
+  {%- comment -%} 功能亮点对比 {%- endcomment -%}
+  <section class="section" aria-labelledby="sec-soft-feat">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-zap"></use></svg>
+          能力速览
+        </span>
+        <h2 class="sec-head__title" id="sec-soft-feat">每款工具解决什么问题</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      {% for soft in all_soft %}
+      {% if soft.highlights %}
+      <div class="card" data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 2 | times: 60 }}">
+        <div class="card__head">
+          <span class="card__icon {{ soft.logoClass }}" style="color:#fff;border:none">{{ soft.logo }}</span>
+          <h3 class="card__title">{{ soft.name }}</h3>
+        </div>
+        <ul class="feature-list">
+          {% for h in soft.highlights %}
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
+            {{ h }}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+
+  {%- comment -%} 版本矩阵 {%- endcomment -%}
+  <section class="section" aria-labelledby="sec-soft-matrix">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-sliders"></use></svg>
+          版本一览
+        </span>
+        <h2 class="sec-head__title" id="sec-soft-matrix">全部软件对照表</h2>
+      </div>
+    </div>
+
+    <table class="matrix" data-reveal>
+      <thead>
+        <tr>
+          <th scope="col">软件</th>
+          <th scope="col">平台</th>
+          <th scope="col">版本</th>
+          <th scope="col">体积</th>
+          <th scope="col">技术栈</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for soft in all_soft %}
+        <tr>
+          <td class="matrix__name">{{ soft.name }}</td>
+          <td>{{ soft.platform }}</td>
+          <td>{{ soft.version }}</td>
+          <td>{{ soft.size }}</td>
+          <td>{{ soft.lang }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+</div>

@@ -1,0 +1,100 @@
+# ============================================================================
+#  收藏夹 —— 驱动 /bookmarks/ 页面
+#  比工具箱更偏「长期沉淀」的一类：教程、文档、参考站点。
+# ============================================================================
+
+- key: learning
+  title: 学习 & 教程
+  icon: book
+  desc: 系统性地补基础
+  items:
+    - name: freeCodeCamp
+      url: https://www.freecodecamp.org
+      desc: 交互式编程课程
+    - name: 菜鸟教程
+      url: https://www.runoob.com
+      desc: 中文速查手册
+    - name: JavaScript.info
+      url: https://javascript.info
+      desc: 现代 JS 教程
+    - name: React 官方文档
+      url: https://react.dev
+      desc: 新版文档与示例
+    - name: Rust 圣经
+      url: https://course.rs
+      desc: 中文 Rust 教程
+    - name: CS 自学指南
+      url: https://csdiy.wiki
+      desc: 计算机自学路线
+
+- key: reference
+  title: 文档 & 参考
+  icon: file
+  desc: 需要精确答案时来这里
+  items:
+    - name: DevDocs
+      url: https://devdocs.io
+      desc: 聚合式 API 文档
+    - name: Python 文档
+      url: https://docs.python.org/zh-cn/3/
+      desc: 官方中文文档
+    - name: Node.js 文档
+      url: https://nodejs.org/docs/latest/api/
+      desc: 官方 API
+    - name: CSS-Tricks
+      url: https://css-tricks.com
+      desc: CSS 技巧合集
+    - name: Web.dev
+      url: https://web.dev
+      desc: 性能与最佳实践
+    - name: RFC 中文
+      url: https://rfc2cn.com
+      desc: 协议中文翻译
+
+- key: tools
+  title: 常用工具站
+  icon: tool
+  desc: 解决具体的小问题
+  items:
+    - name: Tool.lu
+      url: https://tool.lu
+      desc: 在线工具集合
+    - name: CyberChef
+      url: https://gchq.github.io/CyberChef/
+      desc: 编解码瑞士军刀
+    - name: IT Tools
+      url: https://it-tools.tech
+      desc: 开发者在线工具
+    - name: cron 表达式
+      url: https://crontab.guru
+      desc: cron 语法解释
+    - name: Diff Checker
+      url: https://www.diffchecker.com
+      desc: 文本比对
+    - name: Base64
+      url: https://base64.us
+      desc: Base64 编解码
+
+- key: reading
+  title: 阅读 & 社区
+  icon: globe
+  desc: 保持信息输入
+  items:
+    - name: Hacker News
+      url: https://news.ycombinator.com
+      desc: 技术与创业讨论
+    - name: V2EX
+      url: https://www.v2ex.com
+      desc: 中文技术社区
+    - name: 阮一峰周刊
+      url: https://www.ruanyifeng.com/blog/weekly/
+      desc: 每周技术精选
+    - name: GitHub Trending
+      url: https://github.com/trending
+      desc: 每日热门仓库
+    - name: 少数派
+      url: https://sspai.com
+      desc: 效率与生活方式
+    - name: 掘金
+      url: https://juejin.cn
+      desc: 中文前端社区

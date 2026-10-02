@@ -1,0 +1,27 @@
+# Jekyll build output
+_site
+
+# Drafts / archives
+_posts/_draft
+_posts/_archive
+_archive
+
+# Jekyll caches
+.jekyll-cache
+.jekyll-metadata
+
+# Node (unused at runtime, kept for safety)
+node_modules
+
+# Editors
+.vscode
+.idea
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+
+# Logs / scripts
+*.log
+*.sh
+
+# NOTE: Gemfile.lock 必须提交 —— GitHub Actions 的 bundler-cache 依赖它锁定版本。

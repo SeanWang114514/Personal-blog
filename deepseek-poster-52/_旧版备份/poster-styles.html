@@ -1,0 +1,337 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>30+ 海报风格展示 - 自我介绍</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; min-height: 100vh; padding: 20px; }
+    .header { text-align: center; padding: 40px 20px; color: #fff; }
+    .header h1 { font-size: 2.5em; margin-bottom: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .header p { color: #a0a0a0; font-size: 1.1em; }
+    .container { max-width: 1600px; margin: 0 auto; }
+    .style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; padding: 20px 0; }
+    .style-card { background: #16213e; border-radius: 12px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; }
+    .style-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+    .style-preview { height: 200px; padding: 20px; position: relative; overflow: hidden; }
+    .style-info { padding: 15px; }
+    .style-info h4 { color: #fff; font-size: 0.95em; margin-bottom: 5px; }
+    .style-info span { color: #667eea; font-size: 0.8em; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+    .modal.active { display: flex; }
+    .modal-content { background: #1a1a2e; border-radius: 20px; max-width: 1000px; width: 100%; max-height: 95vh; overflow: auto; position: relative; }
+    .modal-close { position: absolute; top: 15px; right: 15px; width: 45px; height: 45px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; cursor: pointer; font-size: 1.5em; color: #fff; z-index: 10; transition: background 0.3s; }
+    .modal-close:hover { background: rgba(255,255,255,0.25); }
+    .poster-container { padding: 40px; }
+    .poster { width: 100%; max-width: 700px; aspect-ratio: 3/4; margin: 0 auto; border-radius: 5px; position: relative; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .poster-content { padding: 40px; height: 100%; display: flex; flex-direction: column; }
+    .poster .name { font-size: 2.5em; margin-bottom: 15px; }
+    .poster .title { font-size: 1.1em; margin-bottom: 25px; opacity: 0.9; }
+    .poster .desc { flex: 1; font-size: 1em; line-height: 1.8; }
+    .poster .tags { margin-top: 25px; display: flex; flex-wrap: wrap; gap: 10px; }
+    .poster .tag { padding: 6px 14px; border-radius: 20px; font-size: 0.85em; }
+    .nav-buttons { display: flex; gap: 10px; padding: 20px 40px; justify-content: center; }
+    .nav-btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; transition: all 0.3s; }
+    .nav-btn.primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+    .nav-btn.secondary { background: rgba(255,255,255,0.1); color: #fff; }
+    .nav-btn:hover { transform: translateY(-2px); }
+
+    /* ========== 30 种海报风格 ========== */
+    
+    /* 1. 瑞士国际主义 */
+    .s-swiss { background: #fafafa; color: #1a1a1a; }
+    .s-swiss .poster-content { background: linear-gradient(135deg, #ff3333 0%, #ff3333 40%, #fafafa 40%); padding: 0; }
+    .s-swiss .poster-content > * { padding: 40px; }
+    .s-swiss .name { font-family: 'Helvetica', Arial, sans-serif; font-weight: 900; letter-spacing: -2px; color: #1a1a1a; }
+    .s-swiss .title { background: #ff3333; color: #fff; display: inline-block; padding: 8px 20px; }
+    .s-swiss .desc { font-size: 0.95em; line-height: 1.6; max-width: 85%; }
+    
+    /* 2. 包豪斯 */
+    .s-bauhaus { background: #e8dcc4; color: #1a1a1a; }
+    .s-bauhaus .poster-content::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 35%; background: #c4463a; }
+    .s-bauhaus .poster-content::after { content: ''; position: absolute; bottom: 0; right: 0; width: 35%; height: 35%; background: #2e5c8a; }
+    .s-bauhaus .poster-content { position: relative; }
+    .s-bauhaus .name { font-family: 'Futura', sans-serif; text-transform: uppercase; letter-spacing: 8px; font-size: 1.8em; }
+    
+    /* 3. 装饰艺术 Art Deco */
+    .s-artdeco { background: linear-gradient(180deg, #1a1a2e 0%, #2d2d44 100%); color: #d4af37; }
+    .s-artdeco .poster-content { border: 3px solid #d4af37; margin: 10px; background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, transparent 100%); }
+    .s-artdeco .name { font-family: 'Broadway', 'Brush Script MT', cursive; font-size: 2.2em; text-align: center; border-bottom: 2px solid #d4af37; padding-bottom: 15px; }
+    .s-artdeco .desc { text-align: center; font-style: italic; }
+    
+    /* 4. 赛博朋克 */
+    .s-cyberpunk { background: #0a0a1a; color: #00ffff; }
+    .s-cyberpunk .poster-content { background: linear-gradient(180deg, rgba(0,255,255,0.05) 0%, transparent 100%); border: 1px solid #00ffff; box-shadow: inset 0 0 30px rgba(0,255,255,0.1); }
+    .s-cyberpunk .name { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 2px 2px 0 #ff00ff; font-size: 2em; }
+    .s-cyberpunk .tag { background: rgba(255,0,255,0.2); border: 1px solid #ff00ff; color: #ff00ff; }
+    
+    /* 5. 极简主义 */
+    .s-minimalist { background: #ffffff; color: #1a1a1a; }
+    .s-minimalist .poster-content { justify-content: center; align-items: center; text-align: center; }
+    .s-minimalist .name { font-size: 3em; font-weight: 300; letter-spacing: 15px; }
+    .s-minimalist .title { font-size: 0.8em; letter-spacing: 5px; text-transform: uppercase; color: #888; }
+    .s-minimalist .desc { max-width: 70%; margin-top: 30px; font-weight: 300; }
+    
+    /* 6. 日本和风 */
+    .s-japanese { background: #f5f0e8; color: #2c2c2c; }
+    .s-japanese .poster-content::before { content: '●'; position: absolute; top: 30px; right: 40px; font-size: 60px; color: #bc3f3f; }
+    .s-japanese .name { font-family: 'Yu Mincho', 'MS Mincho', serif; font-size: 2em; border-left: 4px solid #bc3f3f; padding-left: 20px; writing-mode: vertical-rl; height: 150px; }
+    .s-japanese .desc { writing-mode: vertical-rl; height: 200px; margin-right: 30px; }
+    
+    /* 7. 孟菲斯 */
+    .s-memphis { background: #f7f7f7; color: #333; }
+    .s-memphis .poster-content { background-image: radial-gradient(circle at 30% 20%, #ff6b6b 0%, transparent 15%), radial-gradient(circle at 70% 60%, #4ecdc4 0%, transparent 20%), radial-gradient(circle at 40% 80%, #ffe66d 0%, transparent 12%); }
+    .s-memphis .name { background: #333; color: #fff; display: inline-block; padding: 10px 25px; transform: rotate(-3deg); }
+    .s-memphis .tag { background: #4ecdc4; color: #fff; transform: rotate(2deg); }
+    
+    /* 8. 酸性设计 */
+    .s-acid { background: linear-gradient(135deg, #ccff00 0%, #00ff99 100%); color: #000; }
+    .s-acid .poster-content { font-family: 'Courier New', monospace; }
+    .s-acid .name { font-size: 2.8em; font-weight: 900; text-transform: uppercase; letter-spacing: -3px; -webkit-text-stroke: 2px #000; }
+    .s-acid .tag { background: #000; color: #ccff00; border-radius: 0; }
+    
+    /* 9. 哥特风格 */
+    .s-gothic { background: #1a1a1a; color: #c9c9c9; }
+    .s-gothic .poster-content { background: linear-gradient(180deg, #2a1a1a 0%, #1a1a1a 100%); border: 2px solid #4a1a2a; }
+    .s-gothic .name { font-family: 'Old English Text MT', 'UnifrakturMaguntia', cursive; font-size: 2.2em; color: #8b0000; text-align: center; }
+    .s-gothic .tag { background: #4a1a2a; color: #c9c9c9; border: 1px solid #8b0000; }
+    
+    /* 10. Y2K 千禧 */
+    .s-y2k { background: linear-gradient(180deg, #ff69b4 0%, #9333ea 50%, #00bfff 100%); color: #fff; }
+    .s-y2k .poster-content { backdrop-filter: blur(5px); }
+    .s-y2k .name { font-size: 2.5em; text-shadow: 3px 3px 0 #ff69b4, -3px -3px 0 #00bfff; }
+    .s-y2k .tag { background: rgba(255,255,255,0.3); border-radius: 50px; }
+    
+    /* 11. 蒸汽波 */
+    .s-vaporwave { background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%); color: #fff; }
+    .s-vaporwave .poster-content::before { content: 'VAPOR'; position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 80px; opacity: 0.15; font-family: 'Impact', sans-serif; }
+    .s-vaporwave .name { text-shadow: 4px 4px 0 #ff6b6b, -4px -4px 0 #4ecdc4; font-size: 2.3em; }
+    .s-vaporwave .tag { background: linear-gradient(90deg, #ff6b6b, #4ecdc4); }
+    
+    /* 12. 粗野主义网页 */
+    .s-brutalist { background: #533fc2; color: #000; }
+    .s-brutalist .poster-content { border: 4px solid #000; box-shadow: 8px 8px 0 #000; }
+    .s-brutalist .name { background: #000; color: #fff; padding: 15px 25px; font-family: 'Courier New', monospace; font-size: 1.8em; text-transform: uppercase; }
+    .s-brutalist .tag { background: #000; color: #fff; border-radius: 0; border: 2px solid #fff; }
+    
+    /* 13. 新艺术运动 */
+    .s-artnouveau { background: #e8dcc8; color: #3a3a2a; }
+    .s-artnouveau .poster-content { border: 8px double #5a7a5a; background: radial-gradient(ellipse at center, #e8dcc8 0%, #c8d8b8 100%); }
+    .s-artnouveau .name { font-family: 'Brush Script MT', cursive; font-size: 2.5em; color: #5a7a5a; text-align: center; }
+    .s-artnouveau .desc { font-style: italic; text-align: center; }
+    
+    /* 14. 未来主义 */
+    .s-futurism { background: #0d0d0d; color: #fff; }
+    .s-futurism .poster-content { background: linear-gradient(135deg, rgba(255,100,0,0.2) 0%, rgba(0,100,255,0.2) 100%); clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%); }
+    .s-futurism .name { font-size: 2em; text-transform: uppercase; letter-spacing: 10px; transform: skewX(-10deg); }
+    .s-futurism .tag { background: #ff6600; color: #000; transform: skewX(-10deg); }
+    
+    /* 15. 波普艺术 */
+    .s-popart { background: repeating-linear-gradient(45deg, #ff6b6b, #ff6b6b 20px, #ffd93d 20px, #ffd93d 40px); color: #1a1a1a; }
+    .s-popart .poster-content { background: #fff; border: 4px solid #1a1a1a; box-shadow: 10px 10px 0 rgba(0,0,0,0.2); }
+    .s-popart .name { font-family: 'Impact', sans-serif; font-size: 2.5em; text-transform: uppercase; -webkit-text-stroke: 2px #000; }
+    .s-popart .tag { background: #ff6b6b; color: #fff; border: 2px solid #000; }
+    
+    /* 16. 中国风 */
+    .s-chinese { background: linear-gradient(180deg, #8b1a1a 0%, #c41e3a 100%); color: #f5deb3; }
+    .s-chinese .poster-content { border: 3px solid #f5deb3; background: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\"><rect fill=\"%23c41e3a\" width=\"100\" height=\"100\"/><path d=\"M0 50 L100 50 M50 0 L50 100\" stroke=\"%23f5deb3\" stroke-width=\"0.5\" opacity=\"0.1\"/></svg>'); }
+    .s-chinese .name { font-family: 'KaiTi', 'STKaiti', serif; font-size: 2.5em; text-align: center; writing-mode: vertical-rl; height: 180px; margin: 0 auto; }
+    .s-chinese .desc { writing-mode: vertical-rl; height: 150px; }
+    
+    /* 17. 奶油风 */
+    .s-creamy { background: linear-gradient(135deg, #fdfbf7 0%, #f5ebe0 100%); color: #5c4b4a; }
+    .s-creamy .poster-content { background: rgba(255,255,255,0.5); border-radius: 30px; border: 1px solid rgba(255,255,255,0.8); }
+    .s-creamy .name { font-size: 2.3em; font-weight: 500; color: #8b7355; }
+    .s-creamy .tag { background: #e8dcc8; color: #5c4b4a; border-radius: 20px; }
+    
+    /* 18. 暗黑微光 */
+    .s-darkspark { background: #0a0a0f; color: #e0e0e0; }
+    .s-darkspark .poster-content { background: radial-gradient(circle at 30% 20%, rgba(102,126,234,0.2) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(118,75,162,0.2) 0%, transparent 50%); }
+    .s-darkspark .name { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.5em; }
+    .s-darkspark .tag { background: rgba(102,126,234,0.2); border: 1px solid rgba(102,126,234,0.5); }
+    
+    /* 19. 复古计算机 */
+    .s-retro计算机 { background: #1a1a2e; color: #33ff33; }
+    .s-retro计算机 .poster-content { font-family: 'Courier New', monospace; background: #0f0f1a; border: 2px solid #33ff33; box-shadow: 0 0 20px rgba(51,255,51,0.3); }
+    .s-retro计算机 .name { font-size: 1.8em; text-shadow: 0 0 10px #33ff33; }
+    .s-retro计算机 .desc::before { content: '> '; }
+    .s-retro计算机 .tag { background: #33ff33; color: #000; border-radius: 0; }
+    
+    /* 20. 新拟态 */
+    .s-neumorphism { background: #e0e5ec; color: #4a4a4a; }
+    .s-neumorphism .poster-content { border-radius: 30px; box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff; background: #e0e5ec; }
+    .s-neumorphism .name { font-size: 2.3em; font-weight: 600; }
+    .s-neumorphism .tag { background: #e0e5ec; box-shadow: 5px 5px 15px #bebebe, -5px -5px 15px #ffffff; }
+    
+    /* 21. 拼贴艺术 */
+    .s-collage { background: #fff; color: #1a1a1a; }
+    .s-collage .poster-content { background-image: linear-gradient(90deg, transparent 49%, #ddd 49%, #ddd 51%, transparent 51%), linear-gradient(0deg, transparent 49%, #ddd 49%, #ddd 51%, transparent 51%); background-size: 100px 100px; }
+    .s-collage .name { background: #ff6b6b; color: #fff; display: inline-block; padding: 10px 20px; transform: rotate(-2deg); margin-bottom: 20px; }
+    .s-collage .desc { background: rgba(255,255,255,0.9); padding: 15px; transform: rotate(1deg); }
+    
+    /* 22. 渐变模糊 */
+    .s-gradientblur { background: #000; color: #fff; }
+    .s-gradientblur .poster-content { backdrop-filter: blur(20px); background: linear-gradient(135deg, rgba(255,0,128,0.4) 0%, rgba(128,0,255,0.4) 100%); border-radius: 20px; }
+    .s-gradientblur .name { font-size: 2.5em; text-shadow: 0 0 30px rgba(255,0,128,0.8); }
+    .s-gradientblur .tag { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 50px; }
+    
+    /* 23. 纸艺风格 */
+    .s-paperart { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+    .s-paperart .poster-content { background: #fff; color: #333; box-shadow: 0 5px 10px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.15), 0 20px 30px rgba(0,0,0,0.1); }
+    .s-paperart .name { font-size: 2.3em; font-weight: 700; border-bottom: 5px solid #667eea; display: inline-block; }
+    
+    /* 24. 故障艺术 */
+    .s-glitch { background: #0a0a0a; color: #fff; }
+    .s-glitch .poster-content { position: relative; }
+    .s-glitch .name { font-size: 2.5em; position: relative; text-transform: uppercase; }
+    .s-glitch .name::before { content: attr(data-text); position: absolute; left: 3px; text-shadow: -2px 0 #ff00c1; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim 5s infinite linear alternate-reverse; }
+    .s-glitch .name::after { content: attr(data-text); position: absolute; left: -2px; text-shadow: -2px 0 #00fff9; clip: rect(44px, 450px, 56px, 0); animation: glitch-anim2 5s infinite linear alternate-reverse; }
+    .s-glitch .tag { background: #ff00c1; color: #fff; }
+    
+    /* 25. 自然有机 */
+    .s-organic { background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); color: #1a3a1a; }
+    .s-organic .poster-content { background: rgba(255,255,255,0.9); border-radius: 50% 50% 0 0; margin-top: 50%; }
+    .s-organic .name { font-family: 'Georgia', serif; font-size: 2.2em; color: #2d5a2d; }
+    .s-organic .tag { background: #56ab2f; color: #fff; border-radius: 20px 0 20px 0; }
+    
+    /* 26. 霓虹夜景 */
+    .s-neonnight { background: linear-gradient(180deg, #0c0c1e 0%, #1a1a3e 50%, #2d1b4e 100%); color: #fff; }
+    .s-neonnight .poster-content { border: 2px solid #ff00ff; box-shadow: 0 0 20px #ff00ff, inset 0 0 20px #ff00ff; }
+    .s-neonnight .name { text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff, 0 0 40px #ff00ff; font-size: 2.3em; }
+    .s-neonnight .tag { background: transparent; border: 2px solid #00ffff; color: #00ffff; box-shadow: 0 0 10px #00ffff; }
+    
+    /* 27. 单色摄影 */
+    .s-monochrome { background: #1a1a1a; color: #f0f0f0; }
+    .s-monochrome .poster-content { background: linear-gradient(180deg, #333 0%, #1a1a1a 100%); }
+    .s-monochrome .name { font-size: 2.5em; font-weight: 300; letter-spacing: 8px; }
+    .s-monochrome .desc { opacity: 0.7; font-weight: 300; }
+    .s-monochrome .tag { background: #333; color: #f0f0f0; border-radius: 0; }
+    
+    /* 28. 水彩手绘 */
+    .s-watercolor { background: radial-gradient(circle at 30% 30%, #ffb347 0%, #ffcc33 50%, transparent 100%), linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%); color: #5c4b51; }
+    .s-watercolor .poster-content { background: rgba(255,255,255,0.85); border-radius: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    .s-watercolor .name { font-family: 'Brush Script MT', cursive; font-size: 2.8em; color: #e07a5f; }
+    .s-watercolor .desc { font-style: italic; }
+    
+    /* 29. 工业风 */
+    .s-industrial { background: #2a2a2a; color: #ddd; }
+    .s-industrial .poster-content { background: repeating-linear-gradient(90deg, #3a3a3a 0px, #3a3a3a 2px, transparent 2px, transparent 30px); border: 4px solid #555; }
+    .s-industrial .name { font-family: 'Impact', 'Arial Black', sans-serif; font-size: 2em; text-transform: uppercase; letter-spacing: 5px; color: #ffa500; }
+    .s-industrial .tag { background: #ffa500; color: #000; border-radius: 0; font-weight: 700; }
+    
+    /* 30. 梦幻紫 */
+    .s-dreampurple { background: linear-gradient(180deg, #667eea 0%, #764ba2 50%, #f093fb 100%); color: #fff; }
+    .s-dreampurple .poster-content { background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
+    .s-dreampurple .name { font-size: 2.5em; text-shadow: 0 0 30px rgba(255,150,255,0.8); }
+    .s-dreampurple .tag { background: linear-gradient(90deg, #f093fb, #667eea); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎨 30 种海报风格 - 自我介绍</h1>
+    <p>点击卡片查看完整海报设计</p>
+  </div>
+  <div class="container">
+    <div class="style-grid" id="styleGrid"></div>
+  </div>
+  <div class="modal" id="previewModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div class="poster-container">
+        <div class="poster" id="previewPoster">
+          <div class="poster-content">
+            <div class="header-section">
+              <h1 class="name" id="posterName">姓名</h1>
+              <p class="title" id="posterTitle">职业头衔</p>
+            </div>
+            <p class="desc" id="posterDesc">这是一个自我介绍的示例文本，展示不同海报风格的视觉效果和设计特点。</p>
+            <div class="tags" id="posterTags">
+              <span class="tag">创意</span>
+              <span class="tag">设计</span>
+              <span class="tag">专业</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn secondary" onclick="prevStyle()">← 上一个</button>
+        <button class="nav-btn primary" onclick="nextStyle()">下一个 →</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const styles = [
+      { id: 'swiss', name: '瑞士国际主义', category: '经典' },
+      { id: 'bauhaus', name: '包豪斯', category: '经典' },
+      { id: 'artdeco', name: '装饰艺术', category: '复古' },
+      { id: 'cyberpunk', name: '赛博朋克', category: '科幻' },
+      { id: 'minimalist', name: '极简主义', category: '现代' },
+      { id: 'japanese', name: '日本和风', category: '传统' },
+      { id: 'memphis', name: '孟菲斯', category: '后现代' },
+      { id: 'acid', name: '酸性设计', category: '前卫' },
+      { id: 'gothic', name: '哥特风格', category: '古典' },
+      { id: 'y2k', name: 'Y2K 千禧', category: '复古' },
+      { id: 'vaporwave', name: '蒸汽波', category: '网络' },
+      { id: 'brutalist', name: '粗野主义', category: '网页' },
+      { id: 'artnouveau', name: '新艺术运动', category: '复古' },
+      { id: 'futurism', name: '未来主义', category: '前卫' },
+      { id: 'popart', name: '波普艺术', category: '艺术' },
+      { id: 'chinese', name: '中国风', category: '传统' },
+      { id: 'creamy', name: '奶油风', category: '温柔' },
+      { id: 'darkspark', name: '暗黑微光', category: '现代' },
+      { id: 'retro 计算机', name: '复古计算机', category: '怀旧' },
+      { id: 'neumorphism', name: '新拟态', category: 'UI' },
+      { id: 'collage', name: '拼贴艺术', category: '艺术' },
+      { id: 'gradientblur', name: '渐变模糊', category: '现代' },
+      { id: 'paperart', name: '纸艺风格', category: '质感' },
+      { id: 'glitch', name: '故障艺术', category: '数字' },
+      { id: 'organic', name: '自然有机', category: '清新' },
+      { id: 'neonnight', name: '霓虹夜景', category: '夜景' },
+      { id: 'monochrome', name: '单色摄影', category: '摄影' },
+      { id: 'watercolor', name: '水彩手绘', category: '手绘' },
+      { id: 'industrial', name: '工业风', category: '硬朗' },
+      { id: 'dreampurple', name: '梦幻紫', category: '浪漫' }
+    ];
+    let currentIndex = 0;
+    function renderGrid() {
+      const grid = document.getElementById('styleGrid');
+      grid.innerHTML = styles.map((style, index) => 
+        '<div class="style-card" onclick="openModal(' + index + ')">' +
+          '<div class="style-preview s-' + style.id + '">' +
+            '<div class="poster-content" style="box-shadow:none;margin:0;height:100%;border:none;"><h1 class="name" style="font-size:1.5em;">' + style.name + '</h1></div>' +
+          '</div>' +
+          '<div class="style-info">' +
+            '<h4>' + style.name + '</h4>' +
+            '<span>' + style.category + '</span>' +
+          '</div>' +
+        '</div>'
+      ).join('');
+    }
+    function openModal(index) {
+      currentIndex = index;
+      const style = styles[index];
+      const poster = document.getElementById('previewPoster');
+      poster.className = 'poster s-' + style.id;
+      document.getElementById('posterName').textContent = '张三';
+      document.getElementById('posterTitle').textContent = style.name + ' | 视觉设计师';
+      document.getElementById('posterDesc').textContent = '热爱创意与设计，擅长将想法转化为视觉语言。追求简约而不简单的设计理念，在每一个作品中注入独特的思考与情感。';
+      poster.querySelector('.name').setAttribute('data-text', '张三');
+      document.getElementById('previewModal').classList.add('active');
+    }
+    function closeModal() { document.getElementById('previewModal').classList.remove('active'); }
+    function nextStyle() { currentIndex = (currentIndex + 1) % styles.length; openModal(currentIndex); }
+    function prevStyle() { currentIndex = (currentIndex - 1 + styles.length) % styles.length; openModal(currentIndex); }
+    document.getElementById('previewModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+    document.addEventListener('keydown', function(e) {
+      const modal = document.getElementById('previewModal');
+      if (modal.classList.contains('active')) {
+        if (e.key === 'Escape') closeModal();
+        if (e.key === 'ArrowRight') nextStyle();
+        if (e.key === 'ArrowLeft') prevStyle();
+      }
+    });
+    renderGrid();
+  </script>
+</body>
+</html>

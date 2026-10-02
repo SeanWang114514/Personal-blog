@@ -1,0 +1,20 @@
+# ============================================================================
+#  友情链接 —— 驱动 /friends/ 页面
+#  想交换友链的话，把下面条目按同样格式追加即可。
+#  ⚠️ 目前为示例条目，请替换为真实站点或直接删除。
+# ============================================================================
+
+- name: Hux Blog
+  url: https://huangxuan.me
+  desc: 本站主题 Hux Blog 的原作者
+  avatar: https://avatars.githubusercontent.com/u/2012826?v=4
+
+- name: Jekyll
+  url: https://jekyllrb.com
+  desc: 本站使用的静态站点生成器
+  avatar: https://avatars.githubusercontent.com/u/3083652?v=4
+
+- name: GitHub Pages
+  url: https://pages.github.com
+  desc: 本站的托管与部署平台
+  avatar: https://avatars.githubusercontent.com/u/9919?v=4

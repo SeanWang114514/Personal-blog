@@ -1,0 +1,213 @@
+---
+layout: default
+hero: false
+nav: drive
+title: 云盘
+description: "常用网盘入口与分享说明 —— 大文件优先走不限速渠道"
+permalink: /drive/
+---
+
+{%- assign drives = site.data.drive -%}
+
+<section class="hero hero--compact">
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero__inner">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-cloud"></use></svg>
+        Cloud
+      </span>
+      <h1 class="hero__title">云盘与资源渠道</h1>
+      <p class="hero__sub">
+        我把 {{ drives | size }} 个常用渠道整理在这里，并标注了容量与限速情况。
+        分享大文件时会优先选不限速的渠道。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap section-tight">
+
+  <div class="notice mb-8" data-reveal>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+      aria-hidden="true"><use href="#i-shield"></use></svg>
+    <div>
+      <strong>关于分享链接：</strong>网盘分享容易失效，所以这里只放各平台的入口和说明，
+      具体分享链接会随对应文章一起更新。如果链接打不开，直接发邮件告诉我。
+    </div>
+  </div>
+
+  {%- comment -%} 渠道网格 {%- endcomment -%}
+  <div class="drive-grid">
+    {% for d in drives %}
+    <article class="drive-card" data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 3 | times: 70 }}">
+      <div class="drive-card__logo {{ d.logoClass }}" aria-hidden="true">{{ d.logo }}</div>
+
+      <h2 class="drive-card__name">
+        {{ d.name }}
+        {% if d.status == 'active' %}
+        <span class="tag tag--emerald"><span class="dot"></span>可用</span>
+        {% elsif d.status == 'limited' %}
+        <span class="tag tag--amber"><span class="dot"></span>受限</span>
+        {% endif %}
+      </h2>
+
+      <p class="drive-card__desc">{{ d.desc }}</p>
+
+      <div class="meter">
+        <div class="meter__head">
+          <span>容量</span>
+          <span>{{ d.capacity }}</span>
+        </div>
+        <div class="meter__track">
+          <div class="meter__fill" style="width:{% if d.status == 'active' %}78%{% else %}35%{% endif %}"></div>
+        </div>
+      </div>
+
+      <div class="drive-card__tags">
+        <span class="tag tag--cyan">{{ d.speed }}</span>
+        {% for tag in d.tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+
+      <div class="drive-card__actions">
+        <a class="btn btn--ghost btn--sm" href="{{ d.home }}" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-external"></use></svg>
+          打开官网
+        </a>
+        {% if d.share and d.share != "" %}
+        <a class="btn btn--primary btn--sm" href="{{ d.share }}" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-share"></use></svg>
+          分享页
+        </a>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  {%- comment -%} 使用说明 {%- endcomment -%}
+  <section class="section" aria-labelledby="sec-drive-guide">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-sliders"></use></svg>
+          使用说明
+        </span>
+        <h2 class="sec-head__title" id="sec-drive-guide">怎么选渠道</h2>
+        <p class="sec-head__desc">不同场景适合不同网盘，下面是我自己的使用习惯。</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card" data-reveal>
+        <div class="card__head">
+          <span class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-truck"></use></svg>
+          </span>
+          <h3 class="card__title">分享大文件</h3>
+        </div>
+        <p class="card__desc">
+          优先用 123 云盘或阿里云盘，它们下载不限速。百度网盘虽然容量大，
+          但非会员下载会被限速，适合作为长期备份而非分享渠道。
+        </p>
+      </div>
+
+      <div class="card" data-reveal data-reveal-delay="60">
+        <div class="card__head">
+          <span class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-database"></use></svg>
+          </span>
+          <h3 class="card__title">长期归档</h3>
+        </div>
+        <p class="card__desc">
+          重要资料会同时放 OneDrive 和本地硬盘各一份。云盘会关停、会清空、
+          会改规则，不要把唯一副本放在别人的服务器上。
+        </p>
+      </div>
+
+      <div class="card" data-reveal data-reveal-delay="120">
+        <div class="card__head">
+          <span class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-package"></use></svg>
+          </span>
+          <h3 class="card__title">软件安装包</h3>
+        </div>
+        <p class="card__desc">
+          始终以 GitHub Releases 为准，那里的版本最新、可追溯、有校验。
+          网盘只作为下载慢时的备用镜像。
+        </p>
+      </div>
+
+      <div class="card" data-reveal data-reveal-delay="180">
+        <div class="card__head">
+          <span class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-key"></use></svg>
+          </span>
+          <h3 class="card__title">提取码怎么拿</h3>
+        </div>
+        <p class="card__desc">
+          带提取码的分享会写在对应文章的正文里，本站不集中公开。
+          找不到就直接邮件问我。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} 存储建议 {%- endcomment -%}
+  <section class="section" aria-labelledby="sec-drive-advice">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-shield"></use></svg>
+          备份原则
+        </span>
+        <h2 class="sec-head__title" id="sec-drive-advice">我的三条备份规矩</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card" data-reveal>
+        <div class="card__head">
+          <span class="card__icon" style="color:var(--accent-emerald)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-layers"></use></svg>
+          </span>
+          <h3 class="card__title">三份副本</h3>
+        </div>
+        <p class="card__desc">本地硬盘 + 移动硬盘 + 云端，三者至少同时存在两份才算安全。</p>
+      </div>
+      <div class="card" data-reveal data-reveal-delay="60">
+        <div class="card__head">
+          <span class="card__icon" style="color:var(--accent-cyan)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-refresh"></use></svg>
+          </span>
+          <h3 class="card__title">定期校验</h3>
+        </div>
+        <p class="card__desc">每季度抽一次随机文件尝试恢复，能打开才算备份成功。</p>
+      </div>
+      <div class="card" data-reveal data-reveal-delay="120">
+        <div class="card__head">
+          <span class="card__icon" style="color:var(--accent-amber)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-key"></use></svg>
+          </span>
+          <h3 class="card__title">不依赖单一平台</h3>
+        </div>
+        <p class="card__desc">任何一家网盘都可能关停。重要的东西永远留一条不依赖它的路径。</p>
+      </div>
+    </div>
+  </section>
+
+</div>

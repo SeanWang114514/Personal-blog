@@ -1,0 +1,33 @@
+---
+layout: default
+hero: false
+title: 当前离线
+description: "阅读过的页面可以在离线时访问哦 ;)"
+permalink: /offline.html
+---
+
+<section class="hero hero--compact">
+  <div class="wrap">
+    <div class="hero__inner">
+      <span class="eyebrow">Offline</span>
+      <h1 class="hero__title">当前离线</h1>
+      <p class="hero__sub">网络似乎断开了。已经缓存过的页面仍然可以正常阅读。</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap section-tight">
+  <div class="empty">
+    <div class="empty__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true"><use href="#i-cloud"></use></svg>
+    </div>
+    <p class="empty__title">没有网络连接</p>
+    <p class="empty__desc mb-6">检查一下网络，或者稍后重试。</p>
+    <a class="btn btn--primary" href="{{ '/' | relative_url }}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true"><use href="#i-home"></use></svg>
+      回到首页
+    </a>
+  </div>
+</div>

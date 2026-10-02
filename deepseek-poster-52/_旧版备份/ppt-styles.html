@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>35 种 PPT 风格展示</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; min-height: 100vh; padding: 20px; }
+    .header { text-align: center; padding: 40px 20px; color: #fff; }
+    .header h1 { font-size: 2.5em; margin-bottom: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .header p { color: #a0a0a0; font-size: 1.1em; }
+    .container { max-width: 1400px; margin: 0 auto; }
+    .style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 0; }
+    .style-card { background: #16213e; border-radius: 12px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; }
+    .style-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .style-preview { height: 160px; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+    .style-preview h3 { font-size: 1.1em; margin-bottom: 5px; }
+    .style-preview p { font-size: 0.8em; opacity: 0.8; }
+    .style-info { padding: 15px; }
+    .style-info h4 { color: #fff; font-size: 0.95em; margin-bottom: 5px; }
+    .style-info span { color: #667eea; font-size: 0.8em; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+    .modal.active { display: flex; }
+    .modal-content { background: #1a1a2e; border-radius: 20px; max-width: 900px; width: 100%; max-height: 90vh; overflow: auto; position: relative; }
+    .modal-close { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; cursor: pointer; font-size: 1.5em; color: #fff; z-index: 10; }
+    .modal-close:hover { background: rgba(255,255,255,0.2); }
+    .slide-container { padding: 40px; }
+    .slide { aspect-ratio: 16/9; border-radius: 10px; padding: 40px; position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+    .slide h2 { font-size: 2em; margin-bottom: 20px; }
+    .slide ul { list-style: none; }
+    .slide li { padding: 8px 0; font-size: 1.1em; }
+    .nav-buttons { display: flex; gap: 10px; padding: 20px 40px; justify-content: center; }
+    .nav-btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; transition: all 0.3s; }
+    .nav-btn.primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+    .nav-btn.secondary { background: rgba(255,255,255,0.1); color: #fff; }
+    .nav-btn:hover { transform: translateY(-2px); }
+    .s-minimal-white { background: #fff; color: #333; }
+    .s-minimal-white h2 { border-bottom: 3px solid #333; padding-bottom: 10px; }
+    .s-classic-black { background: #1a1a1a; color: #fff; }
+    .s-classic-black h2 { border-bottom: 2px solid #fff; padding-bottom: 10px; }
+    .s-business-blue { background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff; }
+    .s-business-blue .content { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; }
+    .s-tech-purple { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+    .s-tech-purple h2 { text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+    .s-gradient-orange { background: linear-gradient(135deg, #f093fb, #f5576c); color: #fff; }
+    .s-forest-green { background: linear-gradient(135deg, #134e5e, #71b280); color: #fff; }
+    .s-sunset-red { background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #fff; }
+    .s-ocean-blue { background: linear-gradient(135deg, #2193b0, #6dd5ed); color: #fff; }
+    .s-gold-luxury { background: linear-gradient(135deg, #b7950b, #f9e17e 50%, #b7950b); color: #1a1a1a; }
+    .s-sakura-pink { background: linear-gradient(135deg, #ffecd2, #fcb69f); color: #5c3a3a; }
+    .s-dark-mode { background: #0d0d0d; color: #e0e0e0; }
+    .s-dark-mode h2 { color: #00d4ff; }
+    .s-glassmorphism { background: linear-gradient(45deg, #fc5c7d, #6a82fb); color: #fff; }
+    .s-glassmorphism .content { background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; border: 1px solid rgba(255,255,255,0.3); }
+    .s-neon { background: #0a0a0a; color: #0ff; }
+    .s-neon h2, .s-neon li { text-shadow: 0 0 10px #0ff, 0 0 20px #0ff; }
+    .s-vintage { background: #f4e4c1; color: #2c1810; font-family: Georgia, serif; }
+    .s-vintage h2 { border-bottom: 2px solid #2c1810; }
+    .s-watercolor { background: linear-gradient(45deg, #ff9a9e, #fad0c4); color: #5c4b51; }
+    .s-geometric { background-image: linear-gradient(45deg, rgba(102,126,234,0.15) 25%, transparent 25%), linear-gradient(-45deg, rgba(102,126,234,0.15) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, rgba(102,126,234,0.15) 75%), linear-gradient(-45deg, transparent 75%, rgba(102,126,234,0.15) 75%); background-size: 30px 30px; background-color: #f8f9fa; color: #333; }
+    .s-geometric .content { background: #fff; padding: 25px; border-left: 5px solid #667eea; }
+    .s-brutalism { background: #ff6b6b; color: #1a1a1a; border: 5px solid #1a1a1a; }
+    .s-brutalism h2 { background: #1a1a1a; color: #fff; padding: 10px 20px; display: inline-block; }
+    .s-neumorphism { background: #e0e5ec; color: #4a4a4a; }
+    .s-neumorphism .content { border-radius: 20px; box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #fff; padding: 30px; }
+    .s-cyberpunk { background: linear-gradient(180deg, #0d0d2b, #1a1a4e); color: #fcee0a; }
+    .s-cyberpunk h2 { text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ffff; }
+    .s-chinese { background: linear-gradient(180deg, #8b0000, #c41e3a); color: #f5deb3; font-family: KaiTi, STKaiti, serif; }
+    .s-chinese h2 { border-bottom: 2px solid #f5deb3; }
+    .s-japanese { background: #f8f4e8; color: #4a4a4a; }
+    .s-japanese h2 { border-left: 4px solid #bc3f3f; padding-left: 15px; }
+    .s-nordic { background: #e8eef1; color: #2c3e50; }
+    .s-nordic h2 { color: #5e81ac; }
+    .s-memphis { background: radial-gradient(circle at 20% 30%, #ff6b6b 0%, transparent 50%), radial-gradient(circle at 80% 70%, #4ecdc4 0%, transparent 50%), radial-gradient(circle at 50% 50%, #ffe66d 0%, transparent 40%); background-color: #f7f7f7; color: #333; }
+    .s-pop { background: repeating-linear-gradient(45deg, #ff6b6b, #ff6b6b 20px, #ffd93d 20px, #ffd93d 40px); color: #1a1a1a; }
+    .s-pop .content { background: #fff; padding: 25px; border: 3px solid #1a1a1a; }
+    .s-vaporwave { background: linear-gradient(180deg, #ff9a9e, #fecfef 50%, #a1c4fd); color: #fff; }
+    .s-vaporwave h2 { text-shadow: 3px 3px 0 #ff6b6b, -3px -3px 0 #4ecdc4; }
+    .s-concrete { background: linear-gradient(135deg, #666, #333); color: #fff; }
+    .s-concrete h2 { background: rgba(255,255,255,0.1); padding: 10px 20px; }
+    .s-candy { background: linear-gradient(45deg, #ff9a9e, #fad0c4, #ffd1ff, #a1c4fd); background-size: 400% 400%; color: #fff; }
+    .s-candy h2 { text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+    .s-mono-blue { background: #e3f2fd; color: #1565c0; }
+    .s-mono-blue h2 { color: #0d47a1; border-bottom: 3px solid #1565c0; }
+    .s-mono-green { background: #e8f5e9; color: #2e7d32; }
+    .s-mono-green h2 { color: #1b5e20; }
+    .s-cinematic { background: radial-gradient(ellipse at bottom, #1b2735, #090a0f); color: #f5f5f5; }
+    .s-cinematic h2 { letter-spacing: 5px; text-transform: uppercase; }
+    .s-handwritten { background: #fffef0; color: #5c4b51; font-family: Comic Sans MS, cursive; }
+    .s-handwritten h2 { color: #ff6b6b; }
+    .s-starry { background: radial-gradient(ellipse at bottom, #1b2735, #090a0f); color: #fff; }
+    .s-starry h2 { text-shadow: 0 0 10px #fff, 0 0 20px #7b68ee; }
+    .s-candy-stripes { background: repeating-linear-gradient(90deg, #ff6b6b, #ff6b6b 30px, #fff 30px, #fff 60px); color: #1a1a1a; }
+    .s-candy-stripes .content { background: rgba(255,255,255,0.9); padding: 25px; }
+    .s-aurora { background: linear-gradient(180deg, #000428, #004e92 50%, #00ff88); color: #fff; }
+    .s-aurora h2 { text-shadow: 0 0 20px rgba(0,255,136,0.8); }
+    .s-line-art { background: repeating-linear-gradient(0deg, transparent, transparent 19px, #e0e0e0 20px); color: #333; }
+    .s-gradient-blue { background: linear-gradient(135deg, #667eea, #764ba2 100%); color: #fff; }
+    .s-gradient-pink { background: linear-gradient(135deg, #ff758c, #ff7eb3); color: #fff; }
+    .s-gradient-mint { background: linear-gradient(135deg, #a8edea, #fed6e3); color: #333; }
+  </style>
+</head>
+<body>
+  <div class="header"><h1>📊 35 种 PPT 风格展示</h1><p>点击任意卡片预览完整幻灯片效果</p></div>
+  <div class="container"><div class="style-grid" id="styleGrid"></div></div>
+  <div class="modal" id="previewModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div class="slide-container">
+        <div class="slide" id="previewSlide"><div class="content"><h2 id="slideTitle">标题</h2><ul><li>核心要点一</li><li>核心要点二</li><li>核心要点三</li></ul></div></div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn secondary" onclick="prevStyle()">← 上一个</button>
+        <button class="nav-btn primary" onclick="nextStyle()">下一个 →</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const styles = [
+      { id: 'minimal-white', name: '极简白', category: '简约' }, { id: 'classic-black', name: '经典黑', category: '简约' },
+      { id: 'business-blue', name: '商务蓝', category: '商务' }, { id: 'tech-purple', name: '科技蓝紫', category: '科技' },
+      { id: 'gradient-orange', name: '渐变橙粉', category: '渐变' }, { id: 'forest-green', name: '森林绿', category: '自然' },
+      { id: 'sunset-red', name: '夕阳红', category: '渐变' }, { id: 'ocean-blue', name: '海洋蓝', category: '自然' },
+      { id: 'gold-luxury', name: '金色奢华', category: '奢华' }, { id: 'sakura-pink', name: '樱花粉', category: '温柔' },
+      { id: 'dark-mode', name: '暗色模式', category: '现代' }, { id: 'glassmorphism', name: '毛玻璃', category: '现代' },
+      { id: 'neon', name: '霓虹灯', category: '炫酷' }, { id: 'vintage', name: '复古报纸', category: '复古' },
+      { id: 'watercolor', name: '水彩画', category: '艺术' }, { id: 'geometric', name: '几何图形', category: '抽象' },
+      { id: 'line-art', name: '线条装饰', category: '简约' }, { id: 'brutalism', name: '粗野主义', category: '艺术' },
+      { id: 'neumorphism', name: '新拟态', category: '现代' }, { id: 'cyberpunk', name: '赛博朋克', category: '科幻' },
+      { id: 'chinese', name: '中国风', category: '传统' }, { id: 'japanese', name: '日式和风', category: '传统' },
+      { id: 'nordic', name: '北欧风', category: '简约' }, { id: 'memphis', name: '孟菲斯', category: '艺术' },
+      { id: 'pop', name: '波普艺术', category: '艺术' }, { id: 'vaporwave', name: '蒸汽波', category: '复古' },
+      { id: 'concrete', name: '水泥工业', category: '工业' }, { id: 'candy', name: '糖果色', category: '活泼' },
+      { id: 'mono-blue', name: '单色蓝', category: '单色' }, { id: 'mono-green', name: '单色绿', category: '单色' },
+      { id: 'cinematic', name: '电影感', category: '艺术' }, { id: 'handwritten', name: '手账风', category: '可爱' },
+      { id: 'starry', name: '星空', category: '梦幻' }, { id: 'candy-stripes', name: '糖果条纹', category: '活泼' },
+      { id: 'aurora', name: '极光', category: '梦幻' }
+    ];
+    let currentIndex = 0;
+    function renderGrid() {
+      const grid = document.getElementById('styleGrid');
+      grid.innerHTML = styles.map((style, index) => '<div class="style-card" onclick="openModal(' + index + ')"><div class="style-preview s-' + style.id + '"><h3>标题页</h3><p>风格预览</p></div><div class="style-info"><h4>' + style.name + '</h4><span>' + style.category + '</span></div></div>').join('');
+    }
+    function openModal(index) {
+      currentIndex = index;
+      const style = styles[index];
+      document.getElementById('previewSlide').className = 'slide s-' + style.id;
+      document.getElementById('slideTitle').textContent = style.name + ' · ' + style.category;
+      document.getElementById('previewModal').classList.add('active');
+    }
+    function closeModal() { document.getElementById('previewModal').classList.remove('active'); }
+    function nextStyle() { currentIndex = (currentIndex + 1) % styles.length; openModal(currentIndex); }
+    function prevStyle() { currentIndex = (currentIndex - 1 + styles.length) % styles.length; openModal(currentIndex); }
+    document.getElementById('previewModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+    document.addEventListener('keydown', function(e) {
+      const modal = document.getElementById('previewModal');
+      if (modal.classList.contains('active')) {
+        if (e.key === 'Escape') closeModal();
+        if (e.key === 'ArrowRight') nextStyle();
+        if (e.key === 'ArrowLeft') prevStyle();
+      }
+    });
+    renderGrid();
+  </script>
+</body>
+</html>

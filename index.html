@@ -1,0 +1,395 @@
+---
+layout: default
+hero: false
+nav: home
+description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾记录"
+---
+
+{%- comment -%} ============ HERO ============ {%- endcomment -%}
+<section class="hero">
+  <div class="hero__bg" style="background-image:url('{{ '/img/home-bg.jpg' | relative_url }}')" aria-hidden="true"></div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <div class="hero__inner">
+      <div class="hero__avatar" data-reveal>
+        <img src="{{ site.sidebar-avatar }}" alt="Sean Wang 的头像" width="32" height="32">
+        <span class="hero__avatar-text">{{ site.sidebar-about-description }}</span>
+      </div>
+
+      <h1 class="hero__title" data-reveal data-reveal-delay="60">
+        折腾、记录，<br>
+        然后把它们<span class="text-gradient">做成能用的东西</span>。
+      </h1>
+
+      <p class="hero__sub" data-reveal data-reveal-delay="120">
+        {{ site.description }}。这里有我写的离线工具、踩过的坑，
+        以及一份持续更新的软件与资源清单。
+      </p>
+
+      <div class="hero-search" data-reveal data-reveal-delay="180">
+        <svg class="hero-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <use href="#i-search"></use>
+        </svg>
+        <label class="sr-only" for="home-search">搜索站内内容</label>
+        <input class="hero-search__input" id="home-search" type="search" placeholder="搜索文章、软件、资源…"
+          autocomplete="off" data-instant-search>
+        <kbd class="hero-search__kbd">/</kbd>
+        <div class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+
+      <div class="hero__actions" data-reveal data-reveal-delay="240">
+        <a class="btn btn--primary" href="{{ '/blog/' | relative_url }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-book"></use></svg>
+          开始阅读
+        </a>
+        <a class="btn btn--ghost" href="{{ '/software/' | relative_url }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-box"></use></svg>
+          看看软件
+        </a>
+        <a class="btn btn--ghost" href="https://github.com/{{ site.github_username }}" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-github"></use></svg>
+          GitHub
+        </a>
+      </div>
+
+      <div class="hero__meta" data-reveal data-reveal-delay="300">
+        <div class="hero__stat">
+          <span class="hero__stat-num" data-count="{{ site.posts | size }}">0</span>
+          <span class="hero__stat-label">篇文章</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-num" data-count="{{ site.data.software | size }}">0</span>
+          <span class="hero__stat-label">款软件</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-num" data-count="{{ site.data.projects | size }}">0</span>
+          <span class="hero__stat-label">个项目</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-num" data-count="{{ site.tags | size }}">0</span>
+          <span class="hero__stat-label">个标签</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{%- comment -%} ============ 板块导航 BENTO ============ {%- endcomment -%}
+<section class="wrap section" aria-labelledby="sec-modules">
+  <div class="sec-head" data-reveal>
+    <div>
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-grid"></use></svg>
+        站点导航
+      </span>
+      <h2 class="sec-head__title" id="sec-modules">七个板块，各管一件事</h2>
+      <p class="sec-head__desc">写文章、放软件、存资源、收工具 —— 每一块都能单独打开当独立页面用。</p>
+    </div>
+  </div>
+
+  <div class="bento">
+    <a class="card card--hover card--link bento__item bento__item--wide" href="{{ '/blog/' | relative_url }}"
+      data-reveal>
+      <div class="card__head">
+        <span class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><use href="#i-book"></use></svg>
+        </span>
+        <h3 class="card__title">博客</h3>
+      </div>
+      <p class="card__desc">
+        长文与折腾记录：OCR、输入法、文档工具、硬件选购，写清楚「为什么这么做」而不仅是「怎么做」。
+      </p>
+      <div class="card__foot">
+        <span class="tag tag--brand">{{ site.posts | size }} 篇</span>
+        <span class="link-arrow">进入博客
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card card--hover card--link bento__item bento__item--wide" href="{{ '/software/' | relative_url }}"
+      data-reveal data-reveal-delay="60">
+      <div class="card__head">
+        <span class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><use href="#i-box"></use></svg>
+        </span>
+        <h3 class="card__title">软件</h3>
+      </div>
+      <p class="card__desc">
+        自己做的一批离线工具：输入法套件、文档工作台、OCR、可视化小站，全部开源、可下载。
+      </p>
+      <div class="card__foot">
+        <span class="tag tag--violet">{{ site.data.software | size }} 款</span>
+        <span class="link-arrow">查看合集
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card card--hover card--link bento__item" href="{{ '/drive/' | relative_url }}" data-reveal>
+      <div class="card__head">
+        <span class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><use href="#i-cloud"></use></svg>
+        </span>
+        <h3 class="card__title">云盘</h3>
+      </div>
+      <p class="card__desc">常用网盘的入口与分享说明，大文件优先走不限速渠道。</p>
+      <div class="card__foot">
+        <span class="link-arrow">查看渠道
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card card--hover card--link bento__item" href="{{ '/download/' | relative_url }}" data-reveal
+      data-reveal-delay="60">
+      <div class="card__head">
+        <span class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><use href="#i-download"></use></svg>
+        </span>
+        <h3 class="card__title">下载</h3>
+      </div>
+      <p class="card__desc">所有安装包集中一处，标注版本、体积与平台，直链 GitHub Releases。</p>
+      <div class="card__foot">
+        <span class="link-arrow">前往下载
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card card--hover card--link bento__item" href="{{ '/projects/' | relative_url }}" data-reveal
+      data-reveal-delay="120">
+      <div class="card__head">
+        <span class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><use href="#i-layers"></use></svg>
+        </span>
+        <h3 class="card__title">项目</h3>
+      </div>
+      <p class="card__desc">作品墙：技术栈、状态、仓库与在线体验一键直达。</p>
+      <div class="card__foot">
+        <span class="link-arrow">浏览作品
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card card--hover card--link bento__item" href="{{ '/toolbox/' | relative_url }}" data-reveal
+      data-reveal-delay="180">
+      <div class="card__head">
+        <span class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><use href="#i-tool"></use></svg>
+        </span>
+        <h3 class="card__title">工具箱</h3>
+      </div>
+      <p class="card__desc">常用在线工具聚合，还带本地时钟与可收藏的快捷入口。</p>
+      <div class="card__foot">
+        <span class="link-arrow">打开工具台
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+        </span>
+      </div>
+    </a>
+
+    <a class="card card--hover card--link bento__item" href="{{ '/bookmarks/' | relative_url }}" data-reveal
+      data-reveal-delay="240">
+      <div class="card__head">
+        <span class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><use href="#i-bookmark"></use></svg>
+        </span>
+        <h3 class="card__title">收藏夹</h3>
+      </div>
+      <p class="card__desc">长期沉淀的学习资料、文档与阅读源，比工具箱更「值得回看」。</p>
+      <div class="card__foot">
+        <span class="link-arrow">翻收藏
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+        </span>
+      </div>
+    </a>
+  </div>
+</section>
+
+{%- comment -%} ============ 最新文章 ============ {%- endcomment -%}
+{%- assign recent = site.posts | slice: 0, 3 -%}
+<section class="wrap section" aria-labelledby="sec-posts">
+  <div class="sec-head" data-reveal>
+    <div>
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-pen"></use></svg>
+        最新文章
+      </span>
+      <h2 class="sec-head__title" id="sec-posts">最近在写什么</h2>
+    </div>
+    <a class="link-arrow" href="{{ '/blog/' | relative_url }}">全部文章
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+    </a>
+  </div>
+
+  <div class="grid grid-3">
+    {% for post in recent %}
+    <article class="post-card" data-reveal data-reveal-delay="{{ forloop.index0 | times: 80 }}">
+      <a class="post-card__media" href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">
+        <img src="{{ post.header-img | default: site.header-img | relative_url }}"
+          alt="" loading="lazy" width="640" height="360">
+      </a>
+      <div class="post-card__body">
+        <div class="post-card__tags">
+          {% for tag in post.tags limit: 2 %}
+          <span class="tag tag--brand">{{ tag }}</span>
+          {% endfor %}
+        </div>
+        <h3 class="post-card__title">
+          <a href="{{ post.url | relative_url }}" style="color:inherit">{{ post.title }}</a>
+        </h3>
+        <p class="post-card__excerpt">{{ post.content | strip_html | truncate: 110 }}</p>
+        <div class="post-card__foot">
+          <span class="post-card__meta">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-calendar"></use></svg>
+            {{ post.date | date: '%Y-%m-%d' }}
+          </span>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+{%- comment -%} ============ 精选软件 ============ {%- endcomment -%}
+{%- assign featured_soft = site.data.software | where: "featured", true | slice: 0, 3 -%}
+<section class="wrap section" aria-labelledby="sec-soft">
+  <div class="sec-head" data-reveal>
+    <div>
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-box"></use></svg>
+        精选软件
+      </span>
+      <h2 class="sec-head__title" id="sec-soft">离线优先的自研工具</h2>
+      <p class="sec-head__desc">不想依赖云端和订阅，所以这些工具全部在本地跑。</p>
+    </div>
+    <a class="link-arrow" href="{{ '/software/' | relative_url }}">全部软件
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+    </a>
+  </div>
+
+  <div class="grid grid-3">
+    {% for soft in featured_soft %}
+    <article class="soft-card" data-reveal data-reveal-delay="{{ forloop.index0 | times: 80 }}">
+      <div class="soft-card__top">
+        <div class="soft-card__logo {{ soft.logoClass }}" aria-hidden="true">{{ soft.logo }}</div>
+        <div class="soft-card__head">
+          <h3 class="soft-card__name">{{ soft.name }}</h3>
+          <p class="soft-card__pub">{{ soft.platform }} · v{{ soft.version }}</p>
+        </div>
+      </div>
+      <p class="soft-card__desc">{{ soft.tagline }}</p>
+      <div class="soft-card__specs">
+        <span class="soft-card__spec">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-hard-drive"></use></svg>
+          {{ soft.size }}
+        </span>
+        <span class="soft-card__spec">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-code"></use></svg>
+          {{ soft.lang }}
+        </span>
+      </div>
+      <div class="soft-card__actions">
+        <a class="btn btn--primary btn--sm" href="{{ '/download/' | relative_url }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
+          下载
+        </a>
+        {% if soft.postTitle %}
+        {%- capture _posturl %}{% include post-url.html title=soft.postTitle %}{% endcapture -%}
+        {% if _posturl != "" %}
+        <a class="btn btn--ghost btn--sm" href="{{ _posturl | strip }}">介绍文章</a>
+        {% endif %}
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+{%- comment -%} ============ 标签云 + 关于 CTA ============ {%- endcomment -%}
+<section class="wrap section" aria-labelledby="sec-tags">
+  <div class="grid grid-2">
+    <div class="card" data-reveal>
+      <div class="card__head">
+        <span class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><use href="#i-tag"></use></svg>
+        </span>
+        <h2 class="card__title" id="sec-tags">按标签找内容</h2>
+      </div>
+      <p class="card__desc mb-4">点任意标签直接跳到筛选后的文章列表。</p>
+      <div class="chips">
+        {% assign sorted_tags = site.tags | sort %}
+        {% for tag in sorted_tags %}
+        <a class="chip" href="{{ '/blog/' | relative_url }}?tag={{ tag[0] | url_encode }}">
+          {{ tag[0] }}<span class="chip__count">{{ tag[1] | size }}</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card" data-reveal data-reveal-delay="80">
+      <div class="card__head">
+        <span class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><use href="#i-user"></use></svg>
+        </span>
+        <h2 class="card__title">关于这个站</h2>
+      </div>
+      <p class="card__desc">
+        一个持续迭代的个人站点。做了不少离线工具，也踩了不少坑，
+        这里既放成品，也放过程。欢迎交流。
+      </p>
+      <ul class="feature-list">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
+          全部自研工具开源，代码可查
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
+          离线优先，不依赖云端服务
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
+          文章写清取舍与理由，不做纯教程搬运
+        </li>
+      </ul>
+      <div class="card__foot">
+        <a class="btn btn--primary btn--sm" href="{{ '/about/' | relative_url }}">了解更多</a>
+        <a class="btn btn--ghost btn--sm" href="mailto:{{ site.email }}">联系我</a>
+      </div>
+    </div>
+  </div>
+</section>

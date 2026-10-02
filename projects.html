@@ -1,0 +1,207 @@
+---
+layout: default
+hero: false
+nav: projects
+title: 项目
+description: "作品集 —— 技术栈、状态、仓库与在线体验"
+permalink: /projects/
+---
+
+{%- assign projects = site.data.projects -%}
+
+<section class="hero hero--compact">
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero__inner">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-grid"></use></svg>
+        Projects
+      </span>
+      <h1 class="hero__title">作品集</h1>
+      <p class="hero__sub">
+        {{ projects | size }} 个项目，从桌面工具到单文件网页。
+        每个都标了技术栈和状态，可以直达源码或在线体验。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap section-tight">
+
+  {%- comment -%} 统计 {%- endcomment -%}
+  <div class="grid grid-4 mb-12">
+    <div class="stat-card" data-reveal>
+      <div class="stat-card__num" data-count="{{ projects | size }}">0</div>
+      <div class="stat-card__label">个项目</div>
+    </div>
+    <div class="stat-card" data-reveal data-reveal-delay="60">
+      <div class="stat-card__num" data-count="{{ projects | where: 'category', 'desktop' | size }}">0</div>
+      <div class="stat-card__label">桌面应用</div>
+    </div>
+    <div class="stat-card" data-reveal data-reveal-delay="120">
+      <div class="stat-card__num" data-count="{{ projects | where: 'category', 'web' | size }}">0</div>
+      <div class="stat-card__label">网页工具</div>
+    </div>
+    <div class="stat-card" data-reveal data-reveal-delay="180">
+      <div class="stat-card__num">{{ projects | where: 'status', 'active' | size }}</div>
+      <div class="stat-card__label">维护中</div>
+    </div>
+  </div>
+
+  {%- comment -%} 筛选 {%- endcomment -%}
+  <div class="controls" data-filter-group data-filter-target="#sw-proj-grid"
+    data-filter-search="#sw-proj-search" data-filter-empty="#sw-proj-empty">
+    <div class="controls__search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true"><use href="#i-search"></use></svg>
+      <label class="sr-only" for="sw-proj-search">搜索项目</label>
+      <input id="sw-proj-search" type="search" placeholder="搜索项目名或技术栈…" autocomplete="off">
+    </div>
+    <div class="chips" role="group" aria-label="按类型筛选">
+      <button class="chip is-active" type="button" data-filter="all" aria-pressed="true">全部</button>
+      <button class="chip" type="button" data-filter="desktop" aria-pressed="false">桌面应用</button>
+      <button class="chip" type="button" data-filter="web" aria-pressed="false">网页工具</button>
+    </div>
+  </div>
+
+  {%- comment -%} 项目卡片 {%- endcomment -%}
+  <div class="grid grid-3" id="sw-proj-grid">
+    {% for p in projects %}
+    <article class="card card--hover" data-cat="{{ p.category }}"
+      data-search="{{ p.name | escape }} {{ p.tagline | escape }} {{ p.desc | escape }} {{ p.tech | join: ' ' | escape }}"
+      data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 3 | times: 70 }}">
+
+      <div class="card__head">
+        <span class="card__icon {{ p.logoClass }}" style="color:#fff;border:none;font-weight:800">{{ p.logo }}</span>
+        <div style="flex:1;min-width:0">
+          <h2 class="card__title">{{ p.name }}</h2>
+          <p style="font-size:var(--t-xs);color:var(--text-3)">{{ p.tagline }} · {{ p.year }}</p>
+        </div>
+        {% if p.status == 'active' %}
+        <span class="tag tag--emerald"><span class="dot"></span>维护中</span>
+        {% endif %}
+      </div>
+
+      <p class="card__desc">{{ p.desc }}</p>
+
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--s-4)">
+        {% for t in p.tech limit: 4 %}
+        <span class="tag tag--brand">{{ t }}</span>
+        {% endfor %}
+      </div>
+
+      <div class="card__foot">
+        {% if p.demo %}
+        <a class="btn btn--primary btn--sm" href="{{ p.demo }}" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-external"></use></svg>
+          在线体验
+        </a>
+        {% endif %}
+        {% if p.repo %}
+        <a class="btn btn--ghost btn--sm" href="{{ p.repo }}" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-github"></use></svg>
+          源码
+        </a>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="empty hidden" id="sw-proj-empty">
+    <div class="empty__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true"><use href="#i-grid"></use></svg>
+    </div>
+    <p class="empty__title">没有匹配的项目</p>
+    <p class="empty__desc">换个分类或关键词试试。</p>
+  </div>
+
+  {%- comment -%} 技术栈分布 {%- endcomment -%}
+  <section class="section" aria-labelledby="sec-skills">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-cpu"></use></svg>
+          技术栈
+        </span>
+        <h2 class="sec-head__title" id="sec-skills">我常用的东西</h2>
+        <p class="sec-head__desc">按项目里的实际使用频率排的，不是「精通」声明。</p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card" data-reveal>
+        <div class="skill">
+          <div class="skill__head"><span class="skill__name">JavaScript / TypeScript</span><span>主力</span></div>
+          <div class="skill__track"><div class="skill__fill" data-level="92"></div></div>
+        </div>
+        <div class="skill">
+          <div class="skill__head"><span class="skill__name">HTML / CSS</span><span>主力</span></div>
+          <div class="skill__track"><div class="skill__fill" data-level="90"></div></div>
+        </div>
+        <div class="skill">
+          <div class="skill__head"><span class="skill__name">React / Electron</span><span>常用</span></div>
+          <div class="skill__track"><div class="skill__fill" data-level="82"></div></div>
+        </div>
+        <div class="skill">
+          <div class="skill__head"><span class="skill__name">Node.js</span><span>常用</span></div>
+          <div class="skill__track"><div class="skill__fill" data-level="78"></div></div>
+        </div>
+      </div>
+
+      <div class="card" data-reveal data-reveal-delay="60">
+        <div class="skill">
+          <div class="skill__head"><span class="skill__name">C++ / Win32</span><span>够用</span></div>
+          <div class="skill__track"><div class="skill__fill" data-level="68"></div></div>
+        </div>
+        <div class="skill">
+          <div class="skill__head"><span class="skill__name">Lua / Rime 配置</span><span>折腾向</span></div>
+          <div class="skill__track"><div class="skill__fill" data-level="72"></div></div>
+        </div>
+        <div class="skill">
+          <div class="skill__head"><span class="skill__name">Python</span><span>脚本级</span></div>
+          <div class="skill__track"><div class="skill__fill" data-level="64"></div></div>
+        </div>
+        <div class="skill">
+          <div class="skill__head"><span class="skill__name">Jekyll / 静态站点</span><span>本站就是</span></div>
+          <div class="skill__track"><div class="skill__fill" data-level="76"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} 协作 CTA {%- endcomment -%}
+  <section class="section">
+    <div class="card card--glow" data-reveal>
+      <div class="card__head">
+        <span class="card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><use href="#i-send"></use></svg>
+        </span>
+        <h2 class="card__title">有想法或者发现问题？</h2>
+      </div>
+      <p class="card__desc">
+        所有项目都开源。发现 Bug、想加功能，或者只是想聊聊折腾的事，
+        欢迎开 Issue 或直接发邮件。
+      </p>
+      <div class="card__foot">
+        <a class="btn btn--primary btn--sm" href="https://github.com/{{ site.github_username }}" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-github"></use></svg>
+          我的 GitHub
+        </a>
+        <a class="btn btn--ghost btn--sm" href="mailto:{{ site.email }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-mail"></use></svg>
+          发邮件
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,144 @@
+---
+layout: default
+hero: false
+nav: toolbox
+title: 工具箱
+description: "常用在线工具聚合 —— 带本地时钟与可收藏的快捷入口"
+permalink: /toolbox/
+---
+
+{%- assign groups = site.data.toolbox -%}
+{%- assign total = 0 -%}
+{%- for g in groups -%}{%- assign total = total | plus: g.items.size -%}{%- endfor -%}
+
+<section class="hero hero--compact">
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero__inner">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-tool"></use></svg>
+        Toolbox
+      </span>
+      <h1 class="hero__title">工具箱</h1>
+      <p class="hero__sub">
+        {{ total }} 个常用站点的快捷入口，分 {{ groups | size }} 类。
+        所有链接都在新标签页打开，点星标可以把常用项收藏起来。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap section-tight">
+
+  {%- comment -%} 时钟 + 收藏控制 {%- endcomment -%}
+  <div class="card card--glow mb-12" data-reveal>
+    <div class="flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <div class="eyebrow mb-4">本地时间</div>
+        <div class="clock-widget">
+          <span class="clock-widget__time" data-clock-time>--:--:--</span>
+        </div>
+        <p class="clock-widget__meta" data-clock-date style="margin-top:8px">—</p>
+      </div>
+
+      <div style="text-align:right">
+        <p class="text-sm text-muted mb-4">收藏会在本机浏览器里保存，不上传任何数据。</p>
+        <button class="chip" type="button" data-pins-only aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-star"></use></svg>
+          只看收藏
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} 分组网格 {%- endcomment -%}
+  {% for g in groups %}
+  <section class="section-tight" aria-labelledby="tool-{{ g.key }}">
+    <div class="sec-head" data-reveal>
+      <div>
+        <h2 class="sec-head__title" id="tool-{{ g.key }}" style="font-size:var(--t-xl);display:flex;align-items:center;gap:10px">
+          <span class="card__icon" style="width:34px;height:34px;border-radius:var(--r-sm)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-{{ g.icon }}"></use></svg>
+          </span>
+          {{ g.title }}
+        </h2>
+        <p class="sec-head__desc">{{ g.desc }}</p>
+      </div>
+    </div>
+
+    <div class="tool-grid">
+      {% for item in g.items %}
+      <div class="tool-tile" data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 6 | times: 40 }}">
+        <span class="tool-tile__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round"><use href="#i-external"></use></svg>
+        </span>
+
+        <div style="flex:1;min-width:0">
+          <a class="tool-tile__name" href="{{ item.url }}" rel="noopener noreferrer"
+            style="display:block;color:var(--text)">{{ item.name }}</a>
+          <div class="tool-tile__desc">{{ item.desc }}</div>
+        </div>
+
+        <button class="share-btn" type="button" data-pin="{{ g.key }}-{{ forloop.index }}"
+          aria-label="收藏" style="width:32px;height:32px;flex-shrink:0">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+            stroke-linejoin="round" style="width:15px;height:15px" aria-hidden="true">
+            <use href="#i-star"></use>
+          </svg>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+
+  {%- comment -%} 使用提示 {%- endcomment -%}
+  <section class="section">
+    <div class="grid grid-3">
+      <div class="card" data-reveal>
+        <div class="card__head">
+          <span class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-zap"></use></svg>
+          </span>
+          <h3 class="card__title">为什么要做这个页</h3>
+        </div>
+        <p class="card__desc">
+          浏览器书签越攒越乱，干脆把真正会用的挑出来放在一个页面上，
+          换设备或者重装系统时打开就能继续工作。
+        </p>
+      </div>
+      <div class="card" data-reveal data-reveal-delay="60">
+        <div class="card__head">
+          <span class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-star"></use></svg>
+          </span>
+          <h3 class="card__title">收藏怎么用</h3>
+        </div>
+        <p class="card__desc">
+          点条目右侧的星标即可收藏，状态存在浏览器 localStorage 里。
+          点「只看收藏」就只剩你标过的那些。
+        </p>
+      </div>
+      <div class="card" data-reveal data-reveal-delay="120">
+        <div class="card__head">
+          <span class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-shield"></use></svg>
+          </span>
+          <h3 class="card__title">隐私说明</h3>
+        </div>
+        <p class="card__desc">
+          这个页面不加载任何第三方脚本、不发请求、不做统计。
+          收藏数据只在你自己的浏览器里。
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>

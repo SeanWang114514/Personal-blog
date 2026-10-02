@@ -1,0 +1,58 @@
+# ============================================================================
+#  下载中心 —— 驱动 /download/ 页面
+#  这些条目也会出现在 /software/ 卡片上的「下载」按钮里。
+#  ⚠️ 链接指向 GitHub Releases；文件大小 / 版本为写作时的值，发布新版本后请同步更新。
+# ============================================================================
+
+- name: Rime VMenu 全家桶 · exe 直装包
+  project: Rime VMenu 全家桶
+  platform: Windows 10/11 x64
+  version: "1.0"
+  size: 1.1 GB
+  type: exe
+  kind: 安装包
+  desc: 双击安装，自动写入 Rime 用户目录，全程离线，不需要管理员权限。
+  url: https://github.com/SeanWang114514/weasel-vmenu-suite/releases
+  primary: true
+
+- name: Rime VMenu 全家桶 · zip 便携版
+  project: Rime VMenu 全家桶
+  platform: Windows 10/11 x64
+  version: "1.0"
+  size: 约 1.1 GB
+  type: zip
+  kind: 便携包
+  desc: 解压即用，不改动系统，适合放 U 盘随身携带。
+  url: https://github.com/SeanWang114514/weasel-vmenu-suite/releases
+
+- name: Note Studio
+  project: Note Studio
+  platform: Windows x64
+  version: "0.1.13"
+  size: 251 MB
+  type: exe
+  kind: 安装包
+  desc: 本地文档工作台：PDF 改字、批注、手写 OCR 与语音识别，全部本机推理。
+  url: https://github.com/SeanWang114514/Note-Studio/releases
+  primary: true
+
+- name: PP-OCRv6 Desktop
+  project: PP-OCRv6 Desktop
+  platform: Windows x64
+  version: "1.0"
+  size: 约 250 MB
+  type: exe
+  kind: 绿色单文件
+  desc: 单文件、免安装，双击即用；截图即识别、即翻译，无需联网。
+  url: https://github.com/SeanWang114514/PP-OCRv6-Desktop/releases
+  primary: true
+
+- name: DeepSeek 海报展（离线包）
+  project: DeepSeek 海报展
+  platform: 任意浏览器
+  version: "1.0"
+  size: < 1 MB
+  type: zip
+  kind: 静态站点
+  desc: 下载后可直接双击 index.html 离线打开，52 种风格全部保留。
+  url: https://github.com/SeanWang114514/deepseek-poster-52

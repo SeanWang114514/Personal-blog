@@ -1,0 +1,20 @@
+{%- comment -%}
+  Resolve a post URL by a title keyword, so data files (_data/software.yml etc.)
+  never hardcode dated permalinks that break when a post's date changes.
+
+  Matches the FIRST post whose title starts with the given text, which is robust
+  against the long "Name：subtitle" style titles used on this site.
+
+  Usage:
+    {% include post-url.html title="Note Studio" %}
+  Outputs the relative URL, or an empty string when nothing matches.
+{%- endcomment -%}
+{%- assign _key = include.title | downcase | strip -%}
+{%- assign _hit = "" -%}
+{%- for _p in site.posts -%}
+  {%- assign _t = _p.title | downcase | strip -%}
+  {%- if _hit == "" and _t contains _key -%}
+    {%- assign _hit = _p.url -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if _hit != "" -%}{{ _hit | relative_url }}{%- endif -%}

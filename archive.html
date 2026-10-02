@@ -1,0 +1,107 @@
+---
+layout: default
+hero: false
+title: 归档
+description: "按年份浏览全部文章"
+permalink: /archive/
+---
+
+<section class="hero hero--compact">
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero__inner">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-layers"></use></svg>
+        Archive
+      </span>
+      <h1 class="hero__title">归档</h1>
+      <p class="hero__sub">
+        共 {{ site.posts | size }} 篇文章，{{ site.tags | size }} 个标签。
+        「我干了什么，究竟拿了时间换了什么」。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap section-tight">
+
+  {%- comment -%} 标签筛选 {%- endcomment -%}
+  <div class="controls">
+    <div class="controls__search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true"><use href="#i-search"></use></svg>
+      <label class="sr-only" for="sw-blog-search">搜索归档</label>
+      <input id="sw-blog-search" type="search" placeholder="搜索标题…" autocomplete="off">
+    </div>
+    <div class="chips" role="group" aria-label="按标签筛选">
+      <button class="chip is-active" type="button" data-filter-tag="all" aria-pressed="true">
+        全部<span class="chip__count">{{ site.posts | size }}</span>
+      </button>
+      {% assign sorted_tags = site.tags | sort %}
+      {% for tag in sorted_tags %}
+      <button class="chip" type="button" data-filter-tag="{{ tag[0] | escape }}" aria-pressed="false">
+        {{ tag[0] }}<span class="chip__count">{{ tag[1] | size }}</span>
+      </button>
+      {% endfor %}
+    </div>
+  </div>
+
+  {%- comment -%} 按年份分组 {%- endcomment -%}
+  {%- assign posts_by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" -%}
+
+  <div id="sw-blog-list">
+    {% for year in posts_by_year %}
+    <div class="archive-group">
+      <div class="archive-group__year">{{ year.name }}</div>
+
+      {% for post in year.items %}
+      <div class="archive-item" data-post
+        data-tags="{{ post.tags | join: ',' | escape }}"
+        data-search="{{ post.title | escape }} {{ post.subtitle | escape }}"
+        data-reveal>
+        <span class="archive-item__date">{{ post.date | date: '%m-%d' }}</span>
+        <a class="archive-item__title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        <span style="display:flex;gap:6px;flex-shrink:0">
+          {% for tag in post.tags limit: 2 %}
+          <span class="tag" style="font-size:11px">{{ tag }}</span>
+          {% endfor %}
+        </span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="empty hidden" id="sw-blog-empty">
+    <div class="empty__icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+        aria-hidden="true"><use href="#i-layers"></use></svg>
+    </div>
+    <p class="empty__title">没有匹配的文章</p>
+    <p class="empty__desc">换个标签或关键词试试。</p>
+  </div>
+
+  {%- comment -%} 标签云 {%- endcomment -%}
+  <section class="section" aria-labelledby="sec-arch-tags">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-tag"></use></svg>
+          标签
+        </span>
+        <h2 class="sec-head__title" id="sec-arch-tags">全部标签</h2>
+      </div>
+    </div>
+
+    <div class="chips">
+      {% for tag in sorted_tags %}
+      <a class="chip" href="{{ '/blog/' | relative_url }}?tag={{ tag[0] | url_encode }}">
+        {{ tag[0] }}<span class="chip__count">{{ tag[1] | size }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,127 @@
+---
+layout: default
+---
+
+<article>
+  <header class="wrap post-header">
+    <div class="post-header__tags">
+      {% for tag in page.tags %}
+      <a class="tag tag--brand" href="{{ '/blog/' | relative_url }}?tag={{ tag | url_encode }}">{{ tag }}</a>
+      {% endfor %}
+    </div>
+
+    <h1 class="post-header__title">{{ page.title }}</h1>
+
+    {% if page.subtitle %}
+    <p class="post-header__sub">{{ page.subtitle }}</p>
+    {% endif %}
+
+    <div class="post-header__meta" data-reading-meta>
+      <span class="post-header__meta-item">
+        <img src="{{ site.sidebar-avatar }}" alt="" loading="lazy">
+        {{ page.author | default: site.title }}
+      </span>
+      <span class="post-header__meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-calendar"></use></svg>
+        <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%Y 年 %-m 月 %-d 日' }}</time>
+      </span>
+      <span class="post-header__meta-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-clock"></use></svg>
+        <span data-reading-time>—</span>
+      </span>
+      {% if site.local-stats %}
+      <span class="post-header__meta-item" title="本机浏览计数（仅存于你的浏览器）">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-eye"></use></svg>
+        <span data-view-count>—</span> 次浏览
+      </span>
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="post-layout">
+      <div class="post-content" id="post-content">
+        {{ content }}
+
+        <div class="post-footer">
+          <div class="share-row">
+            <span class="share-row__label">分享</span>
+            <button class="share-btn" type="button" title="复制链接" aria-label="复制链接"
+              data-copy="{{ page.url | absolute_url }}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true"><use href="#i-link"></use></svg>
+            </button>
+            <a class="share-btn" title="分享到 X" aria-label="分享到 X"
+              href="https://twitter.com/intent/tweet?url={{ page.url | absolute_url | url_encode }}&text={{ page.title | url_encode }}"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:15px;height:15px">
+                <path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.67l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23Zm-1.16 17.52h1.83L7.08 4.13H5.11l11.97 15.64Z"/>
+              </svg>
+            </a>
+            <a class="share-btn" title="分享到微博" aria-label="分享到微博"
+              href="https://service.weibo.com/share/share.php?url={{ page.url | absolute_url | url_encode }}&title={{ page.title | url_encode }}"
+              rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:16px;height:16px">
+                <path d="M10.1 8.6c-3.9.4-7.1 2.8-7.1 5.5 0 2.8 3.4 4.6 7.5 4.6 4.4 0 7.6-2.2 7.6-5.1 0-2.4-2.5-4-5.5-4.4.3-.6.4-1.2.4-1.7 0-1.9-1.6-3-3.6-3-.7 0-1.4.2-2 .5-.3.2-.5.5-.4.8.1.3.4.4.7.3.3-.1.6-.1.9-.1 1 0 1.8.6 1.8 1.5 0 .3-.1.6-.2.9l-.1.2zm-.6 8.1c-2.7.2-4.9-.9-4.9-2.5 0-1.5 1.7-3 3.9-3.5 2.6-.6 5.2.3 5.2 2 .1 1.7-1.6 3.7-4.2 4zm-.5-1.6c-1.3.1-2.3-.5-2.2-1.3.1-.8 1.1-1.5 2.2-1.6 1.3-.2 2.3.4 2.2 1.2-.1.8-1 1.6-2.2 1.7zm11-6.6c.2-.1.3-.4.2-.6-.6-1.4-2.2-2.2-4-2-.3 0-.5.3-.5.6.1.3.3.5.6.4 1.3-.1 2.4.4 2.9 1.4.1.2.4.3.8.2zm1.4-1c.3-.1.4-.4.3-.7-.9-2.3-3.6-3.6-6.5-3.2-.3 0-.5.3-.5.6.1.3.3.5.6.4 2.4-.3 4.6.7 5.3 2.5.1.3.4.5.8.4z"/>
+              </svg>
+            </a>
+          </div>
+
+          {% if page.previous.url or page.next.url %}
+          <nav class="post-nav" aria-label="文章导航">
+            {% if page.previous.url %}
+            <a class="post-nav__item" href="{{ page.previous.url | relative_url }}">
+              <span class="post-nav__label">← 上一篇</span>
+              <span class="post-nav__title">{{ page.previous.title }}</span>
+            </a>
+            {% else %}
+            <span></span>
+            {% endif %}
+
+            {% if page.next.url %}
+            <a class="post-nav__item post-nav__item--next" href="{{ page.next.url | relative_url }}">
+              <span class="post-nav__label">下一篇 →</span>
+              <span class="post-nav__title">{{ page.next.title }}</span>
+            </a>
+            {% endif %}
+          </nav>
+          {% endif %}
+
+          {% include giscus.html %}
+        </div>
+      </div>
+
+      <aside class="toc-col">
+        <nav class="toc" aria-label="目录">
+          <div class="toc__title">目录</div>
+          <ul class="toc__list"></ul>
+        </nav>
+      </aside>
+    </div>
+  </div>
+</article>
+
+{% if site.page-mathjax or page.mathjax %}
+{% include mathjax_support.html %}
+{% endif %}
+
+{% if site.anchorjs %}
+<script>
+  (function () {
+    function load() {
+      var s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.3.1/anchor.min.js';
+      s.onload = function () {
+        anchors.options = { visible: 'hover', placement: 'left', icon: '#' };
+        anchors.add('.post-content h2, .post-content h3, .post-content h4');
+      };
+      document.body.appendChild(s);
+    }
+    if (document.readyState === 'complete') load();
+    else window.addEventListener('load', load);
+  })();
+</script>
+{% endif %}

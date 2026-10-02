@@ -1,0 +1,149 @@
+# ============================================================================
+#  软件合集 —— 驱动 /software/ 页面
+#  category 取值需与 /software/ 页面的筛选 chip 一致
+# ============================================================================
+
+- name: Rime VMenu 全家桶
+  slug: rime-vmenu-suite
+  tagline: 一个 v 键，把小狼毫变成输入套件
+  desc: >-
+    把小狼嚎（Weasel）升级成完整的输入工具箱：按 v 出功能菜单，可视化窗口管词库与配置，
+    剪贴板历史随手调用，按住 Ctrl+Win 就能说话输入 —— 全程离线，不需要管理员权限。
+  logo: V
+  logoClass: logo-violet
+  category: input
+  platform: Windows
+  version: "1.0"
+  size: 1.1 GB
+  license: 开源
+  lang: Lua / C++
+  status: stable
+  featured: true
+  tags: [工具, 输入法, Rime, 语音输入, Lua]
+  repo: https://github.com/SeanWang114514/weasel-vmenu-suite
+  postTitle: Rime VMenu 全家桶
+  highlights:
+    - 按 v 唤出功能菜单，常用操作一键直达
+    - 可视化设置窗口，词库与配置不再手改 yaml
+    - 剪贴板历史 + 常用语，随手调用
+    - 前后鼻音模糊、下一个候选词预测
+    - 本地语音输入，离线可用
+
+- name: Note Studio
+  slug: note-studio
+  tagline: PDF 改字、OCR 和语音识别装进一个本地工作台
+  desc: >-
+    一个基于 React + Electron 的本地文档工作台：PDF 能像 Word 一样逐字改，
+    批注文本框自带格式栏，手写 OCR 与语音识别都在本机推理 —— 改完直接写回原文件。
+  logo: N
+  logoClass: logo-cyan
+  category: office
+  platform: Windows
+  version: "0.1.13"
+  size: 251 MB
+  license: 开源
+  lang: React / Electron
+  status: stable
+  featured: true
+  tags: [工具, PDF, Electron, React, OCR]
+  repo: https://github.com/SeanWang114514/Note-Studio
+  postTitle: Note Studio
+  highlights:
+    - 八种常见格式就地打开、改完写回原文件
+    - PDF 逐字编辑，批注文本框自带格式栏
+    - 手写 OCR 与语音识别均在本机推理
+    - 文件不出本机，隐私可控
+
+- name: PP-OCRv6 Desktop
+  slug: ppocrv6-desktop
+  tagline: 纯 C++ 的离线 OCR + 翻译桌面工具
+  desc: >-
+    一个原生 Win32 C++ 应用，截图即识别、即翻译，无需联网，无需 Python，
+    单文件直接运行。
+  logo: P
+  logoClass: logo-emerald
+  category: ai
+  platform: Windows
+  version: "1.0"
+  size: 250 MB
+  license: 开源
+  lang: C++ / PaddleOCR
+  status: stable
+  featured: true
+  tags: [AI, 工具, C++, OCR, PaddleOCR]
+  repo: https://github.com/SeanWang114514/PP-OCRv6-Desktop
+  postTitle: PP-OCRv6 Desktop
+  highlights:
+    - 截图即识别、即翻译，全流程离线
+    - 无 Python 运行时依赖，单文件免安装
+    - 原生 Win32，启动与占用都更轻
+
+- name: DeepSeek 海报展
+  slug: deepseek-poster-52
+  tagline: 52 种风格自我介绍生成器
+  desc: >-
+    把同一段自我介绍，渲染成 52 种经典视觉风格：瑞士国际主义、包豪斯、赛博朋克、
+    日式和风、蒸汽波、像素艺术……一张网页就是一场小型设计展览。
+  logo: D
+  logoClass: logo-indigo
+  category: web
+  platform: Web
+  version: "1.0"
+  size: 静态站点
+  license: 开源
+  lang: HTML / CSS / JS
+  status: stable
+  tags: [AI, 设计, 工具]
+  repo: https://github.com/SeanWang114514/deepseek-poster-52
+  demo: https://seanwang114514.github.io/Personal-blog/deepseek-poster-52/
+  postTitle: DeepSeek 海报展
+  highlights:
+    - 一份 PROFILE 数据，52 套视觉语言
+    - 纯前端静态页，打开即用
+    - 每套风格都可单独导出
+
+- name: Geekbench 性价比天梯图
+  slug: geekbench-value-ladder
+  tagline: 跑分和价格放进同一张图
+  desc: >-
+    把 GPU / CPU 的 Geekbench 跑分和人民币价格放在同一张天梯图里，
+    装机、升级或者纠结要不要换显卡时，直接看性能和性价比。
+  logo: G
+  logoClass: logo-amber
+  category: dev
+  platform: Web
+  version: "1.0"
+  size: 静态站点
+  license: 开源
+  lang: HTML / JS
+  status: stable
+  tags: [Geekbench, GPU, CPU, 硬件]
+  repo: https://github.com/SeanWang114514/geekbench-value-ladder
+  postTitle: Geekbench 性价比天梯图
+  highlights:
+    - 显卡 / CPU 一键切换
+    - 性能榜与性价比榜双视图
+    - 单文件网页，可离线保存
+
+- name: GitHub 高星新项目
+  slug: github-hot-repos
+  tagline: 用 AI 帮你发现新晋热门仓库
+  desc: >-
+    一个纯静态的速览站点，专门抓取最近 7 / 30 / 90 天创建、按 Stars 排序的新仓库，
+    让新项目有机会冒头。
+  logo: H
+  logoClass: logo-slate
+  category: dev
+  platform: Web
+  version: "1.0"
+  size: 静态站点
+  license: 开源
+  lang: HTML / JS
+  status: stable
+  tags: [GitHub, AI, 工具]
+  repo: https://github.com/SeanWang114514/github-hot-repos
+  postTitle: GitHub 高星新项目
+  highlights:
+    - 数据来自 GitHub Search API
+    - 支持 7 / 30 / 90 天窗口切换
+    - 按 Stars 排序，一眼看到黑马

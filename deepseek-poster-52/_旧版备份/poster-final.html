@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>30+ 海报风格展示</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a2e; min-height: 100vh; padding: 20px; }
+    .header { text-align: center; padding: 40px 20px; color: #fff; margin-bottom: 20px; }
+    .header h1 { font-size: 2.5em; margin-bottom: 10px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .header p { color: #a0a0a0; font-size: 1.1em; }
+    .container { max-width: 1600px; margin: 0 auto; }
+    .style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px 0; }
+    .style-card { background: #2a2a4a; border-radius: 12px; overflow: hidden; transition: transform 0.3s; cursor: pointer; min-height: 250px; }
+    .style-card:hover { transform: translateY(-5px); }
+    .card-preview { height: 180px; padding: 20px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .card-style-name { font-size: 1.1em; color: #fff; text-align: center; z-index: 2; position: relative; }
+    .card-info { padding: 15px; background: #1a1a2e; }
+    .card-info h4 { color: #fff; font-size: 0.95em; }
+    .card-info span { color: #888; font-size: 0.8em; }
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+    .modal.active { display: flex; }
+    .modal-content { background: #1a1a2e; border-radius: 20px; max-width: 900px; width: 100%; max-height: 95vh; overflow: auto; position: relative; }
+    .modal-close { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; cursor: pointer; font-size: 1.5em; color: #fff; z-index: 10; }
+    .poster-wrapper { padding: 40px; }
+    .poster { max-width: 500px; aspect-ratio: 3/4; margin: 0 auto; position: relative; overflow: hidden; border-radius: 10px; }
+    .poster-inner { height: 100%; padding: 30px; display: flex; flex-direction: column; position: relative; z-index: 2; }
+    .poster h1 { font-size: 2em; margin-bottom: 10px; }
+    .poster .subtitle { font-size: 0.9em; opacity: 0.8; margin-bottom: 20px; }
+    .poster .desc { flex: 1; font-size: 0.95em; line-height: 1.7; }
+    .poster .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .poster .tag { padding: 5px 12px; border-radius: 15px; font-size: 0.8em; }
+    .poster .avatar { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2em; margin-bottom: 15px; }
+    .poster .contact { margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.85em; opacity: 0.8; }
+    .nav-buttons { display: flex; gap: 10px; padding: 20px; justify-content: center; }
+    .nav-btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; color: #fff; font-size: 1em; }
+    .nav-btn.primary { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .nav-btn.secondary { background: rgba(255,255,255,0.15); }
+    .nav-btn:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎨 30 种海报风格</h1>
+    <p>点击卡片查看完整设计效果</p>
+  </div>
+  <div class="container">
+    <div class="style-grid" id="grid"></div>
+  </div>
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div class="poster-wrapper">
+        <div class="poster" id="poster">
+          <div class="poster-inner" id="posterInner"></div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="nav-btn secondary" onclick="prev()">← 上一个</button>
+        <button class="nav-btn primary" onclick="next()">下一个 →</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const styles = [
+      { id: 's1', name: '瑞士国际主义', cat: '经典', bg: '#fafafa', color: '#1a1a1a' },
+      { id: 's2', name: '包豪斯', cat: '经典', bg: '#e8dcc4', color: '#1a1a1a' },
+      { id: 's3', name: '装饰艺术', cat: '复古', bg: '#1a1a2e', color: '#d4af37' },
+      { id: 's4', name: '赛博朋克', cat: '科幻', bg: '#0a0a1a', color: '#00ffff' },
+      { id: 's5', name: '极简主义', cat: '现代', bg: '#ffffff', color: '#1a1a1a' },
+      { id: 's6', name: '日本和风', cat: '传统', bg: '#f5f0e8', color: '#2c2c2c' },
+      { id: 's7', name: '孟菲斯', cat: '后现代', bg: '#f7f7f7', color: '#333' },
+      { id: 's8', name: '酸性设计', cat: '前卫', bg: '#ccff00', color: '#000' },
+      { id: 's9', name: '哥特风格', cat: '古典', bg: '#1a1a1a', color: '#c9c9c9' },
+      { id: 's10', name: 'Y2K 千禧', cat: '复古', bg: '#ff69b4', color: '#fff' },
+      { id: 's11', name: '蒸汽波', cat: '网络', bg: '#ff9a9e', color: '#fff' },
+      { id: 's12', name: '粗野主义', cat: '网页', bg: '#533fc2', color: '#000' },
+      { id: 's13', name: '新艺术运动', cat: '复古', bg: '#e8dcc8', color: '#3a3a2a' },
+      { id: 's14', name: '未来主义', cat: '前卫', bg: '#0d0d0d', color: '#fff' },
+      { id: 's15', name: '波普艺术', cat: '艺术', bg: '#ff6b6b', color: '#1a1a1a' },
+      { id: 's16', name: '中国风', cat: '传统', bg: '#8b1a1a', color: '#f5deb3' },
+      { id: 's17', name: '奶油风', cat: '温柔', bg: '#fdfbf7', color: '#5c4b4a' },
+      { id: 's18', name: '暗黑微光', cat: '现代', bg: '#0a0a0f', color: '#e0e0e0' },
+      { id: 's19', name: '复古计算机', cat: '怀旧', bg: '#1a1a2e', color: '#33ff33' },
+      { id: 's20', name: '新拟态', cat: 'UI', bg: '#e0e5ec', color: '#4a4a4a' },
+      { id: 's21', name: '拼贴艺术', cat: '艺术', bg: '#fff', color: '#1a1a1a' },
+      { id: 's22', name: '渐变模糊', cat: '现代', bg: '#000', color: '#fff' },
+      { id: 's23', name: '纸艺风格', cat: '质感', bg: '#667eea', color: '#fff' },
+      { id: 's24', name: '故障艺术', cat: '数字', bg: '#0a0a0a', color: '#fff' },
+      { id: 's25', name: '自然有机', cat: '清新', bg: '#56ab2f', color: '#fff' },
+      { id: 's26', name: '霓虹夜景', cat: '夜景', bg: '#0c0c1e', color: '#fff' },
+      { id: 's27', name: '单色摄影', cat: '摄影', bg: '#1a1a1a', color: '#f0f0f0' },
+      { id: 's28', name: '水彩手绘', cat: '手绘', bg: '#ff9a9e', color: '#5c4b51' },
+      { id: 's29', name: '工业风', cat: '硬朗', bg: '#2a2a2a', color: '#ddd' },
+      { id: 's30', name: '梦幻紫', cat: '浪漫', bg: '#667eea', color: '#fff' }
+    ];
+    
+    let idx = 0;
+    
+    function render() {
+      const g = document.getElementById('grid');
+      g.innerHTML = styles.map((s, i) => 
+        '<div class="style-card" onclick="open(' + i + ')">' +
+          '<div class="card-preview" style="background: ' + s.bg + ';">' +
+            '<span class="card-style-name" style="color: ' + s.color + '; text-shadow: 0 0 10px rgba(0,0,0,0.3);">' + s.name + '</span>' +
+          '</div>' +
+          '<div class="card-info"><h4>' + s.name + '</h4><span>' + s.cat + '</span></div>' +
+        '</div>'
+      ).join('');
+    }
+    
+    function getPosterHTML(s) {
+      return '<div class="avatar" style="background: rgba(102,126,234,0.3);">👤</div>' +
+        '<h1 style="color: ' + s.color + ';">张三</h1>' +
+        '<p class="subtitle" style="color: ' + s.color + ';">' + s.name + ' | 视觉设计师</p>' +
+        '<p class="desc" style="color: ' + s.color + ';">热爱创意与设计，将想法转化为视觉语言。擅长品牌设计、UI/UX、动态图形等多种设计领域。</p>' +
+        '<div class="tags">' +
+          '<span class="tag" style="background: ' + s.bg + '; color: ' + s.color + ';">创意设计</span>' +
+          '<span class="tag" style="background: ' + s.bg + '; color: ' + s.color + ';">视觉传达</span>' +
+          '<span class="tag" style="background: ' + s.bg + '; color: ' + s.color + ';">品牌策划</span>' +
+        '</div>' +
+        '<p class="contact" style="color: ' + s.color + ';">📧 hello@designer.com</p>';
+    }
+    
+    function open(i) {
+      idx = i;
+      const s = styles[i];
+      document.getElementById('poster').style.background = s.bg;
+      document.getElementById('posterInner').innerHTML = getPosterHTML(s);
+      document.getElementById('modal').classList.add('active');
+    }
+    
+    function closeM() { document.getElementById('modal').classList.remove('active'); }
+    function next() { idx = (idx + 1) % styles.length; open(idx); }
+    function prev() { idx = (idx - 1 + styles.length) % styles.length; open(idx); }
+    
+    document.getElementById('modal').onclick = function(e) { if(e.target === this) closeM(); };
+    document.onkeydown = function(e) {
+      if(!document.getElementById('modal').classList.contains('active')) return;
+      if(e.key === 'Escape') closeM();
+      if(e.key === 'ArrowRight') next();
+      if(e.key === 'ArrowLeft') prev();
+    };
+    
+    render();
+  </script>
+</body>
+</html>

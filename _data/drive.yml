@@ -1,0 +1,76 @@
+# ============================================================================
+#  云盘 / 网盘资源 —— 驱动 /drive/ 页面
+#  ⚠️ 分享链接与提取码为占位示例，请替换为你自己的真实链接后再发布。
+# ============================================================================
+
+- name: 百度网盘
+  logo: 度
+  logoClass: logo-indigo
+  desc: 国内最常用的网盘，大文件与资源合集的主存放点。
+  capacity: 2 TB（会员）
+  speed: 会员不限速
+  tags: [主力, 大文件]
+  status: active
+  home: https://pan.baidu.com
+  share: https://pan.baidu.com
+  code: ""
+
+- name: 阿里云盘
+  logo: 阿
+  logoClass: logo-cyan
+  desc: 不限速下载，适合分享软件安装包与镜像。
+  capacity: 100 GB
+  speed: 不限速
+  tags: [不限速, 软件包]
+  status: active
+  home: https://www.alipan.com
+  share: https://www.alipan.com
+  code: ""
+
+- name: 夸克网盘
+  logo: 夸
+  logoClass: logo-violet
+  desc: 资源转存方便，移动端体验好，常用作备用分享渠道。
+  capacity: 10 GB
+  speed: 会员加速
+  tags: [备用, 转存]
+  status: active
+  home: https://pan.quark.cn
+  share: https://pan.quark.cn
+  code: ""
+
+- name: 123 云盘
+  logo: 123
+  logoClass: logo-emerald
+  desc: 免费额度大、直链友好，适合放公开的小体积资源。
+  capacity: 2 TB（免费）
+  speed: 不限速
+  tags: [免费, 大容量]
+  status: active
+  home: https://www.123pan.com
+  share: https://www.123pan.com
+  code: ""
+
+- name: OneDrive
+  logo: O
+  logoClass: logo-slate
+  desc: 与系统集成最好，用于个人文档同步与长期归档。
+  capacity: 5 GB（免费）
+  speed: 国内受限
+  tags: [同步, 归档]
+  status: limited
+  home: https://onedrive.live.com
+  share: ""
+  code: ""
+
+- name: GitHub Releases
+  logo: G
+  logoClass: logo-slate
+  desc: 所有自研软件的第一分发渠道，版本可追溯、有校验。
+  capacity: 单文件 < 2 GB
+  speed: 国内较慢
+  tags: [官方渠道, 版本可追溯]
+  status: active
+  home: https://github.com/SeanWang114514?tab=repositories
+  share: ""
+  code: ""

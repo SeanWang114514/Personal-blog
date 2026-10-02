@@ -1,0 +1,76 @@
+---
+layout: null
+permalink: /search.json
+---
+[
+{%- comment -%} 文章 {%- endcomment -%}
+{% for post in site.posts %}
+  {
+    "title": {{ post.title | jsonify }},
+    "subtitle": {{ post.subtitle | default: "" | jsonify }},
+    "tags": {{ post.tags | join: ', ' | jsonify }},
+    "url": {{ post.url | relative_url | jsonify }},
+    "date": {{ post.date | date: "%Y-%m-%d" | jsonify }},
+    "type": "post"
+  },
+{% endfor %}
+{%- comment -%} 软件 {%- endcomment -%}
+{% for soft in site.data.software %}
+  {
+    "title": {{ soft.name | jsonify }},
+    "subtitle": {{ soft.tagline | jsonify }},
+    "tags": {{ soft.tags | join: ', ' | jsonify }},
+    "url": {{ '/software/' | relative_url | jsonify }},
+    "date": "软件",
+    "type": "software"
+  },
+{% endfor %}
+{%- comment -%} 项目 {%- endcomment -%}
+{% for p in site.data.projects %}
+  {
+    "title": {{ p.name | jsonify }},
+    "subtitle": {{ p.tagline | jsonify }},
+    "tags": {{ p.tech | join: ', ' | jsonify }},
+    "url": {{ '/projects/' | relative_url | jsonify }},
+    "date": "项目",
+    "type": "project"
+  },
+{% endfor %}
+{%- comment -%} 下载条目 {%- endcomment -%}
+{% for d in site.data.downloads %}
+  {
+    "title": {{ d.name | jsonify }},
+    "subtitle": {{ d.kind | append: ' · ' | append: d.size | jsonify }},
+    "tags": {{ d.platform | jsonify }},
+    "url": {{ '/download/' | relative_url | jsonify }},
+    "date": "下载",
+    "type": "download"
+  },
+{% endfor %}
+{%- comment -%} 工具箱 {%- endcomment -%}
+{% for g in site.data.toolbox %}
+  {% for item in g.items %}
+  {
+    "title": {{ item.name | jsonify }},
+    "subtitle": {{ item.desc | jsonify }},
+    "tags": {{ g.title | jsonify }},
+    "url": {{ '/toolbox/' | relative_url | jsonify }},
+    "date": "工具箱",
+    "type": "tool"
+  },
+  {% endfor %}
+{% endfor %}
+{%- comment -%} 收藏夹 {%- endcomment -%}
+{% for g in site.data.bookmarks %}
+  {% for item in g.items %}
+  {
+    "title": {{ item.name | jsonify }},
+    "subtitle": {{ item.desc | jsonify }},
+    "tags": {{ g.title | jsonify }},
+    "url": {{ '/bookmarks/' | relative_url | jsonify }},
+    "date": "收藏夹",
+    "type": "bookmark"
+  }{% unless forloop.last and forloop.parentloop.last %},{% endunless %}
+  {% endfor %}
+{% endfor %}
+]

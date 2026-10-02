@@ -1,0 +1,204 @@
+---
+layout: default
+hero: false
+nav: download
+title: 下载
+description: "所有安装包集中一处 —— 标注版本、体积与平台，直链 GitHub Releases"
+permalink: /download/
+---
+
+{%- assign items = site.data.downloads -%}
+
+<section class="hero hero--compact">
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero__inner">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-download"></use></svg>
+        Downloads
+      </span>
+      <h1 class="hero__title">下载中心</h1>
+      <p class="hero__sub">
+        {{ items | size }} 个可下载条目，全部来自 GitHub Releases。
+        每个包都标注了平台、版本与体积，下载前可以先确认是否合适。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap section-tight">
+
+  <div class="notice notice--warn mb-8" data-reveal>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+      aria-hidden="true"><use href="#i-warn"></use></svg>
+    <div>
+      <strong>安全说明：</strong>本站只提供指向 GitHub Releases 的链接，不中转、不打包二次修改。
+      安装前请核对文件名与版本号；如果浏览器提示来源不明，这是因为安装包未做代码签名。
+    </div>
+  </div>
+
+  {%- comment -%} 主推下载 {%- endcomment -%}
+  {%- assign primary = items | where: "primary", true -%}
+  {% if primary.size > 0 %}
+  <section aria-labelledby="sec-primary" class="mb-12">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-star"></use></svg>
+          主推
+        </span>
+        <h2 class="sec-head__title" id="sec-primary">最常被下载的三个</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-3">
+      {% for item in primary %}
+      <article class="card card--glow" data-reveal data-reveal-delay="{{ forloop.index0 | times: 70 }}">
+        <div class="card__head">
+          <span class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-package"></use></svg>
+          </span>
+          <div>
+            <h3 class="card__title" style="font-size:var(--t-base)">{{ item.name }}</h3>
+            <p style="font-size:var(--t-xs);color:var(--text-3)">{{ item.project }}</p>
+          </div>
+        </div>
+
+        <p class="card__desc">{{ item.desc }}</p>
+
+        <div class="soft-card__specs">
+          <span class="soft-card__spec">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-monitor"></use></svg>
+            {{ item.platform }}
+          </span>
+          <span class="soft-card__spec">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-tag"></use></svg>
+            v{{ item.version }}
+          </span>
+          <span class="soft-card__spec">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-hard-drive"></use></svg>
+            {{ item.size }}
+          </span>
+        </div>
+
+        <div class="card__foot">
+          <a class="btn btn--primary btn--sm" href="{{ item.url }}" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
+            前往下载
+          </a>
+          <span class="tag">{{ item.kind }}</span>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {%- comment -%} 完整清单 {%- endcomment -%}
+  <section aria-labelledby="sec-all-dl">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-layers"></use></svg>
+          完整清单
+        </span>
+        <h2 class="sec-head__title" id="sec-all-dl">所有可下载内容</h2>
+        <p class="sec-head__desc">按项目分组，同一项目可能有多种打包方式（安装包 / 便携版）。</p>
+      </div>
+    </div>
+
+    {%- assign projects = items | map: "project" | uniq -%}
+    {% for proj in projects %}
+    <div class="mb-8" data-reveal>
+      <h3 style="font-size:var(--t-lg);font-weight:660;margin-bottom:var(--s-4)">{{ proj }}</h3>
+      <div class="dl-list">
+        {% for item in items %}
+        {% if item.project == proj %}
+        <div class="dl-row">
+          <span class="dl-row__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
+              <use href="#i-{% if item.type == 'zip' %}folder{% elsif item.type == 'exe' %}package{% else %}file{% endif %}"></use>
+            </svg>
+          </span>
+
+          <div class="dl-row__main">
+            <div class="dl-row__name">{{ item.name }}</div>
+            <div class="dl-row__meta">
+              <span>{{ item.platform }}</span>
+              <span>v{{ item.version }}</span>
+              <span>{{ item.size }}</span>
+              <span class="tag" style="padding:2px 8px">{{ item.kind }}</span>
+            </div>
+            <p style="font-size:var(--t-xs);color:var(--text-3);margin-top:6px">{{ item.desc }}</p>
+          </div>
+
+          <div class="dl-row__action">
+            <a class="btn btn--ghost btn--sm" href="{{ item.url }}" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
+              下载
+            </a>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
+  {%- comment -%} 常见问题 {%- endcomment -%}
+  <section class="section" aria-labelledby="sec-faq">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-info"></use></svg>
+          FAQ
+        </span>
+        <h2 class="sec-head__title" id="sec-faq">下载前常见问题</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card" data-reveal>
+        <h3 class="card__title">下载速度很慢怎么办？</h3>
+        <p class="card__desc">
+          GitHub Releases 在国内访问不稳定。可以试试云盘页里的不限速渠道，
+          或者用代理后重新下载。
+        </p>
+      </div>
+      <div class="card" data-reveal data-reveal-delay="60">
+        <h3 class="card__title">安装包为什么这么大？</h3>
+        <p class="card__desc">
+          因为这些工具都内置了本地模型（OCR、语音识别、词库），
+          用体积换「离线可用、不联网、数据不出本机」。
+        </p>
+      </div>
+      <div class="card" data-reveal data-reveal-delay="120">
+        <h3 class="card__title">需要管理员权限吗？</h3>
+        <p class="card__desc">
+          不需要。便携版解压即用；安装包写入的是用户目录，不碰系统目录，
+          卸载直接删文件夹即可。
+        </p>
+      </div>
+      <div class="card" data-reveal data-reveal-delay="180">
+        <h3 class="card__title">更新怎么获取？</h3>
+        <p class="card__desc">
+          目前需要手动下载新版本覆盖。版本号与体积会同步更新在本页，
+          也可以 Watch 对应的 GitHub 仓库接收发布通知。
+        </p>
+      </div>
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,129 @@
+# ============================================================================
+#  Sean Wang Blog — 站点配置
+#  仓库: SeanWang114514/Personal-blog
+#  部署: GitHub Pages (project page) → https://seanwang114514.github.io/Personal-blog/
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# 基本信息
+# ---------------------------------------------------------------------------
+title: Sean Wang
+SEOTitle: Sean Wang 的博客 | Sean Wang Blog
+tagline: "「离开世界之前 一切都是过程」"
+header-img: img/home-bg.jpg
+email: wslzhenshuai@163.com
+description: "Sean Wang 的个人博客 — 软件、工具、AI 与折腾记录"
+keyword: "Sean Wang, Sean Wang Blog, 博客, 个人网站, 软件下载, 工具, AI, OCR, 输入法, 前端, 设计"
+
+# ---------------------------------------------------------------------------
+# 部署地址
+#   GitHub Pages 项目页默认挂在 /Personal-blog/ 子路径下。
+#   所有模板都通过 {{ site.baseurl }} / relative_url 生成链接，改这里即可整体迁移。
+# ---------------------------------------------------------------------------
+url: "https://seanwang114514.github.io"
+baseurl: "/Personal-blog"
+
+future: true
+
+# ---------------------------------------------------------------------------
+# 社交账号
+# ---------------------------------------------------------------------------
+RSS: true
+github_username: SeanWang114514
+bilibili_username: 3461565747563137
+zhihu_username: 91-53-52-62
+weibo_username: u/7943031647
+
+# ---------------------------------------------------------------------------
+# 构建
+# ---------------------------------------------------------------------------
+highlighter: rouge
+permalink: pretty
+paginate: 8
+paginate_path: "/blog/page/:num/"
+
+exclude:
+  [
+    "less",
+    "node_modules",
+    "Gruntfile.js",
+    "package.json",
+    "package-lock.json",
+    "Gemfile",
+    "Gemfile.lock",
+    "Rakefile",
+    "README.md",
+    "README.zh.md",
+    "_doc",
+    "vendor",
+  ]
+
+anchorjs: true
+
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+
+feed:
+  path: feed.xml
+
+# ---------------------------------------------------------------------------
+# Markdown
+# ---------------------------------------------------------------------------
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    span:
+      line_numbers: false
+    block:
+      line_numbers: true
+      start_line: 1
+
+# ---------------------------------------------------------------------------
+# 评论 (Giscus · 基于 GitHub Discussions)
+#   首次部署后到 https://giscus.app 用仓库生成自己的 repo-id / category-id 再替换。
+# ---------------------------------------------------------------------------
+giscus:
+  enabled: true
+  repo: SeanWang114514/Personal-blog
+  repo_id: ""            # ← 留空则自动跳过渲染，填上 giscus.app 给出的值即可启用
+  category: "Announcements"
+  category_id: ""
+  mapping: pathname
+  reactions_enabled: "1"
+  input_position: bottom
+  theme_light: light
+  theme_dark: dark_dimmed
+
+# ---------------------------------------------------------------------------
+# 侧边栏 / 个人卡片
+# ---------------------------------------------------------------------------
+sidebar: true
+sidebar-about-description: "一只AI农场主喵~"
+sidebar-avatar: https://avatars.githubusercontent.com/u/300768697?v=4
+
+featured-tags: true
+featured-condition-size: 3
+
+# ---------------------------------------------------------------------------
+# 主题 / PWA
+# ---------------------------------------------------------------------------
+chrome-tab-theme-color: "#0b0f19"
+service-worker: false
+
+page-mathjax: false
+
+# ---------------------------------------------------------------------------
+# 统计
+#   ⚠️ 下面是原站遗留的占位 / 他人 ID，确认后自行替换或保持关闭。
+#   ga_track_id 留空 = 不加载 Google Analytics。
+# ---------------------------------------------------------------------------
+ga_track_id: ""
+ga_domain: ""
+
+# 本地访问计数（纯前端 localStorage，无第三方依赖，可在 _config 关闭）
+local-stats: true

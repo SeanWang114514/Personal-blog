@@ -1,0 +1,98 @@
+# ============================================================================
+#  项目作品集 —— 驱动 /projects/ 页面
+# ============================================================================
+
+- name: Rime VMenu 全家桶
+  slug: weasel-vmenu-suite
+  tagline: 离线输入套件
+  desc: 把 Rime / 小狼毫从「输入法」升级成带功能菜单、可视化配置、剪贴板历史与本地语音输入的完整工具箱。
+  category: desktop
+  year: "2026"
+  status: active
+  logo: V
+  logoClass: logo-violet
+  tech: [Lua, C++, Rime, Win32]
+  repo: https://github.com/SeanWang114514/weasel-vmenu-suite
+  stars: 0
+  featured: true
+
+- name: Note Studio
+  slug: note-studio
+  tagline: 本地文档工作台
+  desc: React + Electron 打造的离线文档工作台，PDF 逐字编辑、手写 OCR、语音识别全在本机推理，文件不出本机。
+  category: desktop
+  year: "2026"
+  status: active
+  logo: N
+  logoClass: logo-cyan
+  tech: [React, Electron, TypeScript, OCR]
+  repo: https://github.com/SeanWang114514/Note-Studio
+  stars: 0
+  featured: true
+
+- name: PP-OCRv6 Desktop
+  slug: PP-OCRv6-Desktop
+  tagline: 原生离线 OCR
+  desc: 纯 C++ Win32 的截图即识别、即翻译工具，不依赖 Python 运行时，单文件免安装。
+  category: desktop
+  year: "2026"
+  status: active
+  logo: P
+  logoClass: logo-emerald
+  tech: [C++, Win32, PaddleOCR]
+  repo: https://github.com/SeanWang114514/PP-OCRv6-Desktop
+  stars: 0
+  featured: true
+
+- name: DeepSeek 海报展
+  slug: deepseek-poster-52
+  tagline: 52 种风格自我介绍
+  desc: 同一段文字被 52 种经典视觉风格重新演绎，一张网页就是一场小型设计展。
+  category: web
+  year: "2026"
+  status: active
+  logo: D
+  logoClass: logo-indigo
+  tech: [HTML, CSS, JavaScript]
+  demo: https://seanwang114514.github.io/Personal-blog/deepseek-poster-52/
+  repo: https://github.com/SeanWang114514/deepseek-poster-52
+  stars: 0
+
+- name: Geekbench 性价比天梯图
+  slug: geekbench-value-ladder
+  tagline: 跑分 × 价格
+  desc: 把 Geekbench 跑分和人民币价格放进同一张天梯图，装机选卡时直接看性价比。
+  category: web
+  year: "2026"
+  status: active
+  logo: G
+  logoClass: logo-amber
+  tech: [HTML, JavaScript, 数据可视化]
+  repo: https://github.com/SeanWang114514/geekbench-value-ladder
+  stars: 0
+
+- name: GitHub 高星新项目
+  slug: github-hot-repos
+  tagline: 发现新晋黑马
+  desc: 基于 GitHub Search API 的纯静态速览站，专抓最近 7 / 30 / 90 天创建的高星新仓库。
+  category: web
+  year: "2026"
+  status: active
+  logo: H
+  logoClass: logo-slate
+  tech: [GitHub API, HTML, JavaScript]
+  repo: https://github.com/SeanWang114514/github-hot-repos
+  stars: 0
+
+- name: Sean Wang Blog
+  slug: Personal-blog
+  tagline: 你现在看到的这个站
+  desc: 深色优先、玻璃拟态的个人站点，含博客、软件、云盘、下载、项目、工具箱与收藏夹七个板块。
+  category: web
+  year: "2026"
+  status: active
+  logo: S
+  logoClass: logo-rose
+  tech: [Jekyll, Liquid, CSS, JavaScript]
+  repo: https://github.com/SeanWang114514/Personal-blog
+  stars: 0

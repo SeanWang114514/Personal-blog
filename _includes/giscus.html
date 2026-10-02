@@ -1,0 +1,31 @@
+{%- comment -%}
+  Giscus comments (GitHub Discussions). Rendered only when repo_id/category_id are
+  configured in _config.yml — otherwise the include is a no-op so the site never
+  ships a broken embed.
+{%- endcomment -%}
+{%- if site.giscus.enabled and site.giscus.repo_id != "" and site.giscus.category_id != "" -%}
+<section class="comments" id="comments">
+  <h2 class="comments__title">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+      stroke-linejoin="round" aria-hidden="true"><use href="#i-message"></use></svg>
+    评论与讨论
+  </h2>
+
+  <script src="https://giscus.app/client.js"
+    data-repo="{{ site.giscus.repo }}"
+    data-repo-id="{{ site.giscus.repo_id }}"
+    data-category="{{ site.giscus.category }}"
+    data-category-id="{{ site.giscus.category_id }}"
+    data-mapping="{{ site.giscus.mapping }}"
+    data-strict="0"
+    data-reactions-enabled="{{ site.giscus.reactions_enabled }}"
+    data-emit-metadata="0"
+    data-input-position="{{ site.giscus.input_position }}"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
+  </script>
+</section>
+{%- endif -%}

@@ -1,0 +1,49 @@
+# 全站主导航 —— 增删条目即可同时更新顶栏与移动端抽屉
+# key    : 与页面 front matter 的 `nav:` 对应，用于高亮当前项
+# icon   : _includes/icons.html 中的图标 id（去掉 i- 前缀）
+# url    : 以 / 开头的站点内路径，渲染时会自动加上 baseurl
+
+- key: home
+  label: 首页
+  icon: home
+  url: /
+
+- key: blog
+  label: 博客
+  icon: book
+  url: /blog/
+
+- key: software
+  label: 软件
+  icon: box
+  url: /software/
+
+- key: drive
+  label: 云盘
+  icon: cloud
+  url: /drive/
+
+- key: download
+  label: 下载
+  icon: download
+  url: /download/
+
+- key: projects
+  label: 项目
+  icon: grid
+  url: /projects/
+
+- key: toolbox
+  label: 工具箱
+  icon: tool
+  url: /toolbox/
+
+- key: bookmarks
+  label: 收藏夹
+  icon: bookmark
+  url: /bookmarks/
+
+- key: about
+  label: 关于
+  icon: user
+  url: /about/

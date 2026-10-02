@@ -1,0 +1,103 @@
+{%- comment -%}
+  Primary navigation. `page.nav` on a page marks which entry is active.
+  Every link goes through relative_url so the /Personal-blog subpath stays correct.
+{%- endcomment -%}
+{%- assign nav = site.data.nav -%}
+{%- assign current = page.nav | default: '' -%}
+
+<div class="scroll-progress" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="wrap topbar__inner">
+    <a class="brand" href="{{ '/' | relative_url }}">
+      <span class="brand__mark" aria-hidden="true">S</span>
+      <span class="brand__text">{{ site.title }}</span>
+    </a>
+
+    <nav class="nav" aria-label="主导航">
+      {% for item in nav %}
+      <a class="nav__link{% if current == item.key %} is-active{% endif %}"
+        href="{{ item.url | relative_url }}"
+        {% if current == item.key %}aria-current="page"{% endif %}>
+        <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <use href="#i-{{ item.icon }}"></use>
+        </svg>
+        <span>{{ item.label }}</span>
+      </a>
+      {% endfor %}
+    </nav>
+
+    <div class="topbar__actions">
+      <button class="icon-btn theme-toggle" type="button" aria-label="切换深色 / 浅色主题" title="切换主题">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <use href="#i-moon"></use>
+        </svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <use href="#i-sun"></use>
+        </svg>
+      </button>
+
+      <button class="icon-btn nav-toggle" type="button" aria-label="打开菜单" aria-controls="sw-drawer"
+        aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <use href="#i-menu"></use>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+{%- comment -%} Mobile drawer {%- endcomment -%}
+<div class="drawer" id="sw-drawer" aria-hidden="true">
+  <div class="drawer__scrim" data-drawer-close></div>
+  <div class="drawer__panel" role="dialog" aria-modal="true" aria-label="站点导航">
+    <div class="drawer__head">
+      <span class="drawer__title">导航</span>
+      <button class="icon-btn" type="button" aria-label="关闭菜单" data-drawer-close>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <use href="#i-close"></use>
+        </svg>
+      </button>
+    </div>
+
+    {% for item in nav %}
+    <a class="drawer__link{% if current == item.key %} is-active{% endif %}" href="{{ item.url | relative_url }}">
+      <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <use href="#i-{{ item.icon }}"></use>
+      </svg>
+      <span>{{ item.label }}</span>
+    </a>
+    {% endfor %}
+
+    <div class="drawer__group">
+      <div class="drawer__group-title">更多</div>
+      <a class="drawer__link" href="{{ '/archive/' | relative_url }}">
+        <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <use href="#i-layers"></use>
+        </svg>
+        <span>归档</span>
+      </a>
+      <a class="drawer__link" href="{{ '/friends/' | relative_url }}">
+        <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <use href="#i-users"></use>
+        </svg>
+        <span>友链</span>
+      </a>
+      <a class="drawer__link" href="https://github.com/{{ site.github_username }}" rel="noopener noreferrer">
+        <svg class="nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <use href="#i-github"></use>
+        </svg>
+        <span>GitHub</span>
+      </a>
+    </div>
+  </div>
+</div>

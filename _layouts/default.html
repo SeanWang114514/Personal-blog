@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+
+{% include head.html %}
+
+<body>
+  {% include icons.html %}
+
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  {% include nav.html %}
+
+  <main id="main">
+    {{ content }}
+  </main>
+
+  {% include footer.html %}
+</body>
+
+</html>

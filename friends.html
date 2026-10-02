@@ -1,0 +1,135 @@
+---
+layout: default
+hero: false
+title: 友情链接
+description: "一起折腾的朋友，以及本站依赖的开源项目"
+permalink: /friends/
+---
+
+{%- assign friends = site.data.friends -%}
+
+<section class="hero hero--compact">
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero__inner">
+      <span class="eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-users"></use></svg>
+        Friends
+      </span>
+      <h1 class="hero__title">友情链接</h1>
+      <p class="hero__sub">
+        一起折腾的朋友，以及这个站依赖的开源项目。感谢他们。
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap section-tight">
+
+  <div class="friend-grid">
+    {% for f in friends %}
+    <a class="friend-card" href="{{ f.url }}" rel="noopener noreferrer" data-reveal
+      data-reveal-delay="{{ forloop.index0 | times: 50 }}">
+      {% if f.avatar %}
+      <img class="friend-card__avatar" src="{{ f.avatar }}" alt="" loading="lazy" width="44" height="44">
+      {% else %}
+      <span class="friend-card__avatar" style="display:grid;place-items:center;font-weight:700">
+        {{ f.name | slice: 0 }}
+      </span>
+      {% endif %}
+      <div style="flex:1;min-width:0">
+        <div class="friend-card__name">{{ f.name }}</div>
+        <div class="friend-card__desc">{{ f.desc }}</div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" style="width:15px;height:15px;color:var(--text-3);flex-shrink:0"
+        aria-hidden="true"><use href="#i-external"></use></svg>
+    </a>
+    {% endfor %}
+  </div>
+
+  {%- comment -%} 申请友链 {%- endcomment -%}
+  <section class="section" aria-labelledby="sec-friend-apply">
+    <div class="sec-head" data-reveal>
+      <div>
+        <span class="eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true"><use href="#i-send"></use></svg>
+          Apply
+        </span>
+        <h2 class="sec-head__title" id="sec-friend-apply">想交换友链？</h2>
+        <p class="sec-head__desc">
+          欢迎。发邮件给我，附上你的站点名称、地址、一句话简介和头像链接即可。
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card" data-reveal>
+        <div class="card__head">
+          <span class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-check-circle"></use></svg>
+          </span>
+          <h3 class="card__title">我会加的条件</h3>
+        </div>
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
+            有持续更新的原创内容
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
+            站点能正常访问，没有大量广告弹窗
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-check"></use></svg>
+            内容方向与本站有一定交集，或者单纯有趣
+          </li>
+        </ul>
+      </div>
+
+      <div class="card" data-reveal data-reveal-delay="60">
+        <div class="card__head">
+          <span class="card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-link"></use></svg>
+          </span>
+          <h3 class="card__title">本站信息</h3>
+        </div>
+        <div class="dl-list">
+          <div class="dl-row">
+            <div class="dl-row__main">
+              <div class="dl-row__name">Sean Wang Blog</div>
+              <div class="dl-row__meta">
+                <span>{{ site.url }}{{ site.baseurl }}/</span>
+              </div>
+            </div>
+            <button class="icon-btn" type="button" data-copy="{{ site.url }}{{ site.baseurl }}/" aria-label="复制地址">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true"><use href="#i-copy"></use></svg>
+            </button>
+          </div>
+          <div class="dl-row">
+            <div class="dl-row__main">
+              <div class="dl-row__name">一句话简介</div>
+              <div class="dl-row__meta"><span>{{ site.description }}</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card__foot">
+          <a class="btn btn--primary btn--sm" href="mailto:{{ site.email }}?subject=友情链接申请">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-mail"></use></svg>
+            发邮件申请
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
