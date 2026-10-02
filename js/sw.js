@@ -675,4 +675,51 @@
     });
   })();
 
+  /* ----------------------------------------------------------------------
+     16. Pointer-tracking spotlight on cards
+
+     Writes --mx/--my so the CSS radial highlight can follow the cursor. Uses
+     rAF so rapid pointer moves never queue more than one style write per frame,
+     and bails out entirely on touch devices and reduced-motion setups where the
+     effect is suppressed by CSS anyway.
+     ---------------------------------------------------------------------- */
+  (function () {
+    if (window.matchMedia && window.matchMedia("(hover: none)").matches) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var SEL = ".card--hover, .soft-card, .drive-card, .tool-tile, .friend-card, .project-card";
+    var cards = $$(SEL);
+    if (!cards.length) return;
+
+    var queued = false;
+    var pending = null;
+
+    function flush() {
+      queued = false;
+      if (!pending) return;
+      var card = pending.card;
+      var r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", ((pending.x - r.left) / r.width * 100) + "%");
+      card.style.setProperty("--my", ((pending.y - r.top) / r.height * 100) + "%");
+      pending = null;
+    }
+
+    cards.forEach(function (card) {
+      card.addEventListener("pointermove", function (e) {
+        if (e.pointerType !== "mouse") return;
+        pending = { card: card, x: e.clientX, y: e.clientY };
+        if (!queued) {
+          queued = true;
+          requestAnimationFrame(flush);
+        }
+      }, { passive: true });
+
+      // Clear the highlight origin so a re-entry starts fresh.
+      card.addEventListener("pointerleave", function () {
+        card.style.removeProperty("--mx");
+        card.style.removeProperty("--my");
+      }, { passive: true });
+    });
+  })();
+
 })();

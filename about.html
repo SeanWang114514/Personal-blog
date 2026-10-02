@@ -41,7 +41,8 @@ permalink: /about/
 </section>
 
 <div class="wrap section-tight">
-  <div class="post-layout" style="grid-template-columns:minmax(0,1fr) 300px">
+  {#- 侧边栏固定 300px，窄屏放不下会顶出横向滚动条，交给 CSS 断点处理 -#}
+  <div class="post-layout about-layout">
 
     {%- comment -%} 主内容 {%- endcomment -%}
     <div>
