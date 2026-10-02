@@ -51,6 +51,10 @@
   --text-secondary: #aeaeb2;
   /* Apple 的 tertiaryLabel #8e8e93 在 #2c2c2e 上只有 4.27:1，差一点点。
      网站在卡片里大量使用这个色，所以调亮到 5.89:1。 */
+  /* 三级是「最暗但仍达 AA 的正文色」。实测：在 --bg-raised (#3a3a3c) 上
+     要过 4.5:1，最暗只能到 #a8a8ad；再暗一档就会掉到 4.05。
+     所以四级色只用于装饰性元素（图标、箭头、列表符号、时间线圆点），
+     不用于任何文字——深色下四级文字在卡片底上不可能达标。 */
   --text-tertiary: #a8a8ad;
   --text-quaternary: #7c7c81;
   --text-on-accent: #ffffff;
@@ -106,10 +110,10 @@
   --fs-34: 34px;
 
   /* —— 圆角：Apple 的连续圆角观感 —— */
-  --r-sm: 6px;
-  --r-md: 8px;
-  --r-lg: 10px;
-  --r-xl: 14px;
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 8px;
+  --r-xl: 10px;
   --r-full: 999px;
 
   /* —— 间距：压缩后的节奏 —— */
@@ -235,11 +239,20 @@ body {
 }
 
 img,
-svg,
 video {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+/* 内联图标 <svg> 特意不套 display:block + height:auto：
+   只有 viewBox、没有 width/height 属性的 SVG 在块级流里会按
+   「宽度 100% + 等比高度」撑开，一旦某个图标上下文漏写尺寸规则，
+   就会长成一个几百像素的巨图（页脚图标曾被撑到 171px，
+   把页脚顶到 831px 高）。这里只留保守上限，具体尺寸由各组件
+   自己的 `... svg { width/height }` 规则决定。 */
+svg {
+  max-width: 100%;
 }
 
 a {
@@ -265,7 +278,6 @@ button {
 .stat-card__num,
 .matrix td,
 .dl-row__meta,
-.post-card__meta,
 .post-header__meta-item,
 .clock-widget__time,
 .meter__head,
@@ -387,11 +399,11 @@ h6 {
 
 /* 区块间距大幅压缩：原版 96px 一屏看不到几样东西 */
 .section {
-  padding-block: var(--s-10);
+  padding-block: var(--s-6);
 }
 
 .section-tight {
-  padding-block: var(--s-8);
+  padding-block: var(--s-5);
 }
 
 .section + .section {
@@ -807,7 +819,7 @@ html:not([data-theme="light"]) .theme-toggle .i-moon {
 .card {
   display: flex;
   flex-direction: column;
-  padding: var(--s-5);
+  padding: var(--s-4);
   border-radius: var(--r-lg);
   border: 1px solid var(--separator);
   background: var(--bg-elevated);
@@ -881,9 +893,9 @@ html[data-theme="light"] .card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--s-3);
+  gap: var(--s-2);
   margin-top: auto;
-  padding-top: var(--s-3);
+  padding-top: var(--s-2);
 }
 
 /* 统计卡 */
@@ -1109,7 +1121,7 @@ html[data-theme="light"] .card {
 }
 
 .controls__search input::placeholder {
-  color: var(--text-quaternary);
+  color: var(--text-tertiary);
 }
 
 .controls__search input:focus {
@@ -1139,12 +1151,12 @@ html[data-theme="light"] .card {
    阅读场景下这只是个标题区，压到 40px 上下留白即可。
    ========================================================================== */
 .hero {
-  padding-block: var(--s-8) var(--s-6);
+  padding-block: var(--s-6) var(--s-5);
   border-bottom: 1px solid var(--separator);
 }
 
 .hero--compact {
-  padding-block: var(--s-6) var(--s-5);
+  padding-block: var(--s-5) var(--s-4);
 }
 
 /* 背景图与遮罩保留类名，但不再渲染任何东西 */
@@ -1158,18 +1170,18 @@ html[data-theme="light"] .card {
 }
 
 .hero__title {
-  font-size: var(--fs-34);
+  font-size: var(--fs-24);
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.3;
   letter-spacing: -0.02em;
-  margin-block: var(--s-2) var(--s-3);
+  margin-block: var(--s-2);
 }
 
 .hero__sub {
-  font-size: var(--fs-17);
+  font-size: var(--fs-13);
   line-height: 1.55;
   color: var(--text-secondary);
-  max-width: 64ch;
+  max-width: 72ch;
 }
 
 .hero__actions {
@@ -1179,31 +1191,13 @@ html[data-theme="light"] .card {
   margin-top: var(--s-5);
 }
 
-.hero__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-8);
-  margin-top: var(--s-6);
-  padding-top: var(--s-4);
-  border-top: 1px solid var(--separator);
-}
-
-.hero__stat {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-}
-
-.hero__stat-num {
-  font-size: var(--fs-24);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.hero__stat-label {
-  font-size: var(--fs-12);
+/* 一行小字交代体量即可，不做成四个大数字。
+   颜色用 tertiary 而不是 quaternary：后者在页面底色上只有 4.10:1，不达标。 */
+.hero__stats {
+  margin-top: var(--s-3);
   color: var(--text-tertiary);
+  font-size: var(--fs-12);
+  font-variant-numeric: tabular-nums;
 }
 
 .hero__avatar {
@@ -1271,7 +1265,7 @@ html[data-theme="light"] .card {
 }
 
 .hero-search__input::placeholder {
-  color: var(--text-quaternary);
+  color: var(--text-tertiary);
 }
 
 .hero-search__input:focus {
@@ -1288,7 +1282,7 @@ html[data-theme="light"] .card {
   transform: translateY(-50%);
   font-family: var(--font-mono);
   font-size: var(--fs-11);
-  color: var(--text-quaternary);
+  color: var(--text-tertiary);
   border: 1px solid var(--separator-strong);
   border-radius: var(--r-sm);
   padding: 1px 5px;
@@ -1354,157 +1348,246 @@ html[data-theme="light"] .card {
    ========================================================================== */
 .sec-head {
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   justify-content: space-between;
   gap: var(--s-4);
-  margin-bottom: var(--s-5);
+  margin-bottom: var(--s-3);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--separator);
 }
 
+/* 标题与说明同一行：省掉一整行高度，也让区块头不抢内容 */
 .sec-head__title {
-  font-size: var(--fs-20);
+  font-size: var(--fs-17);
   font-weight: 600;
   letter-spacing: -0.01em;
+  flex-shrink: 0;
 }
 
 .sec-head__desc {
-  margin-top: 3px;
-  color: var(--text-secondary);
-  font-size: var(--fs-13);
-  max-width: 68ch;
+  color: var(--text-tertiary);
+  font-size: var(--fs-12);
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ==========================================================================
    11. 首页板块导航
+   --------------------------------------------------------------------------
+   原来是 7 张 333×172 的大卡片，光这一块就占 687px 高——但它本质上只是
+   一组链接。改成两列的紧凑列表行：信息一条不少，高度降到约 1/3，
+   一屏能看完全部入口，不用滚。
    ========================================================================== */
-.bento {
+/* 不用外框：整页到处都是圆角描边盒子会显得吵。
+   直接用发丝线分隔的列表，视觉重量最轻。 */
+.nav-list {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s-4);
-}
-
-.bento__item {
-  grid-column: span 1;
-}
-
-.bento__item--wide {
-  grid-column: span 1;
-}
-
-/* ==========================================================================
-   12. 文章卡片
-   ========================================================================== */
-.post-card {
-  display: flex;
-  gap: var(--s-5);
-  padding: var(--s-5);
-  border-radius: var(--r-lg);
-  border: 1px solid var(--separator);
-  background: var(--bg-elevated);
-  transition: border-color var(--dur-fast), background var(--dur-fast);
-}
-
-.post-card:hover {
-  border-color: var(--separator-strong);
-  background: var(--bg-raised);
-}
-
-.post-card__media {
-  width: 168px;
-  height: 112px;
-  flex-shrink: 0;
-  border-radius: var(--r-md);
-  overflow: hidden;
-  background: var(--material-hover);
-}
-
-.post-card__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.post-card__body {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.post-card__title {
-  font-size: var(--fs-17);
-  font-weight: 600;
-  line-height: 1.4;
-  margin-bottom: var(--s-2);
-}
-
-.post-card__title a {
-  color: var(--text-primary);
-}
-
-.post-card__title a:hover {
-  color: var(--accent);
-}
-
-.post-card__sub {
-  color: var(--text-secondary);
-  font-size: var(--fs-13);
-  line-height: 1.5;
-  margin-bottom: var(--s-2);
-}
-
-.post-card__excerpt {
-  color: var(--text-tertiary);
-  font-size: var(--fs-13);
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-bottom: var(--s-3);
-}
-
-.post-card__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: var(--s-3);
-}
-
-.post-card__foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-3);
-  margin-top: auto;
-  padding-top: var(--s-3);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--s-8);
+  list-style: none;
+  padding: 0;
   border-top: 1px solid var(--separator);
 }
 
-.post-card__meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  color: var(--text-tertiary);
-  font-size: var(--fs-12);
+/* 7 个入口在 2 列里会剩一个空格子，让最后一项横跨两列填满 */
+.nav-list li:last-child {
+  grid-column: 1 / -1;
 }
 
-.post-card__meta svg {
-  width: 13px;
-  height: 13px;
+/* 用 gap:1px + 容器底色画分隔线，比每行加 border 更干净 */
+.nav-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: 7px var(--s-2);
+  min-height: 44px;
+  border-bottom: 1px solid var(--separator);
+  color: var(--text-primary);
+  transition: background var(--dur-fast);
+}
+
+.nav-row:hover {
+  background: var(--material-hover);
+  color: var(--text-primary);
+}
+
+.nav-row__icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm);
+  background: var(--material-hover);
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
+.nav-row__icon svg {
+  width: 15px;
+  height: 15px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.7;
 }
 
-/* 列表式（博客页）：更紧凑，一屏看更多 */
-.post-card--row {
-  gap: var(--s-4);
-  padding: var(--s-4);
+.nav-row__main {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
 }
 
-.post-card--row .post-card__media {
-  width: 132px;
-  height: 88px;
+.nav-row__title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  font-size: var(--fs-15);
+  font-weight: 600;
+}
+
+.nav-row__count {
+  font-size: var(--fs-11);
+  font-weight: 400;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.nav-row__desc {
+  font-size: var(--fs-12);
+  color: var(--text-tertiary);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-row__chev {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: var(--text-quaternary);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.nav-row:hover .nav-row__chev {
+  transform: translateX(2px);
+  color: var(--text-tertiary);
+}
+
+/* ==========================================================================
+   12. 文章卡片
+   --------------------------------------------------------------------------
+   首页「最新文章」用 .post-list，博客页用 .post-list--rich。
+   ========================================================================== */
+.post-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  list-style: none;
+  padding: 0;
+  border-top: 1px solid var(--separator);
+}
+
+/* 栅格项默认 min-width:auto，行内的 nowrap 文本会把它顶得比视口还宽，
+   而不是按预期省略号截断，所以这里显式归零。 */
+.post-list > li {
+  min-width: 0;
+}
+
+.post-row__link {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding: 9px var(--s-2);
+  border-bottom: 1px solid var(--separator);
+  color: var(--text-primary);
+  transition: background var(--dur-fast);
+}
+
+.post-row__link:hover {
+  background: var(--material-hover);
+  color: var(--text-primary);
+}
+
+.post-row__main {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.post-row__title {
+  font-size: var(--fs-13);
+  font-weight: 600;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-row__excerpt {
+  font-size: var(--fs-12);
+  color: var(--text-tertiary);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-row__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex-shrink: 0;
+  font-size: var(--fs-11);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 博客页的加强版行：多一行副标题、摘要允许折到两行、
+   标签与日期在右侧竖排。首页那版是一行一篇的极简版。 */
+.post-list--rich .post-row__link {
+  padding: 12px var(--s-2);
+  align-items: flex-start;
+}
+
+.post-list--rich .post-row__main {
+  gap: 3px;
+}
+
+.post-list--rich .post-row__title {
+  font-size: var(--fs-15);
+  white-space: normal;
+}
+
+.post-row__sub {
+  font-size: var(--fs-12);
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.post-list--rich .post-row__excerpt {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: var(--fs-12);
+}
+
+.post-list--rich .post-row__meta {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--s-1);
+  padding-top: 2px;
 }
 
 /* ==========================================================================
@@ -1513,7 +1596,7 @@ html[data-theme="light"] .card {
 .soft-card {
   display: flex;
   flex-direction: column;
-  padding: var(--s-5);
+  padding: var(--s-4);
   border-radius: var(--r-lg);
   border: 1px solid var(--separator);
   background: var(--bg-elevated);
@@ -1529,14 +1612,14 @@ html[data-theme="light"] .card {
   display: flex;
   align-items: flex-start;
   gap: var(--s-3);
-  margin-bottom: var(--s-3);
+  margin-bottom: var(--s-2);
 }
 
 .soft-card__logo {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--r-md);
   background: var(--accent-soft);
   color: var(--accent);
@@ -1558,7 +1641,7 @@ html[data-theme="light"] .card {
 }
 
 .soft-card__name {
-  font-size: var(--fs-17);
+  font-size: var(--fs-15);
   font-weight: 600;
   line-height: 1.35;
 }
@@ -1572,8 +1655,8 @@ html[data-theme="light"] .card {
 .soft-card__desc {
   color: var(--text-secondary);
   font-size: var(--fs-13);
-  line-height: 1.6;
-  margin-bottom: var(--s-3);
+  line-height: 1.55;
+  margin-bottom: var(--s-2);
 }
 
 .soft-card__tags {
@@ -1586,10 +1669,10 @@ html[data-theme="light"] .card {
 .soft-card__specs {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-2) var(--s-4);
-  padding-block: var(--s-3);
+  gap: var(--s-1) var(--s-3);
+  padding-block: var(--s-2);
   border-top: 1px solid var(--separator);
-  font-size: var(--fs-12);
+  font-size: var(--fs-11);
   color: var(--text-tertiary);
 }
 
@@ -1612,7 +1695,7 @@ html[data-theme="light"] .card {
   flex-wrap: wrap;
   gap: var(--s-2);
   margin-top: auto;
-  padding-top: var(--s-4);
+  padding-top: var(--s-3);
 }
 
 /* ==========================================================================
@@ -1744,6 +1827,21 @@ html[data-theme="light"] .card {
   font-size: var(--fs-12);
   font-weight: 600;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.tool-tile__icon svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+
+.tool-tile__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .tool-tile__name {
@@ -1891,8 +1989,8 @@ html[data-theme="light"] .card {
 /* 打勾清单（首页 / 软件页 / 友链页都用它列要点） */
 .feature-list {
   display: grid;
-  gap: 10px;
-  margin-top: var(--s-4);
+  gap: 6px;
+  margin-top: var(--s-3);
   list-style: none;
   padding-left: 0;
 }
@@ -2684,8 +2782,8 @@ html[data-theme="light"] .card {
    16. 页脚
    ========================================================================== */
 .footer {
-  margin-top: var(--s-12);
-  padding-block: var(--s-10) var(--s-6);
+  margin-top: var(--s-8);
+  padding-block: var(--s-6) var(--s-5);
   border-top: 1px solid var(--separator);
   background: var(--bg-inset);
 }
@@ -2693,8 +2791,8 @@ html[data-theme="light"] .card {
 .footer__grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: var(--s-8);
-  margin-bottom: var(--s-8);
+  gap: var(--s-6);
+  margin-bottom: var(--s-5);
 }
 
 .footer__brand {
@@ -2726,15 +2824,30 @@ html[data-theme="light"] .card {
 .footer__links {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 0;
 }
 
 .footer__link {
   display: inline-flex;
   align-items: center;
-  min-height: 26px;
+  gap: 6px;
+  min-height: 24px;
   color: var(--text-secondary);
-  font-size: var(--fs-13);
+  font-size: var(--fs-12);
+}
+
+.footer__link svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--text-quaternary);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+
+.footer__link:hover svg {
+  color: var(--text-tertiary);
 }
 
 .footer__link:hover {
@@ -2862,8 +2975,10 @@ html[data-theme="light"] .card {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .bento {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  /* 首页板块导航：两列在平板上仍可读，窄屏交给下面的 640px 规则收成一列 */
+  .nav-list {
+    gap: 0 var(--s-6);
   }
 }
 
@@ -2874,30 +2989,53 @@ html[data-theme="light"] .card {
     --fs-24: 20px;
   }
 
+  /*
+   * .sec-head 在桌面端是「标题 + 右侧说明」的 flex 行，标题还带
+   * flex-shrink:0。窄屏上两者并排会把容器顶出视口（实测 360px 下
+   * 溢出 59px），所以这里改成上下堆叠并让说明正常换行。
+   */
+  .sec-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  .sec-head__desc {
+    text-align: left;
+    white-space: normal;
+    flex: none;
+    width: 100%;
+  }
+
+  /* 单列，避免两列在 360px 下把描述挤成两个字一行的碎片 */
+  .nav-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .post-row__meta .tag {
+    display: none;
+  }
+
   .wrap,
   .wrap-narrow {
     padding-inline: var(--s-4);
   }
 
   .section {
-    padding-block: var(--s-8);
+    padding-block: var(--s-6);
   }
 
   .grid-2,
   .grid-3,
-  .grid-4,
-  .bento {
+  .grid-4 {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .post-card {
-    flex-direction: column;
+  .post-row__meta .tag {
+    display: none;
   }
 
-  .post-card__media {
-    width: 100%;
-    height: 168px;
-  }
 
   .post-nav {
     grid-template-columns: minmax(0, 1fr);

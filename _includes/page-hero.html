@@ -1,6 +1,11 @@
 {%- comment -%}
   Compact page hero used by every sub-page.
   Params: title, desc, eyebrow, img (optional background), icon (optional)
+
+  The eyebrow (a small English section label such as "TOOLBOX" above the Chinese
+  heading) is deliberately NOT rendered: the <h1> already names the section, and
+  the duplicate label just adds a line of decorative chrome to every page. The
+  params stay accepted so existing callers don't break.
 {%- endcomment -%}
 <section class="hero hero--compact{% if include.img %} has-bg{% endif %}">
   {% if include.img %}
@@ -10,18 +15,6 @@
 
   <div class="wrap">
     <div class="hero__inner">
-      {% if include.eyebrow %}
-      <span class="eyebrow">
-        {% if include.icon %}
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          stroke-linejoin="round" style="width:14px;height:14px" aria-hidden="true">
-          <use href="#i-{{ include.icon }}"></use>
-        </svg>
-        {% endif %}
-        {{ include.eyebrow }}
-      </span>
-      {% endif %}
-
       <h1 class="hero__title">{{ include.title }}</h1>
 
       {% if include.desc %}
