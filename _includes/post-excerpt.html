@@ -1,0 +1,54 @@
+{%- comment -%}
+  Produce a clean one-line summary for a post card.
+
+  Naively stripping tags from `post.content` leaks text out of the posts'
+  inline widgets — the migrated articles embed styled download buttons and
+  inline SVG diagrams, so `strip_html` yields fragments like
+  "Star on GitHub ⬇ 下载 Windows exe（251MB）快速下载 在 GitHub Releases 下载…".
+
+  The post cards render `subtitle` separately, so this include's job is to pull
+  the article's opening PROSE sentence — the real preview a reader wants.
+
+  Approach: strip the entire content ONCE (so no partial tags survive), then
+  take the leading sentences. Widget label soup ("Star on GitHub ⬇ 下载 …")
+  clusters at the very start of these posts, so we skip any leading run of
+  text that lacks sentence punctuation.
+
+  Usage:
+    {% include post-excerpt.html post=post limit=130 %}
+{%- endcomment -%}
+{%- assign _p = include.post -%}
+{%- assign _limit = include.limit | default: 130 -%}
+
+{%- if _p.excerpt and _p.excerpt != "" -%}
+  {{- _p.excerpt | strip_html | strip_newlines | strip | truncate: _limit -}}
+{%- else -%}
+  {%- comment -%}
+    Collapse the whole body to plain text first. Quotes/symbols from inline
+    widgets remain but are indistinguishable at this point, hence the
+    sentence-quality filter below.
+  {%- endcomment -%}
+  {%- assign _txt = _p.content | strip_html | strip_newlines | replace: "  ", " " | strip -%}
+  {%- assign _parts = _txt | split: "。" -%}
+
+  {%- assign _out = "" -%}
+  {%- assign _kept = 0 -%}
+  {%- for _seg in _parts -%}
+    {%- assign _len = _seg | size -%}
+    {%- comment -%}
+      Skip short leading fragments: those are the collapsed button labels
+      ("Star on GitHub ⬇ 下载 Windows exe（251MB）快速下载 在 GitHub Releases 下载 …").
+      Real opening sentences in these articles run long.
+      Once we start keeping sentences, take up to two of them.
+    {%- endcomment -%}
+    {%- if _len > 40 and _kept < 2 -%}
+      {%- assign _out = _out | append: _seg | append: "。" -%}
+      {%- assign _kept = _kept | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if _out == "" -%}
+    {%- assign _out = _p.subtitle | default: _txt -%}
+  {%- endif -%}
+  {{- _out | strip | truncate: _limit -}}
+{%- endif -%}

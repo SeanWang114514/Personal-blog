@@ -83,7 +83,7 @@ pagination:
         <p class="post-card__sub">{{ post.subtitle }}</p>
         {% endif %}
 
-        <p class="post-card__excerpt">{{ post.content | strip_html | truncate: 130 }}</p>
+        <p class="post-card__excerpt">{% include post-excerpt.html post=post limit=130 %}</p>
 
         <div class="post-card__foot">
           <span class="post-card__meta">

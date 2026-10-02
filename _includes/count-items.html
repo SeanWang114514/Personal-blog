@@ -1,0 +1,19 @@
+{%- comment -%}
+  Count the total number of entries across a grouped data file.
+
+  _data/toolbox.yml and _data/bookmarks.yml are arrays of groups, each holding
+  an `items` array. Piping `map: "items" | flatten` looks like it should count
+  the entries, but on Jekyll's data proxies it returns the GROUP count instead
+  (verified: toolbox returned 6 rather than 38). A nested loop is the only
+  reliable way to total them.
+
+  Usage:
+    {% include count-items.html data=site.data.toolbox %}   -> 38
+{%- endcomment -%}
+{%- assign _n = 0 -%}
+{%- for _g in include.data -%}
+  {%- for _i in _g.items -%}
+    {%- assign _n = _n | plus: 1 -%}
+  {%- endfor -%}
+{%- endfor -%}
+{{- _n -}}

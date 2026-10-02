@@ -1446,10 +1446,20 @@ html[data-theme="light"] .hero__bg {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--s-5);
+  /* Cards in the same row stretch to a shared height, so the count chips and
+     "进入 →" arrows line up on one baseline instead of drifting per row. */
+  align-items: stretch;
 }
 
 .bento__item {
   grid-column: span 4;
+}
+
+/* Cards are anchors; make them flex columns so the footer can be pinned to the
+   bottom regardless of description length. */
+.bento__item .card__foot {
+  margin-top: auto;
+  padding-top: var(--s-4);
 }
 
 .bento__item--wide {

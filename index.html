@@ -146,6 +146,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
       <p class="card__desc">常用网盘的入口与分享说明，大文件优先走不限速渠道。</p>
       <div class="card__foot">
+        <span class="tag tag--cyan">{{ site.data.drive | size }} 个渠道</span>
         <span class="link-arrow">查看渠道
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
@@ -164,6 +165,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
       <p class="card__desc">所有安装包集中一处，标注版本、体积与平台，直链 GitHub Releases。</p>
       <div class="card__foot">
+        <span class="tag tag--emerald">{{ site.data.downloads | size }} 个条目</span>
         <span class="link-arrow">前往下载
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
@@ -182,6 +184,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
       <p class="card__desc">作品墙：技术栈、状态、仓库与在线体验一键直达。</p>
       <div class="card__foot">
+        <span class="tag tag--amber">{{ site.data.projects | size }} 个作品</span>
         <span class="link-arrow">浏览作品
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
@@ -200,6 +203,8 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
       <p class="card__desc">常用在线工具聚合，还带本地时钟与可收藏的快捷入口。</p>
       <div class="card__foot">
+        {%- capture tb_count %}{% include count-items.html data=site.data.toolbox %}{% endcapture -%}
+        <span class="tag tag--rose">{{ tb_count | strip }} 个入口</span>
         <span class="link-arrow">打开工具台
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
@@ -207,8 +212,8 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
     </a>
 
-    <a class="card card--hover card--link bento__item" href="{{ '/bookmarks/' | relative_url }}" data-reveal
-      data-reveal-delay="240">
+    <a class="card card--hover card--link bento__item bento__item--wide" href="{{ '/bookmarks/' | relative_url }}"
+      data-reveal data-reveal-delay="240">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -218,6 +223,8 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
       <p class="card__desc">长期沉淀的学习资料、文档与阅读源，比工具箱更「值得回看」。</p>
       <div class="card__foot">
+        {%- capture bm_count %}{% include count-items.html data=site.data.bookmarks %}{% endcapture -%}
+        <span class="tag tag--brand">{{ bm_count | strip }} 条收藏</span>
         <span class="link-arrow">翻收藏
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
@@ -261,7 +268,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
         <h3 class="post-card__title">
           <a href="{{ post.url | relative_url }}" style="color:inherit">{{ post.title }}</a>
         </h3>
-        <p class="post-card__excerpt">{{ post.content | strip_html | truncate: 110 }}</p>
+        <p class="post-card__excerpt">{% include post-excerpt.html post=post limit=110 %}</p>
         <div class="post-card__foot">
           <span class="post-card__meta">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
