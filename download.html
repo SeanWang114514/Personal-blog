@@ -62,8 +62,8 @@ permalink: /download/
               stroke-linejoin="round" aria-hidden="true"><use href="#i-package"></use></svg>
           </span>
           <div>
-            <h3 class="card__title" style="font-size:var(--t-base)">{{ item.name }}</h3>
-            <p style="font-size:var(--t-xs);color:var(--text-3)">{{ item.project }}</p>
+            <h3 class="card__title" style="font-size:var(--fs-15)">{{ item.name }}</h3>
+            <p style="font-size:var(--fs-12);color:var(--text-tertiary)">{{ item.project }}</p>
           </div>
         </div>
 
@@ -118,7 +118,7 @@ permalink: /download/
     {%- assign projects = items | map: "project" | uniq -%}
     {% for proj in projects %}
     <div class="mb-8">
-      <h3 style="font-size:var(--t-lg);font-weight:660;margin-bottom:var(--s-4)">{{ proj }}</h3>
+      <h3 style="font-size:var(--fs-17);font-weight:660;margin-bottom:var(--s-4)">{{ proj }}</h3>
       <div class="dl-list">
         {% for item in items %}
         {% if item.project == proj %}
@@ -138,7 +138,7 @@ permalink: /download/
               <span>{{ item.size }}</span>
               <span class="tag" style="padding:2px 8px">{{ item.kind }}</span>
             </div>
-            <p style="font-size:var(--t-xs);color:var(--text-3);margin-top:6px">{{ item.desc }}</p>
+            <p style="font-size:var(--fs-12);color:var(--text-tertiary);margin-top:6px">{{ item.desc }}</p>
           </div>
 
           <div class="dl-row__action">

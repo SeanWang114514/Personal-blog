@@ -54,106 +54,105 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
   {%- capture tb_count %}{% include count-items.html data=site.data.toolbox %}{% endcapture -%}
   {%- capture bm_count %}{% include count-items.html data=site.data.bookmarks %}{% endcapture -%}
 
-  <ul class="nav-list">
-    <li>
-      <a class="nav-row" href="{{ '/blog/' | relative_url }}">
-        <span class="nav-row__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-            aria-hidden="true"><use href="#i-book"></use></svg>
+  <div class="module-grid">
+    <a class="module" href="{{ '/blog/' | relative_url }}">
+      <span class="module__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-book"></use></svg>
+      </span>
+      <span class="module__body">
+        <span class="module__head">
+          <span class="module__name">博客</span>
+          <span class="module__count">{{ site.posts | size }} 篇</span>
         </span>
-        <span class="nav-row__main">
-          <span class="nav-row__title">博客 <span class="nav-row__count">{{ site.posts | size }} 篇</span></span>
-          <span class="nav-row__desc">长文与折腾记录：OCR、输入法、文档工具、硬件选购</span>
+        <span class="module__desc">长文与折腾记录：OCR、输入法、文档工具、硬件选购</span>
+      </span>
+    </a>
+
+    <a class="module" href="{{ '/software/' | relative_url }}">
+      <span class="module__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-box"></use></svg>
+      </span>
+      <span class="module__body">
+        <span class="module__head">
+          <span class="module__name">软件</span>
+          <span class="module__count">{{ site.data.software | size }} 款</span>
         </span>
-        <svg class="nav-row__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
-      </a>
-    </li>
-    <li>
-      <a class="nav-row" href="{{ '/software/' | relative_url }}">
-        <span class="nav-row__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-            aria-hidden="true"><use href="#i-box"></use></svg>
+        <span class="module__desc">自研离线工具：输入法套件、文档工作台、OCR，全部开源</span>
+      </span>
+    </a>
+
+    <a class="module" href="{{ '/drive/' | relative_url }}">
+      <span class="module__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-cloud"></use></svg>
+      </span>
+      <span class="module__body">
+        <span class="module__head">
+          <span class="module__name">云盘</span>
+          <span class="module__count">{{ site.data.drive | size }} 个渠道</span>
         </span>
-        <span class="nav-row__main">
-          <span class="nav-row__title">软件 <span class="nav-row__count">{{ site.data.software | size }} 款</span></span>
-          <span class="nav-row__desc">自研离线工具：输入法套件、文档工作台、OCR，全部开源</span>
+        <span class="module__desc">常用网盘入口与分享说明，大文件优先走不限速渠道</span>
+      </span>
+    </a>
+
+    <a class="module" href="{{ '/download/' | relative_url }}">
+      <span class="module__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-download"></use></svg>
+      </span>
+      <span class="module__body">
+        <span class="module__head">
+          <span class="module__name">下载</span>
+          <span class="module__count">{{ site.data.downloads | size }} 个条目</span>
         </span>
-        <svg class="nav-row__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
-      </a>
-    </li>
-    <li>
-      <a class="nav-row" href="{{ '/drive/' | relative_url }}">
-        <span class="nav-row__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-            aria-hidden="true"><use href="#i-cloud"></use></svg>
+        <span class="module__desc">安装包集中一处，标注版本、体积与平台，直链 Releases</span>
+      </span>
+    </a>
+
+    <a class="module" href="{{ '/projects/' | relative_url }}">
+      <span class="module__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-layers"></use></svg>
+      </span>
+      <span class="module__body">
+        <span class="module__head">
+          <span class="module__name">项目</span>
+          <span class="module__count">{{ site.data.projects | size }} 个作品</span>
         </span>
-        <span class="nav-row__main">
-          <span class="nav-row__title">云盘 <span class="nav-row__count">{{ site.data.drive | size }} 个渠道</span></span>
-          <span class="nav-row__desc">常用网盘入口与分享说明，大文件优先走不限速渠道</span>
+        <span class="module__desc">作品墙：技术栈、状态、仓库与在线体验一键直达</span>
+      </span>
+    </a>
+
+    <a class="module" href="{{ '/toolbox/' | relative_url }}">
+      <span class="module__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-tool"></use></svg>
+      </span>
+      <span class="module__body">
+        <span class="module__head">
+          <span class="module__name">工具箱</span>
+          <span class="module__count">{{ tb_count | strip }} 个入口</span>
         </span>
-        <svg class="nav-row__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
-      </a>
-    </li>
-    <li>
-      <a class="nav-row" href="{{ '/download/' | relative_url }}">
-        <span class="nav-row__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-            aria-hidden="true"><use href="#i-download"></use></svg>
+        <span class="module__desc">常用在线工具聚合，带本地时钟与可收藏的快捷入口</span>
+      </span>
+    </a>
+
+    <a class="module" href="{{ '/bookmarks/' | relative_url }}">
+      <span class="module__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-bookmark"></use></svg>
+      </span>
+      <span class="module__body">
+        <span class="module__head">
+          <span class="module__name">收藏夹</span>
+          <span class="module__count">{{ bm_count | strip }} 条收藏</span>
         </span>
-        <span class="nav-row__main">
-          <span class="nav-row__title">下载 <span class="nav-row__count">{{ site.data.downloads | size }} 个条目</span></span>
-          <span class="nav-row__desc">安装包集中一处，标注版本、体积与平台，直链 Releases</span>
-        </span>
-        <svg class="nav-row__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
-      </a>
-    </li>
-    <li>
-      <a class="nav-row" href="{{ '/projects/' | relative_url }}">
-        <span class="nav-row__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-            aria-hidden="true"><use href="#i-layers"></use></svg>
-        </span>
-        <span class="nav-row__main">
-          <span class="nav-row__title">项目 <span class="nav-row__count">{{ site.data.projects | size }} 个作品</span></span>
-          <span class="nav-row__desc">作品墙：技术栈、状态、仓库与在线体验一键直达</span>
-        </span>
-        <svg class="nav-row__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
-      </a>
-    </li>
-    <li>
-      <a class="nav-row" href="{{ '/toolbox/' | relative_url }}">
-        <span class="nav-row__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-            aria-hidden="true"><use href="#i-tool"></use></svg>
-        </span>
-        <span class="nav-row__main">
-          <span class="nav-row__title">工具箱 <span class="nav-row__count">{{ tb_count | strip }} 个入口</span></span>
-          <span class="nav-row__desc">常用在线工具聚合，带本地时钟与可收藏的快捷入口</span>
-        </span>
-        <svg class="nav-row__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
-      </a>
-    </li>
-    <li>
-      <a class="nav-row" href="{{ '/bookmarks/' | relative_url }}">
-        <span class="nav-row__icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-            aria-hidden="true"><use href="#i-bookmark"></use></svg>
-        </span>
-        <span class="nav-row__main">
-          <span class="nav-row__title">收藏夹 <span class="nav-row__count">{{ bm_count | strip }} 条收藏</span></span>
-          <span class="nav-row__desc">长期沉淀的学习资料、文档与阅读源</span>
-        </span>
-        <svg class="nav-row__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
-      </a>
-    </li>
-  </ul>
+        <span class="module__desc">长期沉淀的学习资料、文档与阅读源</span>
+      </span>
+    </a>
+  </div>
 </section>
 
 {%- comment -%} ============ 最新文章 ============ {%- endcomment -%}

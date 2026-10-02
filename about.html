@@ -96,7 +96,7 @@ permalink: /about/
     {%- comment -%} 侧栏 {%- endcomment -%}
     <aside>
       <div class="card mb-6">
-        <h2 class="card__title" style="font-size:var(--t-base)">社交账号</h2>
+        <h2 class="card__title" style="font-size:var(--fs-15)">社交账号</h2>
         <div class="dl-list mt-4">
           <a class="dl-row" href="https://github.com/{{ site.github_username }}" rel="noopener noreferrer">
             <span class="dl-row__icon">
@@ -138,7 +138,7 @@ permalink: /about/
       </div>
 
       <div class="card mb-6">
-        <h2 class="card__title" style="font-size:var(--t-base)">这个站</h2>
+        <h2 class="card__title" style="font-size:var(--fs-15)">这个站</h2>
         <div class="grid grid-2 mt-4" style="gap:var(--s-3)">
           <div class="stat-card">
             <div class="stat-card__num">{{ site.posts | size }}</div>
@@ -157,14 +157,14 @@ permalink: /about/
             <div class="stat-card__label">标签</div>
           </div>
         </div>
-        <p class="card__desc mt-4" style="font-size:var(--t-xs)">
+        <p class="card__desc mt-4" style="font-size:var(--fs-12)">
           基于 Jekyll 构建，无前端框架、无数据库、无追踪脚本。
         </p>
       </div>
 
       {% if site.giscus.enabled and site.giscus.repo_id != "" %}
       <div class="card">
-        <h2 class="card__title" style="font-size:var(--t-base)">留言</h2>
+        <h2 class="card__title" style="font-size:var(--fs-15)">留言</h2>
         <p class="card__desc">有任何想说的都可以写在下面。</p>
       </div>
       {% endif %}

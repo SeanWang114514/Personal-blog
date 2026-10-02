@@ -56,17 +56,15 @@ permalink: /toolbox/
   {%- comment -%} 分组网格 {%- endcomment -%}
   {% for g in groups %}
   <section class="section-tight" aria-labelledby="tool-{{ g.key }}">
-    <div class="sec-head">
-      <div>
-        <h2 class="sec-head__title" id="tool-{{ g.key }}" style="font-size:var(--t-xl);display:flex;align-items:center;gap:10px">
-          <span class="card__icon" style="width:34px;height:34px;border-radius:var(--r-sm)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-              stroke-linejoin="round" aria-hidden="true"><use href="#i-{{ g.icon }}"></use></svg>
-          </span>
-          {{ g.title }}
-        </h2>
-        <p class="sec-head__desc">{{ g.desc }}</p>
-      </div>
+    <div class="sec-head sec-head--icon">
+      <h2 class="sec-head__title" id="tool-{{ g.key }}">
+        <span class="sec-head__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-{{ g.icon }}"></use></svg>
+        </span>
+        {{ g.title }}
+      </h2>
+      <p class="sec-head__desc">{{ g.desc }}</p>
     </div>
 
     <div class="tool-grid">
