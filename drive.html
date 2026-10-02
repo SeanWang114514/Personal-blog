@@ -29,7 +29,7 @@ permalink: /drive/
 
 <div class="wrap section-tight">
 
-  <div class="notice mb-8" data-reveal>
+  <div class="notice mb-8">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
       aria-hidden="true"><use href="#i-shield"></use></svg>
     <div>
@@ -41,7 +41,7 @@ permalink: /drive/
   {%- comment -%} 渠道网格 {%- endcomment -%}
   <div class="drive-grid">
     {% for d in drives %}
-    <article class="drive-card" data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 3 | times: 70 }}">
+    <article class="drive-card">
       <div class="drive-card__logo {{ d.logoClass }}" aria-hidden="true">{{ d.logo }}</div>
 
       <h2 class="drive-card__name">
@@ -92,7 +92,7 @@ permalink: /drive/
 
   {%- comment -%} 使用说明 {%- endcomment -%}
   <section class="section" aria-labelledby="sec-drive-guide">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <span class="eyebrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -105,7 +105,7 @@ permalink: /drive/
     </div>
 
     <div class="grid grid-2">
-      <div class="card" data-reveal>
+      <div class="card">
         <div class="card__head">
           <span class="card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
@@ -119,7 +119,7 @@ permalink: /drive/
         </p>
       </div>
 
-      <div class="card" data-reveal data-reveal-delay="60">
+      <div class="card">
         <div class="card__head">
           <span class="card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
@@ -133,7 +133,7 @@ permalink: /drive/
         </p>
       </div>
 
-      <div class="card" data-reveal data-reveal-delay="120">
+      <div class="card">
         <div class="card__head">
           <span class="card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
@@ -147,7 +147,7 @@ permalink: /drive/
         </p>
       </div>
 
-      <div class="card" data-reveal data-reveal-delay="180">
+      <div class="card">
         <div class="card__head">
           <span class="card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
@@ -165,7 +165,7 @@ permalink: /drive/
 
   {%- comment -%} 存储建议 {%- endcomment -%}
   <section class="section" aria-labelledby="sec-drive-advice">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <span class="eyebrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -177,7 +177,7 @@ permalink: /drive/
     </div>
 
     <div class="grid grid-3">
-      <div class="card" data-reveal>
+      <div class="card">
         <div class="card__head">
           <span class="card__icon" style="color:var(--accent-emerald)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
@@ -187,7 +187,7 @@ permalink: /drive/
         </div>
         <p class="card__desc">本地硬盘 + 移动硬盘 + 云端，三者至少同时存在两份才算安全。</p>
       </div>
-      <div class="card" data-reveal data-reveal-delay="60">
+      <div class="card">
         <div class="card__head">
           <span class="card__icon" style="color:var(--accent-cyan)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
@@ -197,7 +197,7 @@ permalink: /drive/
         </div>
         <p class="card__desc">每季度抽一次随机文件尝试恢复，能打开才算备份成功。</p>
       </div>
-      <div class="card" data-reveal data-reveal-delay="120">
+      <div class="card">
         <div class="card__head">
           <span class="card__icon" style="color:var(--accent-amber)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"

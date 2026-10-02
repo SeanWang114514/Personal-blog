@@ -30,20 +30,20 @@ permalink: /projects/
 <div class="wrap section-tight">
 
   {%- comment -%} 统计 {%- endcomment -%}
-  <div class="grid grid-4 mb-12">
-    <div class="stat-card" data-reveal>
-      <div class="stat-card__num" data-count="{{ projects | size }}">0</div>
+  <div class="grid grid-4 mb-8">
+    <div class="stat-card">
+      <div class="stat-card__num">{{ projects | size }}</div>
       <div class="stat-card__label">个项目</div>
     </div>
-    <div class="stat-card" data-reveal data-reveal-delay="60">
-      <div class="stat-card__num" data-count="{{ projects | where: 'category', 'desktop' | size }}">0</div>
+    <div class="stat-card">
+      <div class="stat-card__num">{{ projects | where: 'category', 'desktop' | size }}</div>
       <div class="stat-card__label">桌面应用</div>
     </div>
-    <div class="stat-card" data-reveal data-reveal-delay="120">
-      <div class="stat-card__num" data-count="{{ projects | where: 'category', 'web' | size }}">0</div>
+    <div class="stat-card">
+      <div class="stat-card__num">{{ projects | where: 'category', 'web' | size }}</div>
       <div class="stat-card__label">网页工具</div>
     </div>
-    <div class="stat-card" data-reveal data-reveal-delay="180">
+    <div class="stat-card">
       <div class="stat-card__num">{{ projects | where: 'status', 'active' | size }}</div>
       <div class="stat-card__label">维护中</div>
     </div>
@@ -69,8 +69,7 @@ permalink: /projects/
   <div class="grid grid-3" id="sw-proj-grid">
     {% for p in projects %}
     <article class="card card--hover" data-cat="{{ p.category }}"
-      data-search="{{ p.name | escape }} {{ p.tagline | escape }} {{ p.desc | escape }} {{ p.tech | join: ' ' | escape }}"
-      data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 3 | times: 70 }}">
+      data-search="{{ p.name | escape }} {{ p.tagline | escape }} {{ p.desc | escape }} {{ p.tech | join: ' ' | escape }}">
 
       <div class="card__head">
         <span class="card__icon {{ p.logoClass }}" style="color:#fff;border:none;font-weight:800">{{ p.logo }}</span>
@@ -122,7 +121,7 @@ permalink: /projects/
 
   {%- comment -%} 技术栈分布 {%- endcomment -%}
   <section class="section" aria-labelledby="sec-skills">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <span class="eyebrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -135,7 +134,7 @@ permalink: /projects/
     </div>
 
     <div class="grid grid-2">
-      <div class="card" data-reveal>
+      <div class="card">
         <div class="skill">
           <div class="skill__head"><span class="skill__name">JavaScript / TypeScript</span><span>主力</span></div>
           <div class="skill__track"><div class="skill__fill" data-level="92"></div></div>
@@ -154,7 +153,7 @@ permalink: /projects/
         </div>
       </div>
 
-      <div class="card" data-reveal data-reveal-delay="60">
+      <div class="card">
         <div class="skill">
           <div class="skill__head"><span class="skill__name">C++ / Win32</span><span>够用</span></div>
           <div class="skill__track"><div class="skill__fill" data-level="68"></div></div>
@@ -177,7 +176,7 @@ permalink: /projects/
 
   {%- comment -%} 协作 CTA {%- endcomment -%}
   <section class="section">
-    <div class="card card--glow" data-reveal>
+    <div class="card card--glow">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"

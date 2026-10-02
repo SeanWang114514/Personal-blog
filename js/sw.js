@@ -149,70 +149,6 @@
   })();
 
   /* ----------------------------------------------------------------------
-     4. Reveal-on-scroll
-     ---------------------------------------------------------------------- */
-  (function () {
-    var items = $$("[data-reveal]");
-    if (!items.length) return;
-
-    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce || !("IntersectionObserver" in window)) {
-      items.forEach(function (el) { el.classList.add("is-in"); });
-      return;
-    }
-
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var el = entry.target;
-        var delay = parseInt(el.getAttribute("data-reveal-delay") || "0", 10);
-        setTimeout(function () { el.classList.add("is-in"); }, delay);
-        io.unobserve(el);
-      });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.06 });
-
-    items.forEach(function (el) { io.observe(el); });
-  })();
-
-  /* ----------------------------------------------------------------------
-     5. Animated counters
-     ---------------------------------------------------------------------- */
-  (function () {
-    var nums = $$("[data-count]");
-    if (!nums.length) return;
-
-    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    function run(el) {
-      var target = parseFloat(el.getAttribute("data-count")) || 0;
-      var suffix = el.getAttribute("data-count-suffix") || "";
-      if (reduce) { el.textContent = target + suffix; return; }
-
-      var start = performance.now();
-      var dur = 1100;
-      function step(now) {
-        var p = Math.min(1, (now - start) / dur);
-        var eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(target * eased) + suffix;
-        if (p < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
-
-    if (!("IntersectionObserver" in window)) { nums.forEach(run); return; }
-
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        run(entry.target);
-        io.unobserve(entry.target);
-      });
-    }, { threshold: 0.4 });
-
-    nums.forEach(function (el) { io.observe(el); });
-  })();
-
-  /* ----------------------------------------------------------------------
      6. Skill bars
      ---------------------------------------------------------------------- */
   (function () {
@@ -529,7 +465,7 @@
     if (heads.length < 2) { toc.parentElement.classList.add("hidden"); return; }
 
     toc.innerHTML = heads.map(function (h) {
-      var cls = h.tagName === "H3" ? "toc__link toc__link--h3" : "toc__link";
+      var cls = h.tagName === "H3" ? "toc__link is-sub" : "toc__link";
       return '<li><a class="' + cls + '" href="#' + h.id + '">' +
         h.textContent.replace(/¶|#/g, "").trim() + "</a></li>";
     }).join("");
@@ -672,53 +608,6 @@
         a.setAttribute("target", "_blank");
         a.setAttribute("rel", "noopener noreferrer");
       }
-    });
-  })();
-
-  /* ----------------------------------------------------------------------
-     16. Pointer-tracking spotlight on cards
-
-     Writes --mx/--my so the CSS radial highlight can follow the cursor. Uses
-     rAF so rapid pointer moves never queue more than one style write per frame,
-     and bails out entirely on touch devices and reduced-motion setups where the
-     effect is suppressed by CSS anyway.
-     ---------------------------------------------------------------------- */
-  (function () {
-    if (window.matchMedia && window.matchMedia("(hover: none)").matches) return;
-    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    var SEL = ".card--hover, .soft-card, .drive-card, .tool-tile, .friend-card, .project-card";
-    var cards = $$(SEL);
-    if (!cards.length) return;
-
-    var queued = false;
-    var pending = null;
-
-    function flush() {
-      queued = false;
-      if (!pending) return;
-      var card = pending.card;
-      var r = card.getBoundingClientRect();
-      card.style.setProperty("--mx", ((pending.x - r.left) / r.width * 100) + "%");
-      card.style.setProperty("--my", ((pending.y - r.top) / r.height * 100) + "%");
-      pending = null;
-    }
-
-    cards.forEach(function (card) {
-      card.addEventListener("pointermove", function (e) {
-        if (e.pointerType !== "mouse") return;
-        pending = { card: card, x: e.clientX, y: e.clientY };
-        if (!queued) {
-          queued = true;
-          requestAnimationFrame(flush);
-        }
-      }, { passive: true });
-
-      // Clear the highlight origin so a re-entry starts fresh.
-      card.addEventListener("pointerleave", function () {
-        card.style.removeProperty("--mx");
-        card.style.removeProperty("--my");
-      }, { passive: true });
     });
   })();
 

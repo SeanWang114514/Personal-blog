@@ -32,7 +32,7 @@ permalink: /toolbox/
 <div class="wrap section-tight">
 
   {%- comment -%} 时钟 + 收藏控制 {%- endcomment -%}
-  <div class="card card--glow mb-12" data-reveal>
+  <div class="card card--glow mb-12">
     <div class="flex flex-wrap items-center justify-between gap-6">
       <div>
         <div class="eyebrow mb-4">本地时间</div>
@@ -56,7 +56,7 @@ permalink: /toolbox/
   {%- comment -%} 分组网格 {%- endcomment -%}
   {% for g in groups %}
   <section class="section-tight" aria-labelledby="tool-{{ g.key }}">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <h2 class="sec-head__title" id="tool-{{ g.key }}" style="font-size:var(--t-xl);display:flex;align-items:center;gap:10px">
           <span class="card__icon" style="width:34px;height:34px;border-radius:var(--r-sm)">
@@ -71,7 +71,7 @@ permalink: /toolbox/
 
     <div class="tool-grid">
       {% for item in g.items %}
-      <div class="tool-tile" data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 6 | times: 40 }}">
+      <div class="tool-tile">
         <span class="tool-tile__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
             stroke-linejoin="round"><use href="#i-external"></use></svg>
@@ -99,7 +99,7 @@ permalink: /toolbox/
   {%- comment -%} 使用提示 {%- endcomment -%}
   <section class="section">
     <div class="grid grid-3">
-      <div class="card" data-reveal>
+      <div class="card">
         <div class="card__head">
           <span class="card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
@@ -112,7 +112,7 @@ permalink: /toolbox/
           换设备或者重装系统时打开就能继续工作。
         </p>
       </div>
-      <div class="card" data-reveal data-reveal-delay="60">
+      <div class="card">
         <div class="card__head">
           <span class="card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
@@ -125,7 +125,7 @@ permalink: /toolbox/
           点「只看收藏」就只剩你标过的那些。
         </p>
       </div>
-      <div class="card" data-reveal data-reveal-delay="120">
+      <div class="card">
         <div class="card__head">
           <span class="card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"

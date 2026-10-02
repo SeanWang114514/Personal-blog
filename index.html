@@ -5,29 +5,23 @@ nav: home
 description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾记录"
 ---
 
-{%- comment -%} ============ HERO ============ {%- endcomment -%}
+{%- comment -%} ============ 页头 ============ {%- endcomment -%}
 <section class="hero">
-  <div class="hero__bg" style="background-image:url('{{ '/img/home-bg.jpg' | relative_url }}')" aria-hidden="true"></div>
-  <div class="hero__scrim" aria-hidden="true"></div>
-
   <div class="wrap">
     <div class="hero__inner">
-      <div class="hero__avatar" data-reveal>
-        <img src="{{ site.sidebar-avatar }}" alt="Sean Wang 的头像" width="32" height="32">
+      <div class="hero__avatar">
+        <img src="{{ site.sidebar-avatar }}" alt="Sean Wang 的头像" width="26" height="26">
         <span class="hero__avatar-text">{{ site.sidebar-about-description }}</span>
       </div>
 
-      <h1 class="hero__title" data-reveal data-reveal-delay="60">
-        折腾、记录，<br>
-        然后把它们<span class="text-gradient">做成能用的东西</span>。
-      </h1>
+      <h1 class="hero__title">折腾、记录，然后把它们做成能用的东西。</h1>
 
-      <p class="hero__sub" data-reveal data-reveal-delay="120">
+      <p class="hero__sub">
         {{ site.description }}。这里有我写的离线工具、踩过的坑，
         以及一份持续更新的软件与资源清单。
       </p>
 
-      <div class="hero-search" data-reveal data-reveal-delay="180">
+      <div class="hero-search">
         <svg class="hero-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <use href="#i-search"></use>
@@ -39,39 +33,21 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
         <div class="search-results" role="listbox" aria-label="搜索结果"></div>
       </div>
 
-      <div class="hero__actions" data-reveal data-reveal-delay="240">
-        <a class="btn btn--primary" href="{{ '/blog/' | relative_url }}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" aria-hidden="true"><use href="#i-book"></use></svg>
-          开始阅读
-        </a>
-        <a class="btn btn--ghost" href="{{ '/software/' | relative_url }}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" aria-hidden="true"><use href="#i-box"></use></svg>
-          看看软件
-        </a>
-        <a class="btn btn--ghost" href="https://github.com/{{ site.github_username }}" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-            stroke-linejoin="round" aria-hidden="true"><use href="#i-github"></use></svg>
-          GitHub
-        </a>
-      </div>
-
-      <div class="hero__meta" data-reveal data-reveal-delay="300">
+      <div class="hero__meta">
         <div class="hero__stat">
-          <span class="hero__stat-num" data-count="{{ site.posts | size }}">0</span>
+          <span class="hero__stat-num">{{ site.posts | size }}</span>
           <span class="hero__stat-label">篇文章</span>
         </div>
         <div class="hero__stat">
-          <span class="hero__stat-num" data-count="{{ site.data.software | size }}">0</span>
+          <span class="hero__stat-num">{{ site.data.software | size }}</span>
           <span class="hero__stat-label">款软件</span>
         </div>
         <div class="hero__stat">
-          <span class="hero__stat-num" data-count="{{ site.data.projects | size }}">0</span>
+          <span class="hero__stat-num">{{ site.data.projects | size }}</span>
           <span class="hero__stat-label">个项目</span>
         </div>
         <div class="hero__stat">
-          <span class="hero__stat-num" data-count="{{ site.tags | size }}">0</span>
+          <span class="hero__stat-num">{{ site.tags | size }}</span>
           <span class="hero__stat-label">个标签</span>
         </div>
       </div>
@@ -81,7 +57,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
 
 {%- comment -%} ============ 板块导航 BENTO ============ {%- endcomment -%}
 <section class="wrap section" aria-labelledby="sec-modules">
-  <div class="sec-head" data-reveal>
+  <div class="sec-head">
     <div>
       <span class="eyebrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -94,8 +70,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
   </div>
 
   <div class="bento">
-    <a class="card card--hover card--link bento__item bento__item--wide" href="{{ '/blog/' | relative_url }}"
-      data-reveal>
+    <a class="card card--hover card--link bento__item bento__item--wide" href="{{ '/blog/' | relative_url }}">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -115,8 +90,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
     </a>
 
-    <a class="card card--hover card--link bento__item bento__item--wide" href="{{ '/software/' | relative_url }}"
-      data-reveal data-reveal-delay="60">
+    <a class="card card--hover card--link bento__item bento__item--wide" href="{{ '/software/' | relative_url }}">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -136,7 +110,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
     </a>
 
-    <a class="card card--hover card--link bento__item" href="{{ '/drive/' | relative_url }}" data-reveal>
+    <a class="card card--hover card--link bento__item" href="{{ '/drive/' | relative_url }}">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -154,8 +128,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
     </a>
 
-    <a class="card card--hover card--link bento__item" href="{{ '/download/' | relative_url }}" data-reveal
-      data-reveal-delay="60">
+    <a class="card card--hover card--link bento__item" href="{{ '/download/' | relative_url }}">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -173,8 +146,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
     </a>
 
-    <a class="card card--hover card--link bento__item" href="{{ '/projects/' | relative_url }}" data-reveal
-      data-reveal-delay="120">
+    <a class="card card--hover card--link bento__item" href="{{ '/projects/' | relative_url }}">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -192,8 +164,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
     </a>
 
-    <a class="card card--hover card--link bento__item" href="{{ '/toolbox/' | relative_url }}" data-reveal
-      data-reveal-delay="180">
+    <a class="card card--hover card--link bento__item" href="{{ '/toolbox/' | relative_url }}">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -212,8 +183,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
     </a>
 
-    <a class="card card--hover card--link bento__item bento__item--wide" href="{{ '/bookmarks/' | relative_url }}"
-      data-reveal data-reveal-delay="240">
+    <a class="card card--hover card--link bento__item bento__item--wide" href="{{ '/bookmarks/' | relative_url }}">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -237,7 +207,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
 {%- comment -%} ============ 最新文章 ============ {%- endcomment -%}
 {%- assign recent = site.posts | slice: 0, 3 -%}
 <section class="wrap section" aria-labelledby="sec-posts">
-  <div class="sec-head" data-reveal>
+  <div class="sec-head">
     <div>
       <span class="eyebrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -254,7 +224,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
 
   <div class="grid grid-3">
     {% for post in recent %}
-    <article class="post-card" data-reveal data-reveal-delay="{{ forloop.index0 | times: 80 }}">
+    <article class="post-card">
       <a class="post-card__media" href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">
         <img src="{{ post.header-img | default: site.header-img | relative_url }}"
           alt="" loading="lazy" width="640" height="360">
@@ -285,7 +255,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
 {%- comment -%} ============ 精选软件 ============ {%- endcomment -%}
 {%- assign featured_soft = site.data.software | where: "featured", true | slice: 0, 3 -%}
 <section class="wrap section" aria-labelledby="sec-soft">
-  <div class="sec-head" data-reveal>
+  <div class="sec-head">
     <div>
       <span class="eyebrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -303,7 +273,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
 
   <div class="grid grid-3">
     {% for soft in featured_soft %}
-    <article class="soft-card" data-reveal data-reveal-delay="{{ forloop.index0 | times: 80 }}">
+    <article class="soft-card">
       <div class="soft-card__top">
         <div class="soft-card__logo {{ soft.logoClass }}" aria-hidden="true">{{ soft.logo }}</div>
         <div class="soft-card__head">
@@ -345,7 +315,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
 {%- comment -%} ============ 标签云 + 关于 CTA ============ {%- endcomment -%}
 <section class="wrap section" aria-labelledby="sec-tags">
   <div class="grid grid-2">
-    <div class="card" data-reveal>
+    <div class="card">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -364,7 +334,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </div>
     </div>
 
-    <div class="card" data-reveal data-reveal-delay="80">
+    <div class="card">
       <div class="card__head">
         <span class="card__icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"

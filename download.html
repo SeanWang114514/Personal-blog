@@ -29,7 +29,7 @@ permalink: /download/
 
 <div class="wrap section-tight">
 
-  <div class="notice notice--warn mb-8" data-reveal>
+  <div class="notice notice--warn mb-8">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
       aria-hidden="true"><use href="#i-warn"></use></svg>
     <div>
@@ -42,7 +42,7 @@ permalink: /download/
   {%- assign primary = items | where: "primary", true -%}
   {% if primary.size > 0 %}
   <section aria-labelledby="sec-primary" class="mb-12">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <span class="eyebrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -55,7 +55,7 @@ permalink: /download/
 
     <div class="grid grid-3">
       {% for item in primary %}
-      <article class="card card--glow" data-reveal data-reveal-delay="{{ forloop.index0 | times: 70 }}">
+      <article class="card card--glow">
         <div class="card__head">
           <span class="card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
@@ -103,7 +103,7 @@ permalink: /download/
 
   {%- comment -%} 完整清单 {%- endcomment -%}
   <section aria-labelledby="sec-all-dl">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <span class="eyebrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -117,7 +117,7 @@ permalink: /download/
 
     {%- assign projects = items | map: "project" | uniq -%}
     {% for proj in projects %}
-    <div class="mb-8" data-reveal>
+    <div class="mb-8">
       <h3 style="font-size:var(--t-lg);font-weight:660;margin-bottom:var(--s-4)">{{ proj }}</h3>
       <div class="dl-list">
         {% for item in items %}
@@ -158,7 +158,7 @@ permalink: /download/
 
   {%- comment -%} 常见问题 {%- endcomment -%}
   <section class="section" aria-labelledby="sec-faq">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <span class="eyebrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -170,28 +170,28 @@ permalink: /download/
     </div>
 
     <div class="grid grid-2">
-      <div class="card" data-reveal>
+      <div class="card">
         <h3 class="card__title">下载速度很慢怎么办？</h3>
         <p class="card__desc">
           GitHub Releases 在国内访问不稳定。可以试试云盘页里的不限速渠道，
           或者用代理后重新下载。
         </p>
       </div>
-      <div class="card" data-reveal data-reveal-delay="60">
+      <div class="card">
         <h3 class="card__title">安装包为什么这么大？</h3>
         <p class="card__desc">
           因为这些工具都内置了本地模型（OCR、语音识别、词库），
           用体积换「离线可用、不联网、数据不出本机」。
         </p>
       </div>
-      <div class="card" data-reveal data-reveal-delay="120">
+      <div class="card">
         <h3 class="card__title">需要管理员权限吗？</h3>
         <p class="card__desc">
           不需要。便携版解压即用；安装包写入的是用户目录，不碰系统目录，
           卸载直接删文件夹即可。
         </p>
       </div>
-      <div class="card" data-reveal data-reveal-delay="180">
+      <div class="card">
         <h3 class="card__title">更新怎么获取？</h3>
         <p class="card__desc">
           目前需要手动下载新版本覆盖。版本号与体积会同步更新在本页，

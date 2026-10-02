@@ -12,14 +12,14 @@ permalink: /about/
   <div class="hero__scrim" aria-hidden="true"></div>
   <div class="wrap">
     <div class="hero__inner">
-      <div class="hero__avatar" data-reveal>
+      <div class="hero__avatar">
         <img src="{{ site.sidebar-avatar }}" alt="Sean Wang 的头像" width="32" height="32">
         <span class="hero__avatar-text">{{ site.sidebar-about-description }}</span>
       </div>
-      <h1 class="hero__title" data-reveal data-reveal-delay="60">关于我</h1>
-      <p class="hero__sub" data-reveal data-reveal-delay="120">{{ site.tagline }}</p>
+      <h1 class="hero__title">关于我</h1>
+      <p class="hero__sub">{{ site.tagline }}</p>
 
-      <div class="hero__actions" data-reveal data-reveal-delay="180">
+      <div class="hero__actions">
         <a class="btn btn--primary" href="https://github.com/{{ site.github_username }}" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true"><use href="#i-github"></use></svg>
@@ -53,7 +53,7 @@ permalink: /about/
 
       {%- comment -%} 时间线 {%- endcomment -%}
       <section class="section" aria-labelledby="sec-timeline">
-        <div class="sec-head" data-reveal>
+        <div class="sec-head">
           <div>
             <span class="eyebrow">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -67,7 +67,7 @@ permalink: /about/
 
         <div class="timeline">
           {% for post in site.posts %}
-          <div class="tl-item" data-reveal>
+          <div class="tl-item">
             <div class="tl-item__date">{{ post.date | date: '%Y 年 %-m 月' }}</div>
             <h3 class="tl-item__title">
               <a href="{{ post.url | relative_url }}" style="color:inherit">{{ post.title }}</a>
@@ -81,7 +81,7 @@ permalink: /about/
           </div>
           {% endfor %}
 
-          <div class="tl-item" data-reveal>
+          <div class="tl-item">
             <div class="tl-item__date">更早</div>
             <h3 class="tl-item__title">开始折腾</h3>
             <p class="tl-item__body">
@@ -95,7 +95,7 @@ permalink: /about/
 
     {%- comment -%} 侧栏 {%- endcomment -%}
     <aside>
-      <div class="card mb-6" data-reveal>
+      <div class="card mb-6">
         <h2 class="card__title" style="font-size:var(--t-base)">社交账号</h2>
         <div class="dl-list mt-4">
           <a class="dl-row" href="https://github.com/{{ site.github_username }}" rel="noopener noreferrer">
@@ -137,7 +137,7 @@ permalink: /about/
         </div>
       </div>
 
-      <div class="card mb-6" data-reveal data-reveal-delay="60">
+      <div class="card mb-6">
         <h2 class="card__title" style="font-size:var(--t-base)">这个站</h2>
         <div class="grid grid-2 mt-4" style="gap:var(--s-3)">
           <div class="stat-card">
@@ -163,7 +163,7 @@ permalink: /about/
       </div>
 
       {% if site.giscus.enabled and site.giscus.repo_id != "" %}
-      <div class="card" data-reveal data-reveal-delay="120">
+      <div class="card">
         <h2 class="card__title" style="font-size:var(--t-base)">留言</h2>
         <p class="card__desc">有任何想说的都可以写在下面。</p>
       </div>

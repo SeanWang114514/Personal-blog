@@ -52,7 +52,7 @@ permalink: /bookmarks/
   <div class="friend-grid-wrap">
     {% for g in groups %}
     <section class="section-tight" aria-labelledby="bm-{{ g.key }}">
-      <div class="sec-head" data-reveal>
+      <div class="sec-head">
         <div>
           <h2 class="sec-head__title"
             id="bm-{{ g.key }}" style="font-size:var(--t-xl);display:flex;align-items:center;gap:10px">
@@ -69,8 +69,7 @@ permalink: /bookmarks/
       <div class="friend-grid">
         {% for item in g.items %}
         <div class="friend-card" data-cat="{{ g.key }}"
-          data-search="{{ item.name | escape }} {{ item.desc | escape }}"
-          data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 3 | times: 50 }}">
+          data-search="{{ item.name | escape }} {{ item.desc | escape }}">
 
           <span class="tool-tile__icon" style="width:44px;height:44px;border-radius:var(--r-sm)" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"

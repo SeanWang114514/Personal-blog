@@ -29,8 +29,7 @@ permalink: /friends/
 
   <div class="friend-grid">
     {% for f in friends %}
-    <a class="friend-card" href="{{ f.url }}" rel="noopener noreferrer" data-reveal
-      data-reveal-delay="{{ forloop.index0 | times: 50 }}">
+    <a class="friend-card" href="{{ f.url }}" rel="noopener noreferrer">
       {% if f.avatar %}
       <img class="friend-card__avatar" src="{{ f.avatar }}" alt="" loading="lazy" width="44" height="44">
       {% else %}
@@ -51,7 +50,7 @@ permalink: /friends/
 
   {%- comment -%} 申请友链 {%- endcomment -%}
   <section class="section" aria-labelledby="sec-friend-apply">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <span class="eyebrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -66,7 +65,7 @@ permalink: /friends/
     </div>
 
     <div class="grid grid-2">
-      <div class="card" data-reveal>
+      <div class="card">
         <div class="card__head">
           <span class="card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
@@ -93,7 +92,7 @@ permalink: /friends/
         </ul>
       </div>
 
-      <div class="card" data-reveal data-reveal-delay="60">
+      <div class="card">
         <div class="card__head">
           <span class="card__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"

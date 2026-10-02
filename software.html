@@ -29,7 +29,7 @@ permalink: /software/
 
 <div class="wrap section-tight">
 
-  <div class="notice mb-8" data-reveal>
+  <div class="notice mb-8">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
       aria-hidden="true"><use href="#i-info"></use></svg>
     <div>
@@ -61,8 +61,7 @@ permalink: /software/
   <div class="grid grid-3" id="sw-soft-grid">
     {% for soft in all_soft %}
     <article class="soft-card" data-cat="{{ soft.category }}"
-      data-search="{{ soft.name | escape }} {{ soft.tagline | escape }} {{ soft.desc | escape }} {{ soft.tags | join: ' ' | escape }}"
-      data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 3 | times: 70 }}">
+      data-search="{{ soft.name | escape }} {{ soft.tagline | escape }} {{ soft.desc | escape }} {{ soft.tags | join: ' ' | escape }}">
 
       <div class="soft-card__top">
         <div class="soft-card__logo {{ soft.logoClass }}" aria-hidden="true">{{ soft.logo }}</div>
@@ -139,7 +138,7 @@ permalink: /software/
 
   {%- comment -%} 功能亮点对比 {%- endcomment -%}
   <section class="section" aria-labelledby="sec-soft-feat">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <span class="eyebrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -153,7 +152,7 @@ permalink: /software/
     <div class="grid grid-2">
       {% for soft in all_soft %}
       {% if soft.highlights %}
-      <div class="card" data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 2 | times: 60 }}">
+      <div class="card">
         <div class="card__head">
           <span class="card__icon {{ soft.logoClass }}" style="color:#fff;border:none">{{ soft.logo }}</span>
           <h3 class="card__title">{{ soft.name }}</h3>
@@ -175,7 +174,7 @@ permalink: /software/
 
   {%- comment -%} 版本矩阵 {%- endcomment -%}
   <section class="section" aria-labelledby="sec-soft-matrix">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <span class="eyebrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -186,7 +185,7 @@ permalink: /software/
       </div>
     </div>
 
-    <table class="matrix" data-reveal>
+    <table class="matrix">
       <thead>
         <tr>
           <th scope="col">软件</th>

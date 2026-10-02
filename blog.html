@@ -60,8 +60,7 @@ pagination:
     {% for post in all_posts %}
     <article class="post-card" data-post
       data-tags="{{ post.tags | join: ',' | escape }}"
-      data-search="{{ post.title | escape }} {{ post.subtitle | escape }} {{ post.tags | join: ' ' | escape }} {{ post.content | strip_html | truncate: 400 | escape }}"
-      data-reveal data-reveal-delay="{{ forloop.index0 | modulo: 3 | times: 70 }}">
+      data-search="{{ post.title | escape }} {{ post.subtitle | escape }} {{ post.tags | join: ' ' | escape }} {{ post.content | strip_html | truncate: 400 | escape }}">
 
       <a class="post-card__media" href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">
         <img src="{{ post.header-img | default: site.header-img | relative_url }}"

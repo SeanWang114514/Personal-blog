@@ -58,8 +58,7 @@ permalink: /archive/
       {% for post in year.items %}
       <div class="archive-item" data-post
         data-tags="{{ post.tags | join: ',' | escape }}"
-        data-search="{{ post.title | escape }} {{ post.subtitle | escape }}"
-        data-reveal>
+        data-search="{{ post.title | escape }} {{ post.subtitle | escape }}">
         <span class="archive-item__date">{{ post.date | date: '%m-%d' }}</span>
         <a class="archive-item__title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
         <span style="display:flex;gap:6px;flex-shrink:0">
@@ -84,7 +83,7 @@ permalink: /archive/
 
   {%- comment -%} 标签云 {%- endcomment -%}
   <section class="section" aria-labelledby="sec-arch-tags">
-    <div class="sec-head" data-reveal>
+    <div class="sec-head">
       <div>
         <span class="eyebrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
