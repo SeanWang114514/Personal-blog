@@ -426,14 +426,71 @@
       });
     });
 
+    // Set by the collapsible-bar block below. "/" must expand the bar BEFORE
+    // focusing: focus() on a display:none element is a no-op and fires no
+    // event, so relying on the input's own focus handler would silently fail.
+    var expandSearch = null;
+
     // "/" focuses the first search box.
     document.addEventListener("keydown", function (e) {
       var tag = (e.target.tagName || "").toLowerCase();
       if (e.key === "/" && tag !== "input" && tag !== "textarea") {
         e.preventDefault();
+        if (expandSearch) expandSearch();
         inputs[0].focus();
       }
     });
+
+    /* --------------------------------------------------------------------
+       Collapsible top search bar.
+       The bar starts folded to one line. "/" above focuses the input, which
+       is hidden while folded — so instead of special-casing that, expand on
+       the input's own focus event. Any route that focuses it opens it.
+       -------------------------------------------------------------------- */
+    var toggle = $("[data-search-toggle]");
+    var panel = $("#topsearch-panel");
+    if (!toggle || !panel) return;
+
+    var field = $("[data-instant-search]", panel);
+
+    function expand() {
+      panel.hidden = false;
+      toggle.setAttribute("aria-expanded", "true");
+      toggle.hidden = true;
+      if (field) field.focus();
+    }
+
+    function collapse() {
+      if (field && field.value) return; // keep a term the user typed
+      panel.hidden = true;
+      toggle.hidden = false;
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.focus();
+    }
+
+    toggle.addEventListener("click", expand);
+    expandSearch = expand;
+    $("[data-search-close]", panel).addEventListener("click", function () {
+      if (field) field.value = "";
+      collapse();
+    });
+
+    // focus can also arrive from a tap; the field must be visible by then
+    if (field) {
+      field.addEventListener("focus", function () {
+        if (panel.hidden) {
+          panel.hidden = false;
+          toggle.hidden = true;
+          toggle.setAttribute("aria-expanded", "true");
+        }
+      });
+      field.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          field.value = "";
+          collapse();
+        }
+      });
+    }
   })();
 
   /* ----------------------------------------------------------------------

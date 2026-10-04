@@ -1236,7 +1236,154 @@ html[data-theme="light"] .card {
   white-space: nowrap;
 }
 
-/* 首页搜索框 */
+/* --------------------------------------------------------------------------
+   首页顶部搜索（默认折叠）
+   --------------------------------------------------------------------------
+   收起时只占一行、看起来像输入框但其实是按钮；点开或按 / 才展开真正的
+   输入框。这样搜索始终在页面最上方伸手可及，又不会在用户想读内容时
+   先占掉一大块。
+   -------------------------------------------------------------------------- */
+.topsearch {
+  padding-top: var(--s-4);
+}
+
+.topsearch__inner {
+  position: relative;
+  max-width: 560px;
+}
+
+.topsearch__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--border-input);
+  border-radius: var(--r-md);
+  background: var(--bg-raised);
+  color: var(--text-tertiary);
+  font-family: inherit;
+  font-size: var(--fs-13);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--dur-fast), background var(--dur-fast), color var(--dur-fast);
+}
+
+.topsearch__toggle:hover {
+  border-color: var(--separator-strong);
+  color: var(--text-secondary);
+}
+
+.topsearch__toggle:focus-visible {
+  outline: 3px solid var(--accent-ring);
+  outline-offset: 1px;
+}
+
+.topsearch__toggle svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.topsearch__hint {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.topsearch__kbd {
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  color: var(--text-tertiary);
+  border: 1px solid var(--separator-strong);
+  border-radius: var(--r-sm);
+  padding: 1px 5px;
+}
+
+.topsearch__panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.topsearch__panel[hidden] {
+  display: none;
+}
+
+.topsearch__icon {
+  position: absolute;
+  left: 12px;
+  width: 16px;
+  height: 16px;
+  color: var(--text-tertiary);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  pointer-events: none;
+}
+
+.topsearch__input {
+  width: 100%;
+  height: 38px;
+  padding: 0 78px 0 38px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--accent);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--fs-15);
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.topsearch__input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.topsearch__input:focus {
+  outline: none;
+}
+
+.topsearch__close {
+  position: absolute;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+
+.topsearch__close:hover {
+  background: var(--material-hover);
+  color: var(--text-primary);
+}
+
+.topsearch__close:focus-visible {
+  outline: 3px solid var(--accent-ring);
+  outline-offset: 1px;
+}
+
+.topsearch__close svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+/* 旧的首页搜索框样式保留：别的页面没有顶部条时仍会用到 */
 .hero-search {
   position: relative;
   max-width: 460px;
@@ -1426,11 +1573,20 @@ html[data-theme="light"] .card {
   gap: var(--s-3);
 }
 
+/* --------------------------------------------------------------------------
+   首页板块卡
+   --------------------------------------------------------------------------
+   这 8 张卡是首页的导航主体，用户靠它们决定去哪。所以「名字」和「数量」
+   要一眼看见：名字放大加粗、数量做成小徽章、图标按板块上色。颜色一律取
+   已有的调色板 token（图标用 --x，底色用配对的 --x-soft），浅色主题下这些
+   token 自带加深版本，不用另写一套。
+   说明文字仍是 12px 次要色 —— 它是解释，不是标题。
+   -------------------------------------------------------------------------- */
 .module {
   display: flex;
   align-items: center;
   gap: var(--s-3);
-  padding: 14px var(--s-4);
+  padding: var(--s-4);
   border: 1px solid var(--separator);
   border-radius: var(--r-lg);
   background: var(--bg-elevated);
@@ -1447,51 +1603,98 @@ html[data-theme="light"] .card {
 .module__icon {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: var(--r-md);
-  background: var(--material-hover);
-  color: var(--accent);
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-lg);
+  background: var(--tint-soft, var(--material-hover));
+  color: var(--tint, var(--accent));
   flex-shrink: 0;
 }
 
 .module__icon svg {
-  width: 17px;
-  height: 17px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.7;
+  stroke-width: 1.8;
 }
 
 .module__body {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
   flex: 1;
 }
 
 .module__head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--s-2);
 }
 
 .module__name {
-  font-size: var(--fs-15);
+  font-size: var(--fs-17);
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .module__count {
+  padding: 1px 7px;
+  border-radius: var(--r-full);
+  background: var(--material-hover);
   font-size: var(--fs-11);
-  color: var(--text-tertiary);
+  font-weight: 500;
+  color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .module__desc {
   font-size: var(--fs-12);
   color: var(--text-secondary);
   line-height: 1.45;
+}
+
+/* 每个板块一个色调：只设两个变量，图标与底色都取它 */
+.module--blog {
+  --tint: var(--accent);
+  --tint-soft: var(--accent-soft);
+}
+
+.module--soft {
+  --tint: var(--green);
+  --tint-soft: var(--green-soft);
+}
+
+.module--drive {
+  --tint: var(--teal);
+  --tint-soft: var(--teal-soft);
+}
+
+.module--download {
+  --tint: var(--orange);
+  --tint-soft: var(--orange-soft);
+}
+
+.module--projects {
+  --tint: var(--purple);
+  --tint-soft: var(--purple-soft);
+}
+
+.module--pentest {
+  --tint: var(--red);
+  --tint-soft: var(--red-soft);
+}
+
+.module--toolbox {
+  --tint: var(--accent);
+  --tint-soft: var(--accent-soft);
+}
+
+.module--bookmarks {
+  --tint: var(--orange);
+  --tint-soft: var(--orange-soft);
 }
 
 /* 模块数是偶数（8 个），正好铺满 2 列；如果将来增删成奇数，

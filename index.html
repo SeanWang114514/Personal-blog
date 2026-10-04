@@ -5,6 +5,39 @@ nav: home
 description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾记录"
 ---
 
+{%- comment -%}
+  ============ 站内搜索 ============
+  放在最上面，默认收成一行；点一下（或按 /）才展开成真正的输入框。
+  输入框和结果面板必须留在同一个父元素里 —— 搜索脚本是用
+  input.parentElement.querySelector(".search-results") 找结果容器的。
+{%- endcomment -%}
+<section class="topsearch" aria-label="站内搜索">
+  <div class="wrap">
+    <div class="topsearch__inner">
+      <button class="topsearch__toggle" type="button" data-search-toggle aria-expanded="false"
+        aria-controls="topsearch-panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true"><use href="#i-search"></use></svg>
+        <span class="topsearch__hint">搜索文章、软件、资源…</span>
+        <kbd class="topsearch__kbd">/</kbd>
+      </button>
+
+      <div class="topsearch__panel" id="topsearch-panel" hidden>
+        <svg class="topsearch__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><use href="#i-search"></use></svg>
+        <label class="sr-only" for="home-search">搜索站内内容</label>
+        <input class="topsearch__input" id="home-search" type="search" placeholder="搜索文章、软件、资源…"
+          autocomplete="off" data-instant-search>
+        <div class="search-results" role="listbox" aria-label="搜索结果"></div>
+        <button class="topsearch__close" type="button" data-search-close aria-label="收起搜索">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-close"></use></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
 {%- comment -%} ============ 页头 ============ {%- endcomment -%}
 <section class="hero">
   <div class="wrap">
@@ -15,18 +48,6 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
         {{ site.description }}。这里有我写的离线工具、踩过的坑，
         以及一份持续更新的软件与资源清单。
       </p>
-
-      <div class="hero-search">
-        <svg class="hero-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <use href="#i-search"></use>
-        </svg>
-        <label class="sr-only" for="home-search">搜索站内内容</label>
-        <input class="hero-search__input" id="home-search" type="search" placeholder="搜索文章、软件、资源…"
-          autocomplete="off" data-instant-search>
-        <kbd class="hero-search__kbd">/</kbd>
-        <div class="search-results" role="listbox" aria-label="搜索结果"></div>
-      </div>
 
       {%- comment -%}
         统计不再做成四个大数字 + 边框的行，改成一行小字。
@@ -46,7 +67,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
 <section class="wrap section" aria-labelledby="sec-modules">
   <div class="sec-head">
     <div>
-      <h2 class="sec-head__title" id="sec-modules">七个板块，各管一件事</h2>
+      <h2 class="sec-head__title" id="sec-modules">八个板块，各管一件事</h2>
       <p class="sec-head__desc">写文章、放软件、存资源、收工具 —— 每一块都能单独打开当独立页面用。</p>
     </div>
   </div>
@@ -56,7 +77,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
   {%- capture pt_count %}{% include count-items.html data=site.data.pentest key="tools" %}{% endcapture -%}
 
   <div class="module-grid">
-    <a class="module" href="{{ '/blog/' | relative_url }}">
+    <a class="module module--blog" href="{{ '/blog/' | relative_url }}">
       <span class="module__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
           aria-hidden="true"><use href="#i-book"></use></svg>
@@ -70,7 +91,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </span>
     </a>
 
-    <a class="module" href="{{ '/software/' | relative_url }}">
+    <a class="module module--soft" href="{{ '/software/' | relative_url }}">
       <span class="module__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
           aria-hidden="true"><use href="#i-box"></use></svg>
@@ -84,7 +105,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </span>
     </a>
 
-    <a class="module" href="{{ '/drive/' | relative_url }}">
+    <a class="module module--drive" href="{{ '/drive/' | relative_url }}">
       <span class="module__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
           aria-hidden="true"><use href="#i-cloud"></use></svg>
@@ -98,7 +119,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </span>
     </a>
 
-    <a class="module" href="{{ '/download/' | relative_url }}">
+    <a class="module module--download" href="{{ '/download/' | relative_url }}">
       <span class="module__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
           aria-hidden="true"><use href="#i-download"></use></svg>
@@ -112,7 +133,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </span>
     </a>
 
-    <a class="module" href="{{ '/projects/' | relative_url }}">
+    <a class="module module--projects" href="{{ '/projects/' | relative_url }}">
       <span class="module__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
           aria-hidden="true"><use href="#i-layers"></use></svg>
@@ -126,7 +147,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </span>
     </a>
 
-    <a class="module" href="{{ '/pentest/' | relative_url }}">
+    <a class="module module--pentest" href="{{ '/pentest/' | relative_url }}">
       <span class="module__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
           aria-hidden="true"><use href="#i-shield"></use></svg>
@@ -140,7 +161,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </span>
     </a>
 
-    <a class="module" href="{{ '/toolbox/' | relative_url }}">
+    <a class="module module--toolbox" href="{{ '/toolbox/' | relative_url }}">
       <span class="module__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
           aria-hidden="true"><use href="#i-tool"></use></svg>
@@ -154,7 +175,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </span>
     </a>
 
-    <a class="module" href="{{ '/bookmarks/' | relative_url }}">
+    <a class="module module--bookmarks" href="{{ '/bookmarks/' | relative_url }}">
       <span class="module__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
           aria-hidden="true"><use href="#i-bookmark"></use></svg>
