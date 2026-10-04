@@ -78,7 +78,13 @@ permalink: /drive/
             stroke-linejoin="round" aria-hidden="true"><use href="#i-external"></use></svg>
           打开官网
         </a>
-        {% if d.share and d.share != "" %}
+        {%- comment -%}
+          「分享页」只在 share 与 home 确实不同时才渲染。
+          原来只要 share 非空就渲染，而数据里 share 填的是官网首页，
+          于是每张卡都摆着一个假的「分享页」按钮 —— 点进去只是官网。
+          真实分享链接一旦填进 _data/drive.yml 的 share，按钮会自动出现。
+        {%- endcomment -%}
+        {% if d.share and d.share != "" and d.share != d.home %}
         <a class="btn btn--primary btn--sm" href="{{ d.share }}" rel="noopener noreferrer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true"><use href="#i-share"></use></svg>

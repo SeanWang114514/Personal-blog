@@ -101,6 +101,11 @@ layout: default
           </nav>
           {% endif %}
 
+          {%- comment -%}
+            文章页的评论由这里渲染（在 <main> 内、紧跟正文）。
+            footer.html 里还有一份兜底渲染，但带 layout != "post" 条件 ——
+            两处都渲染会在同一页插入两个 giscus、抢同一个 #comments id。
+          {%- endcomment -%}
           {% include giscus.html %}
         </div>
       </div>

@@ -85,14 +85,18 @@ kramdown:
 
 # ---------------------------------------------------------------------------
 # 评论 (Giscus · 基于 GitHub Discussions)
-#   首次部署后到 https://giscus.app 用仓库生成自己的 repo-id / category-id 再替换。
+#   仓库已开启 Discussions，下面两个 id 是对着它查出来的：
+#     repo_id     = repos/SeanWang114514/Personal-blog 的 node_id
+#     category_id = Announcements 分类的 node_id
+#   注意：giscus 还需要在仓库上安装 giscus App 并授权，
+#   否则访客只会看到一个空框 —— 这一步只能在网页上做，配置里写不了。
 # ---------------------------------------------------------------------------
 giscus:
   enabled: true
   repo: SeanWang114514/Personal-blog
-  repo_id: ""            # ← 留空则自动跳过渲染，填上 giscus.app 给出的值即可启用
+  repo_id: "R_kgDOU4VyiQ"
   category: "Announcements"
-  category_id: ""
+  category_id: "DIC_kwDOU4Vyic4DHAQ6"
   mapping: pathname
   reactions_enabled: "1"
   input_position: bottom

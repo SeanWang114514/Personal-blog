@@ -3437,9 +3437,24 @@ html[data-theme="light"] .card {
 }
 
 .comments__title {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
   font-size: var(--fs-17);
   font-weight: 600;
   margin-bottom: var(--s-4);
+}
+
+/* 这个 svg 只有 viewBox、没有 width/height，全局 reset 又只给了
+   max-width:100%（故意没给 height:auto，见 reset 里的说明），
+   所以必须在这里显式定尺寸，否则它会撑满整个容器宽度变成 860×860。 */
+.comments__title svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
 }
 
 /* 时间线 */

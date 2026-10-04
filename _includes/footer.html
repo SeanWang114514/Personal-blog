@@ -130,6 +130,13 @@
 
 <script src="{{ '/js/sw.js' | relative_url }}" defer></script>
 
-{% if site.giscus.enabled and site.giscus.repo_id != "" and page.comments != false %}
+{%- comment -%}
+  评论只在两种情况下渲染：
+    1. 文章页 —— 由 _layouts/post.html 紧跟正文渲染，这里必须跳过，
+       否则同一页会插进两个 giscus、抢同一个 #comments id；
+    2. 其它页面 —— 只有自己在 front matter 里写明 comments: true 才渲染。
+  所以留空 repo_id 不再是「关掉评论」的开关，页面级开关是 comments。
+{%- endcomment -%}
+{% if site.giscus.enabled and site.giscus.repo_id != "" and site.giscus.category_id != "" and page.layout != "post" and page.comments == true %}
 {% include giscus.html %}
 {% endif %}
