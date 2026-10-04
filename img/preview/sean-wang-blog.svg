@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360"
+  role="img" aria-label="Sean Wang 个人博客站点结构示意图">
+  <title>Sean Wang 个人博客站点结构示意图</title>
+  
+  <defs>
+    <linearGradient id="g-accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5aa9ff"/><stop offset="1" stop-color="#cb7df5"/>
+    </linearGradient>
+    
+  </defs>
+  <rect x="0" y="0" width="640" height="360" fill="#1c1c1e"/>
+  <rect x="0" y="0" width="640" height="28" fill="#2c2c2e"/>
+  <circle cx="16" cy="14" r="4" fill="#5aa9ff"/>
+  <text x="30" y="18" fill="#a8a8ad" font-size="10.5"
+    font-family="ui-sans-serif,system-ui,sans-serif">Sean Wang</text>
+  
+  <text x="300" y="18" fill="#f2f2f7" font-size="9.5"
+    font-family="ui-sans-serif,system-ui,sans-serif">博客</text>
+  <text x="344" y="18" fill="#7c7c81" font-size="9.5"
+    font-family="ui-sans-serif,system-ui,sans-serif">软件</text>
+  <text x="388" y="18" fill="#7c7c81" font-size="9.5"
+    font-family="ui-sans-serif,system-ui,sans-serif">云盘</text>
+  <text x="432" y="18" fill="#7c7c81" font-size="9.5"
+    font-family="ui-sans-serif,system-ui,sans-serif">下载</text>
+  <text x="476" y="18" fill="#7c7c81" font-size="9.5"
+    font-family="ui-sans-serif,system-ui,sans-serif">项目</text>
+  <text x="520" y="18" fill="#7c7c81" font-size="9.5"
+    font-family="ui-sans-serif,system-ui,sans-serif">安全</text>
+  <text x="564" y="18" fill="#7c7c81" font-size="9.5"
+    font-family="ui-sans-serif,system-ui,sans-serif">工具箱</text>
+  <line x1="0" y1="28" x2="640" y2="28" stroke="rgba(255,255,255,0.10)"/>
+
+  <text x="32" y="66" fill="#f2f2f7" font-size="17" font-weight="600"
+    font-family="ui-sans-serif,system-ui,sans-serif">折腾、记录，然后把它们做成能用的东西。</text>
+  <rect x="32" y="80" width="330" height="7" rx="3.5" fill="rgba(255,255,255,0.12)"/>
+  <rect x="32" y="94" width="250" height="7" rx="3.5" fill="rgba(255,255,255,0.08)"/>
+
+  
+  <rect x="32" y="120" width="136" height="48" rx="6" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="44" y="132" width="20" height="20" rx="5" fill="rgba(90,169,255,0.18)"/>
+  <rect x="72" y="133" width="52" height="7" rx="3.5" fill="rgba(255,255,255,0.2)"/>
+  <rect x="72" y="147" width="80" height="5" rx="2.5" fill="rgba(255,255,255,0.1)"/>
+  <rect x="180" y="120" width="136" height="48" rx="6" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="192" y="132" width="20" height="20" rx="5" fill="rgba(90,169,255,0.18)"/>
+  <rect x="220" y="133" width="52" height="7" rx="3.5" fill="rgba(255,255,255,0.2)"/>
+  <rect x="220" y="147" width="80" height="5" rx="2.5" fill="rgba(255,255,255,0.1)"/>
+  <rect x="328" y="120" width="136" height="48" rx="6" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="340" y="132" width="20" height="20" rx="5" fill="rgba(90,169,255,0.18)"/>
+  <rect x="368" y="133" width="52" height="7" rx="3.5" fill="rgba(255,255,255,0.2)"/>
+  <rect x="368" y="147" width="80" height="5" rx="2.5" fill="rgba(255,255,255,0.1)"/>
+  <rect x="476" y="120" width="136" height="48" rx="6" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="488" y="132" width="20" height="20" rx="5" fill="rgba(90,169,255,0.18)"/>
+  <rect x="516" y="133" width="52" height="7" rx="3.5" fill="rgba(255,255,255,0.2)"/>
+  <rect x="516" y="147" width="80" height="5" rx="2.5" fill="rgba(255,255,255,0.1)"/>
+  <rect x="32" y="178" width="136" height="48" rx="6" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="44" y="190" width="20" height="20" rx="5" fill="rgba(90,169,255,0.18)"/>
+  <rect x="72" y="191" width="52" height="7" rx="3.5" fill="rgba(255,255,255,0.2)"/>
+  <rect x="72" y="205" width="80" height="5" rx="2.5" fill="rgba(255,255,255,0.1)"/>
+  <rect x="180" y="178" width="136" height="48" rx="6" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="192" y="190" width="20" height="20" rx="5" fill="rgba(90,169,255,0.18)"/>
+  <rect x="220" y="191" width="52" height="7" rx="3.5" fill="rgba(255,255,255,0.2)"/>
+  <rect x="220" y="205" width="80" height="5" rx="2.5" fill="rgba(255,255,255,0.1)"/>
+  <rect x="328" y="178" width="136" height="48" rx="6" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="340" y="190" width="20" height="20" rx="5" fill="rgba(90,169,255,0.18)"/>
+  <rect x="368" y="191" width="52" height="7" rx="3.5" fill="rgba(255,255,255,0.2)"/>
+  <rect x="368" y="205" width="80" height="5" rx="2.5" fill="rgba(255,255,255,0.1)"/>
+  <rect x="476" y="178" width="136" height="48" rx="6" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="488" y="190" width="20" height="20" rx="5" fill="rgba(90,169,255,0.18)"/>
+  <rect x="516" y="191" width="52" height="7" rx="3.5" fill="rgba(255,255,255,0.2)"/>
+  <rect x="516" y="205" width="80" height="5" rx="2.5" fill="rgba(255,255,255,0.1)"/>
+
+  <line x1="32" y1="248" x2="608" y2="248" stroke="rgba(255,255,255,0.10)"/>
+  
+  <line x1="32" y1="272" x2="608" y2="272" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="32" y="258" width="200" height="7" rx="3.5" fill="rgba(255,255,255,0.16)"/>
+  <rect x="500" y="258" width="108" height="7" rx="3.5" fill="rgba(255,255,255,0.07)"/>
+  <line x1="32" y1="298" x2="608" y2="298" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="32" y="284" width="200" height="7" rx="3.5" fill="rgba(255,255,255,0.16)"/>
+  <rect x="500" y="284" width="108" height="7" rx="3.5" fill="rgba(255,255,255,0.07)"/>
+  <line x1="32" y1="324" x2="608" y2="324" stroke="rgba(255,255,255,0.10)"/>
+  <rect x="32" y="310" width="200" height="7" rx="3.5" fill="rgba(255,255,255,0.16)"/>
+  <rect x="500" y="310" width="108" height="7" rx="3.5" fill="rgba(255,255,255,0.07)"/>
+  <text x="32" y="344" fill="#7c7c81" font-size="10"
+    font-family="ui-sans-serif,system-ui,sans-serif">示意 · 站点自身结构</text>
+</svg>

@@ -5,6 +5,7 @@
 
 - name: Rime VMenu 全家桶
   slug: rime-vmenu-suite
+  preview: img/preview/rime-vmenu-suite.svg
   tagline: 一个 v 键，把小狼毫变成输入套件
   desc: >-
     把小狼嚎（Weasel）升级成完整的输入工具箱：按 v 出功能菜单，可视化窗口管词库与配置，
@@ -31,6 +32,7 @@
 
 - name: Note Studio
   slug: note-studio
+  preview: img/preview/note-studio.svg
   tagline: PDF 改字、OCR 和语音识别装进一个本地工作台
   desc: >-
     一个基于 React + Electron 的本地文档工作台：PDF 能像 Word 一样逐字改，
@@ -56,6 +58,7 @@
 
 - name: PP-OCRv6 Desktop
   slug: ppocrv6-desktop
+  preview: img/preview/ppocrv6-desktop.svg
   tagline: 纯 C++ 的离线 OCR + 翻译桌面工具
   desc: >-
     一个原生 Win32 C++ 应用，截图即识别、即翻译，无需联网，无需 Python，
@@ -80,6 +83,7 @@
 
 - name: DeepSeek 海报展
   slug: deepseek-poster-52
+  preview: img/preview/deepseek-poster-52.svg
   tagline: 52 种风格自我介绍生成器
   desc: >-
     把同一段自我介绍，渲染成 52 种经典视觉风格：瑞士国际主义、包豪斯、赛博朋克、
@@ -104,6 +108,7 @@
 
 - name: Geekbench 性价比天梯图
   slug: geekbench-value-ladder
+  preview: img/preview/geekbench-value-ladder.svg
   tagline: 跑分和价格放进同一张图
   desc: >-
     把 GPU / CPU 的 Geekbench 跑分和人民币价格放在同一张天梯图里，
@@ -127,6 +132,7 @@
 
 - name: GitHub 高星新项目
   slug: github-hot-repos
+  preview: img/preview/github-hot-repos.svg
   tagline: 用 AI 帮你发现新晋热门仓库
   desc: >-
     一个纯静态的速览站点，专门抓取最近 7 / 30 / 90 天创建、按 Stars 排序的新仓库，

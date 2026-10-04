@@ -4,7 +4,7 @@ title:      "GitHub 高星新项目：用 AI 帮你发现新晋热门仓库"
 subtitle:   "一个基于 GitHub Search API 的新仓库速览工具"
 date:       2026-08-02 12:00:00
 author:     "Sean Wang"
-header-img: "img/post-bg-web.jpg"
+header-img: "img/preview/github-hot-repos.svg"
 catalog: true
 tags:
     - GitHub

@@ -1,19 +1,27 @@
 {%- comment -%}
   Count the total number of entries across a grouped data file.
 
-  _data/toolbox.yml and _data/bookmarks.yml are arrays of groups, each holding
-  an `items` array. Piping `map: "items" | flatten` looks like it should count
-  the entries, but on Jekyll's data proxies it returns the GROUP count instead
-  (verified: toolbox returned 6 rather than 38). A nested loop is the only
-  reliable way to total them.
+  Data files are arrays of groups, each holding a list of entries. The list key
+  differs by file, so pass it explicitly:
 
-  Usage:
-    {% include count-items.html data=site.data.toolbox %}   -> 38
+    {% include count-items.html data=site.data.toolbox %}                  -> items (default)
+    {% include count-items.html data=site.data.pentest key="tools" %}      -> tools
+
+  Piping `map: "items" | flatten` looks like it should count the entries, but on
+  Jekyll's data proxies it returns the GROUP count instead (verified: toolbox
+  returned 6 rather than 38). A nested loop is the only reliable way to total them.
+
+  `where_exp` cannot be used to filter out groups whose key is missing, because
+  comparing against nil in Liquid is unreliable; the inner loop simply yields
+  nothing for a missing key, which is the behaviour we want anyway.
 {%- endcomment -%}
+{%- assign _key = include.key | default: "items" -%}
 {%- assign _n = 0 -%}
 {%- for _g in include.data -%}
-  {%- for _i in _g.items -%}
-    {%- assign _n = _n | plus: 1 -%}
-  {%- endfor -%}
+  {%- if _key == "tools" -%}
+    {%- for _i in _g.tools -%}{%- assign _n = _n | plus: 1 -%}{%- endfor -%}
+  {%- else -%}
+    {%- for _i in _g.items -%}{%- assign _n = _n | plus: 1 -%}{%- endfor -%}
+  {%- endif -%}
 {%- endfor -%}
 {{- _n -}}

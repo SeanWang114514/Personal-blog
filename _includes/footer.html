@@ -52,6 +52,10 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
               stroke-linejoin="round" aria-hidden="true"><use href="#i-tool"></use></svg>工具箱
           </a>
+          <a class="footer__link" href="{{ '/pentest/' | relative_url }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true"><use href="#i-shield"></use></svg>安全工具
+          </a>
         </div>
       </div>
 
@@ -90,8 +94,8 @@
         {% if site.bilibili_username %}
         <a class="social-btn" href="https://space.bilibili.com/{{ site.bilibili_username }}" title="哔哩哔哩"
           aria-label="哔哩哔哩" rel="noopener noreferrer">
-          <img src="{{ '/img/bilibili-icon.png' | relative_url }}" alt=""
-            style="width:17px;height:17px;object-fit:contain;filter:var(--social-icon-filter,none)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-bilibili"></use></svg>
         </a>
         {% endif %}
         {% if site.zhihu_username %}

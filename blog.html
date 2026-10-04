@@ -69,6 +69,11 @@ pagination:
       data-search="{{ post.title | escape }} {{ post.subtitle | escape }} {{ post.tags | join: ' ' | escape }} {{ post.content | strip_html | truncate: 400 | escape }}">
 
       <a class="post-row__link" href="{{ post.url | relative_url }}">
+        {% if post.header-img %}
+        <span class="post-row__thumb" aria-hidden="true">
+          <img src="{{ post.header-img | relative_url }}" alt="" width="144" height="88" loading="lazy">
+        </span>
+        {% endif %}
         <span class="post-row__main">
           <span class="post-row__title">{{ post.title }}</span>
           {% if post.subtitle %}

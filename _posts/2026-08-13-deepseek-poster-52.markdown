@@ -4,7 +4,7 @@ title:      "DeepSeek 海报展：52 种风格自我介绍"
 subtitle:   "把同一段自我介绍，渲染成 52 种经典视觉风格"
 date:       2026-08-13 20:00:00
 author:     "Sean Wang"
-header-img: "img/post-bg-digital-native.jpg"
+header-img: "img/preview/deepseek-poster-52.svg"
 catalog: true
 tags:
     - AI

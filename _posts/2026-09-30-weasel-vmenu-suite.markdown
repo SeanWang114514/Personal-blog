@@ -4,7 +4,7 @@ title:      "Rime VMenu 全家桶：一个 v 键，把小狼毫变成输入套�
 subtitle:   "功能菜单 / 可视化设置窗口 / 剪贴板历史 / 常用语 / 前后鼻音模糊 / 下一个候选词预测 / 本地语音输入，全部离线，exe 与 zip 双格式发布"
 date:       2026-09-30 08:00:00
 author:     "Sean Wang"
-header-img: "img/post-bg-os-metro.jpg"
+header-img: "img/preview/rime-vmenu-suite.svg"
 catalog: true
 tags:
     - 工具

@@ -39,6 +39,17 @@ layout: default
       </span>
       {% endif %}
     </div>
+
+    {%- comment -%}
+      header-img 之前只被列表页用作缩略图，文章页从来不显示它。
+      这里补上：进文章先看到这个工具长什么样，比直接跳进正文更友好。
+    {%- endcomment -%}
+    {% if page.header-img %}
+    <figure class="post-header__figure">
+      <img src="{{ page.header-img | relative_url }}" alt="{{ page.title }} 的界面示意图"
+        width="640" height="360">
+    </figure>
+    {% endif %}
   </header>
 
   <div class="wrap">

@@ -33,6 +33,11 @@
   icon: grid
   url: /projects/
 
+- key: pentest
+  label: 安全
+  icon: shield
+  url: /pentest/
+
 - key: toolbox
   label: 工具箱
   icon: tool

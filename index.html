@@ -53,6 +53,7 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
 
   {%- capture tb_count %}{% include count-items.html data=site.data.toolbox %}{% endcapture -%}
   {%- capture bm_count %}{% include count-items.html data=site.data.bookmarks %}{% endcapture -%}
+  {%- capture pt_count %}{% include count-items.html data=site.data.pentest key="tools" %}{% endcapture -%}
 
   <div class="module-grid">
     <a class="module" href="{{ '/blog/' | relative_url }}">
@@ -125,6 +126,20 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
       </span>
     </a>
 
+    <a class="module" href="{{ '/pentest/' | relative_url }}">
+      <span class="module__icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><use href="#i-shield"></use></svg>
+      </span>
+      <span class="module__body">
+        <span class="module__head">
+          <span class="module__name">安全</span>
+          <span class="module__count">{{ pt_count | strip }} 个条目</span>
+        </span>
+        <span class="module__desc">渗透测试工具归档：信息收集、提权、内网、应急响应</span>
+      </span>
+    </a>
+
     <a class="module" href="{{ '/toolbox/' | relative_url }}">
       <span class="module__icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -176,6 +191,11 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
     {% for post in recent %}
     <li class="post-row">
       <a class="post-row__link" href="{{ post.url | relative_url }}">
+        {% if post.header-img %}
+        <span class="post-row__thumb" aria-hidden="true">
+          <img src="{{ post.header-img | relative_url }}" alt="" width="144" height="88" loading="lazy">
+        </span>
+        {% endif %}
         <span class="post-row__main">
           <span class="post-row__title">{{ post.title }}</span>
           <span class="post-row__excerpt">{% include post-excerpt.html post=post limit=90 %}</span>

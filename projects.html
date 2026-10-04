@@ -71,6 +71,17 @@ permalink: /projects/
     <article class="card card--hover" data-cat="{{ p.category }}"
       data-search="{{ p.name | escape }} {{ p.tagline | escape }} {{ p.desc | escape }} {{ p.tech | join: ' ' | escape }}">
 
+      {%- comment -%}
+        预览图：自绘的界面示意图，让人一眼看出这个作品是什么。
+        原来只有角落里的一个字母方块，没有可看的预览。
+      {%- endcomment -%}
+      {% if p.preview %}
+      <a class="card__preview" href="{% if p.demo %}{{ p.demo }}{% else %}{{ p.repo }}{% endif %}"
+        rel="noopener noreferrer" aria-hidden="true" tabindex="-1">
+        <img src="{{ p.preview | relative_url }}" alt="" width="640" height="360" loading="lazy">
+      </a>
+      {% endif %}
+
       <div class="card__head">
         <span class="card__icon {{ p.logoClass }}" style="color:#fff;border:none;font-weight:800">{{ p.logo }}</span>
         <div style="flex:1;min-width:0">

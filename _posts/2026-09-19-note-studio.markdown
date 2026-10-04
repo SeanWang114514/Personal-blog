@@ -4,7 +4,7 @@ title:      "Note Studio：把 PDF 改字、OCR 和语音识别装进一个本�
 subtitle:   "八种常见格式就地打开、改完写回原文件；识别在本机推理，文件不出本机"
 date:       2026-09-19 22:00:00
 author:     "Sean Wang"
-header-img: "img/post-bg-web.jpg"
+header-img: "img/preview/note-studio.svg"
 catalog: true
 tags:
     - 工具

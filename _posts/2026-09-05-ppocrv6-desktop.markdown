@@ -4,7 +4,7 @@ title:      "PP-OCRv6 Desktop：一个纯 C++ 的离线 OCR + 翻译桌面工具
 subtitle:   "截图即识别、即翻译，无需联网，无需 Python，单文件直接运行"
 date:       2026-09-05 23:00:00
 author:     "Sean Wang"
-header-img: "img/post-bg-unix-linux.jpg"
+header-img: "img/preview/ppocrv6-desktop.svg"
 catalog: true
 tags:
     - AI

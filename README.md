@@ -112,7 +112,7 @@ title:      "文章标题"
 subtitle:   "副标题"
 date:       2026-01-01 12:00:00
 author:     "Sean Wang"
-header-img: "img/post-bg-web.jpg"
+header-img: "img/preview/<slug>.svg"
 catalog:    true
 tags:
     - 工具

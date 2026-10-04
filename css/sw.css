@@ -789,6 +789,11 @@ html:not([data-theme="light"]) .theme-toggle .i-moon {
   transform: translateX(2px);
 }
 
+/*
+ * 图标用 --text-primary 而不是 --text-secondary：
+ * 这些是社交账号入口，需要一眼看清，浅色主题下要接近纯黑
+ * （--text-secondary #55555a 偏灰，显得糊）。深色下自然是近白。
+ */
 .social-btn {
   display: grid;
   place-items: center;
@@ -796,13 +801,13 @@ html:not([data-theme="light"]) .theme-toggle .i-moon {
   height: 32px;
   border-radius: var(--r-sm);
   background: var(--material-hover);
-  color: var(--text-secondary);
+  color: var(--text-primary);
   transition: background var(--dur-fast), color var(--dur-fast);
 }
 
 .social-btn:hover {
   background: var(--material-active);
-  color: var(--text-primary);
+  color: var(--accent);
 }
 
 .social-btn svg {
@@ -1489,12 +1494,187 @@ html[data-theme="light"] .card {
   line-height: 1.45;
 }
 
-/* 最后一个在 2 列里会剩半行，让它横跨两列 */
-.module:last-child {
-  grid-column: 1 / -1;
-}
+/* 模块数是偶数（8 个），正好铺满 2 列；如果将来增删成奇数，
+   再给最后一项加 grid-column: 1 / -1 补满整行即可。 */
 /* ==========================================================================
-   12. 文章卡片
+   安全工具库（/pentest/）
+   --------------------------------------------------------------------------
+   条目数量多、每条信息量小，所以用 auto-fill 的窄卡片网格：一屏能扫
+   十几个工具，卡片之间靠底色和描边分组，不做装饰。
+   ========================================================================== */
+.pentest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--s-3);
+}
+
+.pentest-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-4);
+  border: 1px solid var(--separator);
+  border-radius: var(--r-lg);
+  background: var(--bg-elevated);
+  transition: background var(--dur-fast), border-color var(--dur-fast);
+}
+
+.pentest-card:hover {
+  background: var(--bg-raised);
+  border-color: var(--separator-strong);
+}
+
+.pentest-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.pentest-card__name {
+  font-size: var(--fs-15);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-primary);
+  min-width: 0;
+}
+
+/* 类别角标：和分组标题呼应，方便单独搜索时判断来源 */
+.pentest-card__cat {
+  flex-shrink: 0;
+  font-size: var(--fs-11);
+  color: var(--text-tertiary);
+  border: 1px solid var(--separator);
+  border-radius: var(--r-sm);
+  padding: 1px 6px;
+}
+
+.pentest-card__desc {
+  font-size: var(--fs-13);
+  color: var(--text-secondary);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.pentest-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-2);
+  padding-top: var(--s-2);
+  border-top: 1px solid var(--separator);
+}
+
+.pentest-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+}
+
+.pentest-card__tags .tag {
+  font-size: var(--fs-11);
+  height: 20px;
+  padding-inline: 6px;
+}
+
+/* 宽表格（如仓库结构统计）在窄屏要能横向滚动，而不是撑破视口 */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  .pentest-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ==========================================================================
+   预览图（软件卡 / 项目卡）
+   --------------------------------------------------------------------------
+   img/preview/*.svg 是自绘的界面示意图：矢量、几 KB、随主题缩放，
+   取代了原先所有文章共用同一张的通用风景照。
+   ========================================================================== */
+.card__preview,
+.soft-card__preview {
+  display: block;
+  margin: calc(var(--s-5) * -1) calc(var(--s-5) * -1) var(--s-4);
+  border-bottom: 1px solid var(--separator);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  overflow: hidden;
+  background: var(--bg-inset);
+}
+
+.card__preview img,
+.soft-card__preview img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+/* 子页面 hero 里的示意图（如安全工具库） */
+.hero__figure {
+  margin: var(--s-4) 0 0;
+  max-width: 560px;
+  border: 1px solid var(--separator);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--bg-inset);
+}
+
+.hero__figure img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+/* 文章页顶部的界面示意图 */
+.post-header__figure {
+  margin: var(--s-5) 0 0;
+  border: 1px solid var(--separator);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--bg-inset);
+}
+
+.post-header__figure img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+/* 文章列表里的一行缩略图（首页 + 博客页都用） */
+.post-row__thumb {
+  flex-shrink: 0;
+  width: 72px;
+  height: 44px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--separator);
+  overflow: hidden;
+  background: var(--bg-inset);
+}
+
+.post-row__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .post-row__thumb {
+    display: none;
+  }
+}
+
+/* ==========================================================================   12. 文章卡片
    --------------------------------------------------------------------------
    首页「最新文章」用 .post-list，博客页用 .post-list--rich。
    ========================================================================== */
@@ -3016,10 +3196,6 @@ html[data-theme="light"] .card {
   /* 单列，避免两列在 360px 下把描述挤成两个字一行的碎片 */
   .module-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .module:last-child {
-    grid-column: auto;
   }
 
   .post-row__meta .tag {

@@ -63,6 +63,17 @@ permalink: /software/
     <article class="soft-card" data-cat="{{ soft.category }}"
       data-search="{{ soft.name | escape }} {{ soft.tagline | escape }} {{ soft.desc | escape }} {{ soft.tags | join: ' ' | escape }}">
 
+      {%- comment -%}
+        预览图：自绘的界面示意图，说明这个软件长什么样 / 干什么用。
+        之前这里只有字母方块，纯粹是占位，看不出软件是做什么的。
+      {%- endcomment -%}
+      {% if soft.preview %}
+      <a class="soft-card__preview" href="{{ '/software/' | relative_url }}{{ soft.slug }}/"
+        aria-hidden="true" tabindex="-1">
+        <img src="{{ soft.preview | relative_url }}" alt="" width="640" height="360" loading="lazy">
+      </a>
+      {% endif %}
+
       <div class="soft-card__top">
         <div class="soft-card__logo {{ soft.logoClass }}" aria-hidden="true">{{ soft.logo }}</div>
         <div class="soft-card__head">

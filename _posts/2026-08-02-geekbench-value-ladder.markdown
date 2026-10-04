@@ -4,7 +4,7 @@ title:      "Geekbench 性价比天梯图：一张图看懂 CPU / GPU 跑分与�
 subtitle:   "把 Geekbench 跑分和人民币价格放在同一张图里"
 date:       2026-08-02 15:00:00
 author:     "Sean Wang"
-header-img: "img/post-bg-infinity.jpg"
+header-img: "img/preview/geekbench-value-ladder.svg"
 catalog: true
 tags:
     - Geekbench
