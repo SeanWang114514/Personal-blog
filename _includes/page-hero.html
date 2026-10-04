@@ -10,8 +10,12 @@
 <section class="hero hero--compact{% if include.img %} has-bg{% endif %}">
   {% if include.img %}
   <div class="hero__bg" style="background-image:url('{{ include.img | relative_url }}')" aria-hidden="true"></div>
-  {% endif %}
+  {%- comment -%}
+    遮罩只在真有背景图时才渲染。它靠绝对定位盖满整块，
+    没图也渲染的话会在一张空底色上凭空压一层黑。
+  {%- endcomment -%}
   <div class="hero__scrim" aria-hidden="true"></div>
+  {% endif %}
 
   <div class="wrap">
     <div class="hero__inner">

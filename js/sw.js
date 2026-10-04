@@ -34,6 +34,16 @@
       var meta = $('meta[name="theme-color"]');
       if (meta) meta.setAttribute("content", theme === "light" ? "#f7f8fc" : "#0b0f19");
 
+      // The hero backdrop ships as two files and is picked by JS, not by the
+      // <source media="prefers-color-scheme"> — that would follow the OS,
+      // while this site's theme is its own toggle and can disagree with it.
+      var hero = $("[data-hero-bg]");
+      if (hero) {
+        var want = (theme === "light" ? "/img/hero-light.svg" : "/img/hero-dark.svg");
+        var full = BASE + want;
+        if (hero.getAttribute("src") !== full) hero.setAttribute("src", full);
+      }
+
       // Tell Giscus (and anything else listening) about the change.
       var frame = $("iframe.giscus-frame");
       if (frame && frame.contentWindow) {

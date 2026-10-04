@@ -38,8 +38,28 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
   </div>
 </section>
 
-{%- comment -%} ============ 页头 ============ {%- endcomment -%}
-<section class="hero">
+{%- comment -%}
+  ============ 页头 ============
+  首屏用一张大色块的抽象背景打底，口号用大字压在上面（旧站的做法）。
+
+  为什么不是照片：仓库里唯一那张 home-bg.jpg 是一整面演出海报拼贴墙 ——
+  小字密密麻麻、明暗对比极强。字压上去要么遮罩压很重（图就看不见了），
+  要么压很轻（字就糊了），两头不讨好。换成几块平滑的大色块背景，
+  背后没有会跟文字抢的细节，图看得见、字也清楚。生成脚本：
+  tools/make-hero-bg.js，两个主题各一张，合计 5 KB。
+
+  用 <picture> 而不是给 <img> 换 src：浏览器按主题各取所需，
+  不依赖 JS —— 主题是在 <html data-theme> 上切换的，
+  CSS 换图会有一瞬的空白，<picture> 没有这个问题。
+{%- endcomment -%}
+<section class="hero hero--banner">
+  <picture>
+    <source srcset="{{ '/img/hero-dark.svg' | relative_url }}" media="(prefers-color-scheme: dark)">
+    <img class="hero__bg" src="{{ '/img/hero-light.svg' | relative_url }}" alt="" width="1600" height="620"
+      fetchpriority="high" decoding="async" data-hero-bg>
+  </picture>
+  <div class="hero__scrim" aria-hidden="true"></div>
+
   <div class="wrap">
     <div class="hero__inner">
       <h1 class="hero__title">折腾、记录，然后把它们做成能用的东西。</h1>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 620" width="1600" height="620"
+  preserveAspectRatio="xMidYMid slice" role="img" aria-label="抽象渐变背景">
+  <defs>
+    <linearGradient id="hbl-base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef2f7"/>
+      <stop offset="1" stop-color="#e6ecf5"/>
+    </linearGradient>
+    <radialGradient id="hbl-g0" cx="200" cy="110" r="720" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#93c5fd" stop-opacity="0.62"/>
+      <stop offset="0.55" stop-color="#93c5fd" stop-opacity="0.260"/>
+      <stop offset="1" stop-color="#93c5fd" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hbl-g1" cx="1330" cy="100" r="680" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#99f6e4" stop-opacity="0.52"/>
+      <stop offset="0.55" stop-color="#99f6e4" stop-opacity="0.218"/>
+      <stop offset="1" stop-color="#99f6e4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hbl-g2" cx="880" cy="620" r="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c4b5fd" stop-opacity="0.55"/>
+      <stop offset="0.55" stop-color="#c4b5fd" stop-opacity="0.231"/>
+      <stop offset="1" stop-color="#c4b5fd" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hbl-g3" cx="1490" cy="540" r="540" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a7f3d0" stop-opacity="0.42"/>
+      <stop offset="0.55" stop-color="#a7f3d0" stop-opacity="0.176"/>
+      <stop offset="1" stop-color="#a7f3d0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="hbl-g4" cx="70" cy="590" r="440" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#bfdbfe" stop-opacity="0.48"/>
+      <stop offset="0.55" stop-color="#bfdbfe" stop-opacity="0.202"/>
+      <stop offset="1" stop-color="#bfdbfe" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="hbl-grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7" result="n"/>
+      <feColorMatrix in="n" type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.035"/></feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="620" fill="url(#hbl-base)"/>
+  <rect width="1600" height="620" fill="url(#hbl-g0)"/>
+  <rect width="1600" height="620" fill="url(#hbl-g1)"/>
+  <rect width="1600" height="620" fill="url(#hbl-g2)"/>
+  <rect width="1600" height="620" fill="url(#hbl-g3)"/>
+  <rect width="1600" height="620" fill="url(#hbl-g4)"/>
+  <rect width="1600" height="620" filter="url(#hbl-grain)" opacity="0.5"/>
+</svg>
