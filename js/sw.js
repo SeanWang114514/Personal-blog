@@ -260,21 +260,38 @@
         : null;
       var state = { cat: "all", q: "" };
 
+      /*
+       * 收藏（星标）是独立的一个筛选维度，必须和分类 / 搜索叠加，
+       * 否则「只看收藏」之后再点分类，就会把没收藏的又放出来。
+       * 星标状态由第 14 节维护，这里只读它暴露的全局量。
+       */
+      function isPinned(item) {
+        var btn = item.querySelector("[data-pin]");
+        if (!btn) return false;
+        return (window.__swPins || []).indexOf(btn.getAttribute("data-pin")) !== -1;
+      }
+
       function apply() {
         var q = state.q.trim().toLowerCase();
         var cat = state.cat.toLowerCase();   // keep in sync with the lowercased data-cat
+        var pinsOnly = window.__swPinsOnly === true;
         var shown = 0;
         items.forEach(function (item) {
           var cats = (item.getAttribute("data-cat") || "").toLowerCase();
           var hay = (item.getAttribute("data-search") || "").toLowerCase();
           var catOk = cat === "all" || cats.split(",").indexOf(cat) !== -1;
           var qOk = !q || hay.indexOf(q) !== -1;
-          var ok = catOk && qOk;
+          var pinOk = !pinsOnly || isPinned(item);
+          var ok = catOk && qOk && pinOk;
           item.classList.toggle("hidden", !ok);
           if (ok) shown++;
         });
         if (empty) empty.classList.toggle("hidden", shown > 0);
       }
+
+      // let the favorites toggle (section 14) re-run every filter group
+      window.__swFilterApply = window.__swFilterApply || [];
+      window.__swFilterApply.push(apply);
 
       chips.forEach(function (chip) {
         chip.addEventListener("click", function () {
@@ -549,7 +566,8 @@
   })();
 
   /* ----------------------------------------------------------------------
-     14. Local-storage backed link favorites (toolbox / bookmarks)
+     14. Local-storage backed favorites (toolbox / bookmarks / software /
+         projects). Purely local: nothing is uploaded.
      ---------------------------------------------------------------------- */
   (function () {
     var KEY = "sw-pins";
@@ -557,29 +575,46 @@
     try { pins = JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { pins = []; }
     if (!Array.isArray(pins)) pins = [];
 
+    // Published for the filter groups in section 8, which compose with this.
+    window.__swPins = pins;
+    window.__swPinsOnly = false;
+
+    var buttons = $$("[data-pin]");
+    if (!buttons.length) return;
+
     function save() {
       try { localStorage.setItem(KEY, JSON.stringify(pins)); } catch (e) { /* ignore */ }
     }
 
-    $$("[data-pin]").forEach(function (btn) {
-      var id = btn.getAttribute("data-pin");
-      function paint() {
-        var on = pins.indexOf(id) !== -1;
+    function repaint() {
+      buttons.forEach(function (btn) {
+        var on = pins.indexOf(btn.getAttribute("data-pin")) !== -1;
         btn.classList.toggle("is-pinned", on);
         btn.setAttribute("aria-pressed", on ? "true" : "false");
-        btn.setAttribute("aria-label", on ? "取消收藏" : "收藏");
-      }
-      paint();
+        // keep the label in sync with the state for screen readers
+        var base = btn.getAttribute("data-pin-label") || "收藏";
+        btn.setAttribute("aria-label", (on ? "取消收藏 " : base + " ") + (btn.getAttribute("data-pin-name") || ""));
+      });
+    }
+
+    buttons.forEach(function (btn) {
       btn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
+        var id = btn.getAttribute("data-pin");
         var i = pins.indexOf(id);
         if (i === -1) pins.push(id);
         else pins.splice(i, 1);
         save();
-        paint();
+        repaint();
+        // if "只看收藏" is on, un-starring an item must hide it again
+        if (window.__swPinsOnly && (window.__swFilterApply || []).length) {
+          (window.__swFilterApply || []).forEach(function (fn) { fn(); });
+        }
       });
     });
+
+    repaint();
 
     // "只看收藏" toggle
     var only = $("[data-pins-only]");
@@ -587,13 +622,21 @@
       only.addEventListener("click", function () {
         var on = only.classList.toggle("is-active");
         only.setAttribute("aria-pressed", on ? "true" : "false");
-        $$("[data-pin]").forEach(function (btn) {
-          var tile = btn.closest("[data-cat], .tool-tile, .friend-card");
-          if (!tile) return;
-          var pinned = pins.indexOf(btn.getAttribute("data-pin")) !== -1;
-          if (on && !pinned) tile.classList.add("hidden");
-          else tile.classList.remove("hidden");
-        });
+        window.__swPinsOnly = on;
+
+        var groups = window.__swFilterApply || [];
+        if (groups.length) {
+          // Pages with a category filter: let the filter compose both dimensions.
+          groups.forEach(function (fn) { fn(); });
+        } else {
+          // Toolbox / bookmarks have no category filter; hide directly.
+          $$("[data-pin]").forEach(function (btn) {
+            var tile = btn.closest("[data-cat], .tool-tile, .friend-card");
+            if (!tile) return;
+            var pinned = pins.indexOf(btn.getAttribute("data-pin")) !== -1;
+            tile.classList.toggle("hidden", on && !pinned);
+          });
+        }
       });
     }
   })();
@@ -607,6 +650,135 @@
       if (a.hostname && a.hostname !== host) {
         a.setAttribute("target", "_blank");
         a.setAttribute("rel", "noopener noreferrer");
+      }
+    });
+  })();
+
+  /* ----------------------------------------------------------------------
+     16. Static-site preview overlay
+     ----------------------------------------------------------------------
+     The site's own web tools (海报展 / 天梯图 / 高星项目) are standalone static
+     pages. Instead of only linking away, let them be previewed in place.
+
+     Two deliberate choices:
+       - the iframe src is assigned on first open, never in the markup, so
+         merely loading a list page does not hit three external sites;
+       - it is cleared again on close, so no third-party page keeps running
+         scripts in the background after you dismissed it. Reopening reloads,
+         which is the honest trade for not leaving a live page behind.
+     ---------------------------------------------------------------------- */
+  (function () {
+    var root = $("#sw-pv");
+    if (!root) return;
+
+    var panel = $(".pv__panel", root);
+    var frame = $("[data-pv-frame]", root);
+    var spinner = $("[data-pv-spinner]", root);
+    var titleEl = $("#sw-pv-title", root);
+    var hostEl = $("[data-pv-host]", root);
+    var external = $("[data-pv-external]", root);
+    // [data-pv-close] also sits on the backdrop, which is a plain div and not
+    // focusable — so target the button explicitly for the initial focus.
+    var closeBtn = $("button[data-pv-close]", root);
+    var triggers = $$("[data-pv-open]");
+    if (!triggers.length) return;
+
+    var lastTrigger = null;
+    var loadTimer = null;
+
+    function focusables() {
+      return $$('a[href], button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])', panel)
+        .filter(function (el) { return el.offsetParent !== null || el === frame; });
+    }
+
+    function open(trigger) {
+      var url = trigger.getAttribute("data-pv-url");
+      var title = trigger.getAttribute("data-pv-title") || "预览";
+      if (!url) return;
+
+      lastTrigger = trigger;
+      titleEl.textContent = title;
+      try {
+        hostEl.textContent = new URL(url).host;
+      } catch (e) {
+        hostEl.textContent = "";
+      }
+      external.setAttribute("href", url);
+
+      root.hidden = false;
+      // next frame, so the transition runs instead of snapping
+      requestAnimationFrame(function () { root.classList.add("is-open"); });
+      document.body.style.overflow = "hidden";
+
+      spinner.classList.remove("is-hidden");
+      frame.classList.remove("is-ready");
+      frame.setAttribute("src", url);
+
+      // if it is still blank after a while, say so rather than spin forever
+      clearTimeout(loadTimer);
+      loadTimer = setTimeout(function () {
+        if (!frame.classList.contains("is-ready")) {
+          spinner.textContent = "加载较慢，可点右上角「新标签页」直接打开";
+        }
+      }, 6000);
+
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function close() {
+      clearTimeout(loadTimer);
+      root.classList.remove("is-open");
+      document.body.style.overflow = "";
+      // drop the third-party page instead of leaving it running off-screen
+      frame.removeAttribute("src");
+      frame.classList.remove("is-ready");
+      spinner.classList.remove("is-hidden");
+
+      var done = function () { root.hidden = true; };
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) done();
+      else setTimeout(done, 180);
+
+      if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+      lastTrigger = null;
+    }
+
+    frame.addEventListener("load", function () {
+      if (!frame.getAttribute("src")) return;
+      clearTimeout(loadTimer);
+      frame.classList.add("is-ready");
+      spinner.classList.add("is-hidden");
+    });
+
+    triggers.forEach(function (t) {
+      t.addEventListener("click", function (e) {
+        e.preventDefault();
+        open(t);
+      });
+    });
+
+    $$("[data-pv-close]", root).forEach(function (el) {
+      el.addEventListener("click", close);
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (root.hidden) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      // keep focus inside the dialog while it is open
+      var f = focusables();
+      if (!f.length) return;
+      var first = f[0];
+      var last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     });
   })();

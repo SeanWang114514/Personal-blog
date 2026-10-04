@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128"
+  role="img" aria-label="Geekbench 性价比天梯图">
+  <title>Geekbench 性价比天梯图</title>
+  <defs>
+    <linearGradient id="gb" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#40c8e0"/><stop offset="1" stop-color="#0a6ad8"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#gb)"/>
+  <!-- 逐级升高的柱子 = 天梯 -->
+  <g fill="#fff">
+    <rect x="26" y="76" width="14" height="26" rx="4" opacity=".6"/>
+    <rect x="46" y="62" width="14" height="40" rx="4" opacity=".75"/>
+    <rect x="66" y="48" width="14" height="54" rx="4" opacity=".9"/>
+    <rect x="86" y="34" width="14" height="68" rx="4"/>
+  </g>
+  <line x1="22" y1="104" x2="106" y2="104" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+</svg>

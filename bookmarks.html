@@ -79,10 +79,10 @@ permalink: /bookmarks/
             <div class="friend-card__desc">{{ item.desc }}</div>
           </div>
 
-          <button class="share-btn" type="button" data-pin="bm-{{ g.key }}-{{ forloop.index }}"
-            aria-label="收藏" style="width:32px;height:32px;flex-shrink:0">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
-              stroke-linejoin="round" style="width:15px;height:15px" aria-hidden="true">
+          <button class="pin-btn pin-btn--sm" type="button" data-pin="bm-{{ g.key }}-{{ forloop.index }}" data-pin-name="{{ item.name | escape }}"
+            aria-label="收藏" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
               <use href="#i-star"></use>
             </svg>
           </button>

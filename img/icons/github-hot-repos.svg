@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128"
+  role="img" aria-label="GitHub 高星新项目">
+  <title>GitHub 高星新项目</title>
+  <rect width="128" height="128" rx="28" fill="#2c2c2e"/>
+  <!-- 仓库书架 + 星标 -->
+  <path d="M40 44h20a8 8 0 0 1 8 8v34a7 7 0 0 0-7-7H40z" fill="#f2f2f7" opacity=".85"/>
+  <path d="M88 44H68a8 8 0 0 0-8 8v34a7 7 0 0 1 7-7h21z" fill="#f2f2f7" opacity=".55"/>
+  <path d="M64 26l5.6 11.4 12.6 1.8-9.1 8.9 2.1 12.5L64 54.7l-11.2 5.9 2.1-12.5-9.1-8.9 12.6-1.8z"
+    fill="#ff9f0a"/>
+</svg>

@@ -4,6 +4,7 @@
 
 - name: Rime VMenu 全家桶
   slug: weasel-vmenu-suite
+  appIcon: img/icons/rime-vmenu-suite.png
   preview: img/preview/rime-vmenu-suite.svg
   tagline: 离线输入套件
   desc: 把 Rime / 小狼毫从「输入法」升级成带功能菜单、可视化配置、剪贴板历史与本地语音输入的完整工具箱。
@@ -19,6 +20,7 @@
 
 - name: Note Studio
   slug: note-studio
+  appIcon: img/icons/note-studio.png
   preview: img/preview/note-studio.svg
   tagline: 本地文档工作台
   desc: React + Electron 打造的离线文档工作台，PDF 逐字编辑、手写 OCR、语音识别全在本机推理，文件不出本机。
@@ -34,6 +36,7 @@
 
 - name: PP-OCRv6 Desktop
   slug: PP-OCRv6-Desktop
+  appIcon: img/icons/ppocrv6-desktop.png
   preview: img/preview/ppocrv6-desktop.svg
   tagline: 原生离线 OCR
   desc: 纯 C++ Win32 的截图即识别、即翻译工具，不依赖 Python 运行时，单文件免安装。
@@ -49,7 +52,9 @@
 
 - name: DeepSeek 海报展
   slug: deepseek-poster-52
+  appIcon: img/icons/deepseek-poster-52.svg
   preview: img/preview/deepseek-poster-52.svg
+  previewUrl: https://seanwang114514.github.io/deepseek-poster-52/
   tagline: 52 种风格自我介绍
   desc: 同一段文字被 52 种经典视觉风格重新演绎，一张网页就是一场小型设计展。
   category: web
@@ -64,7 +69,9 @@
 
 - name: Geekbench 性价比天梯图
   slug: geekbench-value-ladder
+  appIcon: img/icons/geekbench-value-ladder.svg
   preview: img/preview/geekbench-value-ladder.svg
+  previewUrl: https://seanwang114514.github.io/geekbench-value-ladder/
   tagline: 跑分 × 价格
   desc: 把 Geekbench 跑分和人民币价格放进同一张天梯图，装机选卡时直接看性价比。
   category: web
@@ -78,7 +85,9 @@
 
 - name: GitHub 高星新项目
   slug: github-hot-repos
+  appIcon: img/icons/github-hot-repos.svg
   preview: img/preview/github-hot-repos.svg
+  previewUrl: https://seanwang114514.github.io/github-hot-repos/
   tagline: 发现新晋黑马
   desc: 基于 GitHub Search API 的纯静态速览站，专抓最近 7 / 30 / 90 天创建的高星新仓库。
   category: web
@@ -92,6 +101,7 @@
 
 - name: Sean Wang Blog
   slug: Personal-blog
+  appIcon: img/icons/sean-wang-blog.svg
   preview: img/preview/sean-wang-blog.svg
   tagline: 你现在看到的这个站
   desc: 深色优先、玻璃拟态的个人站点，含博客、软件、云盘、下载、项目、工具箱与收藏夹七个板块。

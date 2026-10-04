@@ -5,6 +5,7 @@
 
 - name: Rime VMenu 全家桶
   slug: rime-vmenu-suite
+  appIcon: img/icons/rime-vmenu-suite.png
   preview: img/preview/rime-vmenu-suite.svg
   tagline: 一个 v 键，把小狼毫变成输入套件
   desc: >-
@@ -12,7 +13,7 @@
     剪贴板历史随手调用，按住 Ctrl+Win 就能说话输入 —— 全程离线，不需要管理员权限。
   logo: V
   logoClass: logo-violet
-  category: input
+  category: desktop
   platform: Windows
   version: "1.0"
   size: 1.1 GB
@@ -32,6 +33,7 @@
 
 - name: Note Studio
   slug: note-studio
+  appIcon: img/icons/note-studio.png
   preview: img/preview/note-studio.svg
   tagline: PDF 改字、OCR 和语音识别装进一个本地工作台
   desc: >-
@@ -39,7 +41,7 @@
     批注文本框自带格式栏，手写 OCR 与语音识别都在本机推理 —— 改完直接写回原文件。
   logo: N
   logoClass: logo-cyan
-  category: office
+  category: desktop
   platform: Windows
   version: "0.1.13"
   size: 251 MB
@@ -58,6 +60,7 @@
 
 - name: PP-OCRv6 Desktop
   slug: ppocrv6-desktop
+  appIcon: img/icons/ppocrv6-desktop.png
   preview: img/preview/ppocrv6-desktop.svg
   tagline: 纯 C++ 的离线 OCR + 翻译桌面工具
   desc: >-
@@ -65,7 +68,7 @@
     单文件直接运行。
   logo: P
   logoClass: logo-emerald
-  category: ai
+  category: desktop,ai
   platform: Windows
   version: "1.0"
   size: 250 MB
@@ -83,14 +86,16 @@
 
 - name: DeepSeek 海报展
   slug: deepseek-poster-52
+  appIcon: img/icons/deepseek-poster-52.svg
   preview: img/preview/deepseek-poster-52.svg
+  previewUrl: https://seanwang114514.github.io/deepseek-poster-52/
   tagline: 52 种风格自我介绍生成器
   desc: >-
     把同一段自我介绍，渲染成 52 种经典视觉风格：瑞士国际主义、包豪斯、赛博朋克、
     日式和风、蒸汽波、像素艺术……一张网页就是一场小型设计展览。
   logo: D
   logoClass: logo-indigo
-  category: web
+  category: web,ai
   platform: Web
   version: "1.0"
   size: 静态站点
@@ -108,14 +113,16 @@
 
 - name: Geekbench 性价比天梯图
   slug: geekbench-value-ladder
+  appIcon: img/icons/geekbench-value-ladder.svg
   preview: img/preview/geekbench-value-ladder.svg
+  previewUrl: https://seanwang114514.github.io/geekbench-value-ladder/
   tagline: 跑分和价格放进同一张图
   desc: >-
     把 GPU / CPU 的 Geekbench 跑分和人民币价格放在同一张天梯图里，
     装机、升级或者纠结要不要换显卡时，直接看性能和性价比。
   logo: G
   logoClass: logo-amber
-  category: dev
+  category: web,dev
   platform: Web
   version: "1.0"
   size: 静态站点
@@ -132,14 +139,16 @@
 
 - name: GitHub 高星新项目
   slug: github-hot-repos
+  appIcon: img/icons/github-hot-repos.svg
   preview: img/preview/github-hot-repos.svg
+  previewUrl: https://seanwang114514.github.io/github-hot-repos/
   tagline: 用 AI 帮你发现新晋热门仓库
   desc: >-
     一个纯静态的速览站点，专门抓取最近 7 / 30 / 90 天创建、按 Stars 排序的新仓库，
     让新项目有机会冒头。
   logo: H
   logoClass: logo-slate
-  category: dev
+  category: web,dev
   platform: Web
   version: "1.0"
   size: 静态站点

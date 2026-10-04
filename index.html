@@ -230,11 +230,25 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
     {% for soft in featured_soft %}
     <article class="soft-card">
       <div class="soft-card__top">
+        {% if soft.appIcon %}
+        <span class="app-icon">
+          <img src="{{ soft.appIcon | relative_url }}" alt="" width="34" height="34" loading="lazy">
+        </span>
+        {% else %}
         <div class="soft-card__logo {{ soft.logoClass }}" aria-hidden="true">{{ soft.logo }}</div>
+        {% endif %}
         <div class="soft-card__head">
           <h3 class="soft-card__name">{{ soft.name }}</h3>
           <p class="soft-card__pub">{{ soft.platform }} · v{{ soft.version }}</p>
         </div>
+        <button class="pin-btn" type="button" data-pin="soft-{{ soft.slug }}"
+          data-pin-name="{{ soft.name | escape }}" aria-label="收藏 {{ soft.name | escape }}"
+          aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <use href="#i-star"></use>
+          </svg>
+        </button>
       </div>
       <p class="soft-card__desc">{{ soft.tagline }}</p>
       <div class="soft-card__specs">

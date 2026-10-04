@@ -1,0 +1,51 @@
+{%- comment -%}
+  静态网站预览弹窗
+  --------------------------------------------------------------------------
+  站点上的「网页工具」（海报展 / 天梯图 / 高星项目）本身就是可以打开的静态页面，
+  之前只能点「体验」跳走。这里给它们一个原地预览：点「预览」在当前页开一个
+  覆盖层，里面用 iframe 加载真实站点。
+
+  iframe 的 src 不写在 HTML 里，而是点开时才由 JS 赋上 —— 否则每次打开列表页
+  都会替你访问三个外部站点，既慢又不符合这个站「不产生第三方请求」的做法。
+  真正发起外部请求的时机，是你主动点了「预览」。
+
+  只能被 iframe 的前提是目标站没有 X-Frame-Options / CSP frame-ancestors，
+  这几个 GitHub Pages 站点都没有；万一将来加了，覆盖层里有「在新标签页打开」
+  作为兜底。
+{%- endcomment -%}
+<div class="pv" id="sw-pv" hidden>
+  <div class="pv__backdrop" data-pv-close></div>
+
+  <div class="pv__panel" role="dialog" aria-modal="true" aria-labelledby="sw-pv-title">
+    <header class="pv__bar">
+      <span class="pv__dot" aria-hidden="true"></span>
+      <h2 class="pv__title" id="sw-pv-title">预览</h2>
+      <span class="pv__host" data-pv-host></span>
+
+      <div class="pv__actions">
+        <a class="btn btn--ghost btn--sm" data-pv-external href="#" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-external"></use></svg>
+          新标签页
+        </a>
+        <button class="icon-btn" type="button" data-pv-close aria-label="关闭预览">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-close"></use></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="pv__body">
+      <div class="pv__spinner" data-pv-spinner aria-hidden="true">
+        <span class="pv__spinner-ring"></span>
+        正在加载…
+      </div>
+      <iframe class="pv__frame" data-pv-frame title="站点预览" loading="lazy"
+        referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    </div>
+
+    <p class="pv__note">
+      预览内容来自外部站点，加载时会产生一次对外请求。若长时间空白，用右上角「新标签页」直接打开。
+    </p>
+  </div>
+</div>

@@ -1,88 +1,52 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360"
-  role="img" aria-label="Rime VMenu 功能菜单与候选窗口示意图">
-  <title>Rime VMenu 功能菜单与候选窗口示意图</title>
-  
+  role="img" aria-label="一个 v 键的功能菜单示意图">
+  <title>一个 v 键的功能菜单</title>
   <defs>
-    <linearGradient id="g-accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#5aa9ff"/><stop offset="1" stop-color="#cb7df5"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0" stop-color="#1c1c1e"/>
+      <stop offset="1" stop-color="#141416"/>
     </linearGradient>
-    
+    <radialGradient id="glow" cx="0.22" cy="0.12" r="0.85">
+      <stop offset="0" stop-color="#cb7df5" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#cb7df5" stop-opacity="0"/>
+    </radialGradient>
   </defs>
+
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <rect width="640" height="360" fill="url(#glow)"/>
+
   
-  <rect x="0" y="0" width="640" height="360" fill="#1c1c1e"/>
-  <rect x="0" y="0" width="640" height="30" fill="#2c2c2e"/>
-  <circle cx="18" cy="15" r="4.5" fill="#ff5f57"/>
-  <circle cx="33" cy="15" r="4.5" fill="#febc2e"/>
-  <circle cx="48" cy="15" r="4.5" fill="#28c840"/>
-  <text x="320" y="19" fill="#a8a8ad" font-size="11" font-family="ui-sans-serif,system-ui,sans-serif"
-    text-anchor="middle">weasel · Rime VMenu</text>
-  <line x1="0" y1="30" x2="640" y2="30" stroke="rgba(255,255,255,0.10)"/>
-  <rect x="24" y="52" width="330" height="200" rx="8" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
-  <text x="40" y="76" fill="#a8a8ad" font-size="11" font-family="ui-sans-serif,system-ui,sans-serif">按 v 唤出功能菜单</text>
+  <rect x="40" y="44" width="380" height="196" rx="16" fill="#2c2c2e" stroke="#3a3a3c" stroke-width="1.5"/>
   
-  <rect x="36" y="92" width="306" height="24" rx="5"
+  <rect x="62" y="72" width="336" height="42" rx="10"
     fill="rgba(90,169,255,0.16)"
-    stroke="#5aa9ff"/>
-  <rect x="44" y="98" width="12" height="12" rx="3" fill="#5aa9ff" opacity="0.85"/>
-  <text x="64" y="110" fill="#f2f2f7" font-size="11.5"
-    font-family="ui-sans-serif,system-ui,sans-serif">1. 词库管理</text>
-  <rect x="36" y="122" width="306" height="24" rx="5"
-    fill="rgba(255,255,255,0.04)"
-    stroke="transparent"/>
-  <rect x="44" y="128" width="12" height="12" rx="3" fill="#30d158" opacity="0.85"/>
-  <text x="64" y="140" fill="#a8a8ad" font-size="11.5"
-    font-family="ui-sans-serif,system-ui,sans-serif">2. 设置窗口</text>
-  <rect x="36" y="152" width="306" height="24" rx="5"
-    fill="rgba(255,255,255,0.04)"
-    stroke="transparent"/>
-  <rect x="44" y="158" width="12" height="12" rx="3" fill="#ff9f0a" opacity="0.85"/>
-  <text x="64" y="170" fill="#a8a8ad" font-size="11.5"
-    font-family="ui-sans-serif,system-ui,sans-serif">3. 剪贴板历史</text>
-  <rect x="36" y="182" width="306" height="24" rx="5"
-    fill="rgba(255,255,255,0.04)"
-    stroke="transparent"/>
-  <rect x="44" y="188" width="12" height="12" rx="3" fill="#cb7df5" opacity="0.85"/>
-  <text x="64" y="200" fill="#a8a8ad" font-size="11.5"
-    font-family="ui-sans-serif,system-ui,sans-serif">4. 常用语</text>
-  <rect x="36" y="212" width="306" height="24" rx="5"
-    fill="rgba(255,255,255,0.04)"
-    stroke="transparent"/>
-  <rect x="44" y="218" width="12" height="12" rx="3" fill="#40c8e0" opacity="0.85"/>
-  <text x="64" y="230" fill="#a8a8ad" font-size="11.5"
-    font-family="ui-sans-serif,system-ui,sans-serif">5. 语音输入</text>
+    stroke="#5aa9ff" stroke-width="2"/>
+  <circle cx="90" cy="93" r="11" fill="#5aa9ff"/>
+  <text x="116" y="101" fill="#f2f2f7" font-size="24"
+    font-family="ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif">词库管理</text>
+  <rect x="62" y="126" width="336" height="42" rx="10"
+    fill="rgba(255,255,255,0.05)"
+    stroke="none" stroke-width="0"/>
+  <circle cx="90" cy="147" r="11" fill="#30d158"/>
+  <text x="116" y="155" fill="#a8a8ad" font-size="24"
+    font-family="ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif">剪贴板历史</text>
+  <rect x="62" y="180" width="336" height="42" rx="10"
+    fill="rgba(255,255,255,0.05)"
+    stroke="none" stroke-width="0"/>
+  <circle cx="90" cy="201" r="11" fill="#ff9f0a"/>
+  <text x="116" y="209" fill="#a8a8ad" font-size="24"
+    font-family="ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif">语音输入</text>
 
-  <rect x="378" y="52" width="238" height="96" rx="8" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
-  <text x="394" y="74" fill="#7c7c81" font-size="10" font-family="ui-sans-serif,system-ui,sans-serif">候选</text>
-  <rect x="394" y="84" width="150" height="22" rx="4" fill="rgba(90,169,255,0.2)" stroke="#5aa9ff"/>
-  <text x="402" y="99" fill="#f2f2f7" font-size="12" font-family="ui-sans-serif,system-ui,sans-serif">1. 词库管理</text>
-  <text x="394" y="124" fill="#a8a8ad" font-size="12" font-family="ui-sans-serif,system-ui,sans-serif">2. 设置窗口</text>
-  <text x="394" y="142" fill="#a8a8ad" font-size="12" font-family="ui-sans-serif,system-ui,sans-serif">3. 剪贴板历史</text>
+  <rect x="452" y="88" width="148" height="108" rx="16" fill="#2c2c2e" stroke="#3a3a3c" stroke-width="1.5"/>
+  <text x="526" y="150" fill="#5aa9ff" font-size="52" font-weight="700" text-anchor="middle"
+    font-family="ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif">v</text>
+  <text x="526" y="176" fill="#a8a8ad" font-size="18" text-anchor="middle"
+    font-family="ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif">唤出菜单</text>
 
-  <rect x="378" y="162" width="238" height="90" rx="8" fill="#2c2c2e" stroke="rgba(255,255,255,0.10)"/>
-  <text x="394" y="182" fill="#7c7c81" font-size="10" font-family="ui-sans-serif,system-ui,sans-serif">剪贴板历史</text>
-  
-  <rect x="392" y="190" width="210" height="16" rx="3" fill="rgba(255,255,255,0.05)"/>
-  <text x="400" y="202" fill="#a8a8ad" font-size="9.5"
-    font-family="ui-monospace,Consolas,monospace">git rebase -i HEAD~3</text>
-  <rect x="392" y="210" width="210" height="16" rx="3" fill="rgba(255,255,255,0.05)"/>
-  <text x="400" y="222" fill="#a8a8ad" font-size="9.5"
-    font-family="ui-monospace,Consolas,monospace">SELECT * FROM users</text>
-  <rect x="392" y="230" width="210" height="16" rx="3" fill="rgba(255,255,255,0.05)"/>
-  <text x="400" y="242" fill="#a8a8ad" font-size="9.5"
-    font-family="ui-monospace,Consolas,monospace">ssh -L 8080:localhost</text>
-
-  
-  <rect x="24" y="272" width="40.4" height="18" rx="4" fill="rgba(255,255,255,0.06)"/>
-  <text x="44.2" y="284.5" fill="#30d158" font-size="10"
-    font-family="ui-sans-serif,system-ui,sans-serif" text-anchor="middle">全程离线</text>
-  
-  <rect x="96" y="272" width="53.599999999999994" height="18" rx="4" fill="rgba(255,255,255,0.06)"/>
-  <text x="122.8" y="284.5" fill="#40c8e0" font-size="10"
-    font-family="ui-sans-serif,system-ui,sans-serif" text-anchor="middle">免管理员权限</text>
-  
-  <rect x="196" y="272" width="73.4" height="18" rx="4" fill="rgba(255,255,255,0.06)"/>
-  <text x="232.7" y="284.5" fill="#ff9f0a" font-size="10"
-    font-family="ui-sans-serif,system-ui,sans-serif" text-anchor="middle">exe / zip</text>
-  <text x="24" y="326" fill="#7c7c81" font-size="10.5"
-    font-family="ui-sans-serif,system-ui,sans-serif">示意图 · 非实际截图</text>
+  <text x="40" y="286" fill="#f2f2f7" font-size="36" font-weight="600"
+    font-family="ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif">一个 v 键的功能菜单</text>
+  <text x="40" y="318" fill="#a8a8ad" font-size="22"
+    font-family="ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif">离线运行 · 免管理员权限</text>
+  <text x="600" y="342" fill="#a8a8ad" font-size="15" text-anchor="end" opacity="0.65"
+    font-family="ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif">示意图</text>
 </svg>

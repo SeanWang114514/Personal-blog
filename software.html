@@ -54,6 +54,11 @@ permalink: /software/
       <button class="chip" type="button" data-filter="web" aria-pressed="false">网页工具</button>
       <button class="chip" type="button" data-filter="ai" aria-pressed="false">AI</button>
       <button class="chip" type="button" data-filter="dev" aria-pressed="false">开发</button>
+      <button class="chip chip--pin" type="button" data-pins-only aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true"><use href="#i-star"></use></svg>
+        只看收藏
+      </button>
     </div>
   </div>
 
@@ -75,11 +80,28 @@ permalink: /software/
       {% endif %}
 
       <div class="soft-card__top">
+        {%- comment -%}
+          真实应用图标（从各程序 exe 的图标资源里提取的 256px 帧），
+          拿不到图标的网页工具用自绘的图标，不再用字母方块占位。
+        {%- endcomment -%}
+        {% if soft.appIcon %}
+        <span class="app-icon">
+          <img src="{{ soft.appIcon | relative_url }}" alt="" width="34" height="34" loading="lazy">
+        </span>
+        {% else %}
         <div class="soft-card__logo {{ soft.logoClass }}" aria-hidden="true">{{ soft.logo }}</div>
+        {% endif %}
         <div class="soft-card__head">
           <h2 class="soft-card__name">{{ soft.name }}</h2>
           <p class="soft-card__pub">{{ soft.platform }} · v{{ soft.version }}</p>
         </div>
+        <button class="pin-btn" type="button" data-pin="soft-{{ soft.slug }}" data-pin-name="{{ soft.name | escape }}"
+          aria-label="收藏 {{ soft.name | escape }}" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <use href="#i-star"></use>
+          </svg>
+        </button>
       </div>
 
       <p class="soft-card__desc">{{ soft.desc }}</p>
@@ -110,12 +132,30 @@ permalink: /software/
         {% endif %}
       </div>
 
+      {%- comment -%}
+        主按钮按「这个软件到底是干什么用的」来定：
+        网页工具没有安装包，主按钮就是「预览」（页内打开真实站点）；
+        桌面软件的主按钮才是「下载」。
+        另外：download.html 上并没有 #{{ soft.slug }} 这样的锚点，
+        原来的 href="/download/#slug" 是个死锚点，现在只链到下载页本身。
+      {%- endcomment -%}
+      {%- assign dl = site.data.downloads | where: "project", soft.name -%}
       <div class="soft-card__actions">
-        <a class="btn btn--primary btn--sm" href="{{ '/download/' | relative_url }}#{{ soft.slug }}">
+        {% if soft.previewUrl %}
+        <button class="btn btn--primary btn--sm pv-trigger" type="button"
+          data-pv-open data-pv-url="{{ soft.previewUrl }}"
+          data-pv-title="{{ soft.name | escape }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-eye"></use></svg>
+          预览
+        </button>
+        {% elsif dl.size > 0 %}
+        <a class="btn btn--primary btn--sm" href="{{ '/download/' | relative_url }}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
           下载
         </a>
+        {% endif %}
         {% if soft.postTitle %}
         {%- capture _posturl %}{% include post-url.html title=soft.postTitle %}{% endcapture -%}
         {% if _posturl != "" %}
@@ -125,6 +165,14 @@ permalink: /software/
           介绍
         </a>
         {% endif %}
+        {% endif %}
+        {%- comment -%} 网页工具若另有离线包，再补一个下载入口 {%- endcomment -%}
+        {% if soft.previewUrl and dl.size > 0 %}
+        <a class="btn btn--ghost btn--sm" href="{{ '/download/' | relative_url }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><use href="#i-download"></use></svg>
+          离线包
+        </a>
         {% endif %}
         {% if soft.repo %}
         <a class="btn btn--ghost btn--sm" href="{{ soft.repo }}" rel="noopener noreferrer">

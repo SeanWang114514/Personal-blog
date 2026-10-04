@@ -1591,6 +1591,36 @@ html[data-theme="light"] .card {
 }
 
 /* ==========================================================================
+   应用图标（软件卡 / 项目卡）
+   --------------------------------------------------------------------------
+   优先用真实图标：img/icons/*.png 是从各程序 exe 的图标资源里提取出的
+   256px 帧（PP-OCRv6、Note Studio、Rime/Weasel），网页工具没有图标，
+   用同尺寸同圆角的自绘图标补齐。字母方块只作为兜底保留。
+   ========================================================================== */
+.app-icon {
+  display: block;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  /* 透明底的图标（如 Weasel 的白字 logo）也能看清 */
+  background: var(--material-hover);
+}
+
+.app-icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.app-icon--lg {
+  width: 38px;
+  height: 38px;
+}
+
+/* ==========================================================================
    预览图（软件卡 / 项目卡）
    --------------------------------------------------------------------------
    img/preview/*.svg 是自绘的界面示意图：矢量、几 KB、随主题缩放，
@@ -2849,6 +2879,307 @@ html[data-theme="light"] .card {
 
 .share-btn.is-pinned {
   color: var(--orange);
+}
+
+/* ==========================================================================
+   静态网站预览覆盖层
+   --------------------------------------------------------------------------
+   点卡片上的「预览」在页内打开真实站点。面板占满可视区、留出一点边距，
+   顶部一条细栏放标题、域名、外部打开和关闭 —— 不再堆装饰。
+   ========================================================================== */
+.pv {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-4);
+}
+
+.pv[hidden] {
+  display: none;
+}
+
+.pv__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.pv.is-open .pv__backdrop {
+  opacity: 1;
+}
+
+.pv__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(1200px, 100%);
+  height: min(820px, 100%);
+  overflow: hidden;
+  border: 1px solid var(--separator-strong);
+  border-radius: var(--r-xl);
+  background: var(--bg-elevated);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.pv.is-open .pv__panel {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pv__backdrop,
+  .pv__panel {
+    transition: none;
+  }
+}
+
+.pv__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-shrink: 0;
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--separator);
+  background: var(--bg-raised);
+}
+
+.pv__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-full);
+  background: var(--green);
+  flex-shrink: 0;
+}
+
+.pv__title {
+  font-size: var(--fs-15);
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pv__host {
+  font-size: var(--fs-12);
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.pv__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.pv__body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: var(--bg-inset);
+}
+
+.pv__frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.pv__frame.is-ready {
+  opacity: 1;
+}
+
+.pv__spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-3);
+  color: var(--text-tertiary);
+  font-size: var(--fs-13);
+  text-align: center;
+  padding: var(--s-4);
+}
+
+.pv__spinner.is-hidden {
+  display: none;
+}
+
+.pv__spinner-ring {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--separator-strong);
+  border-top-color: var(--accent);
+  border-radius: var(--r-full);
+  animation: pv-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pv__spinner-ring {
+    animation-duration: 2.4s;
+  }
+}
+
+.pv__note {
+  flex-shrink: 0;
+  padding: var(--s-2) var(--s-4);
+  border-top: 1px solid var(--separator);
+  background: var(--bg-raised);
+  font-size: var(--fs-12);
+  color: var(--text-tertiary);
+}
+
+@media (max-width: 640px) {
+  .pv {
+    padding: 0;
+  }
+
+  .pv__panel {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .pv__host {
+    display: none;
+  }
+
+  /* 手机上给关闭键更大的点按区域 */
+  .pv__actions .icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* 卡片上的「预览」入口 */
+.pv-trigger {
+  gap: 6px;
+}
+
+.pv-trigger svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   收藏星标
+   --------------------------------------------------------------------------
+   原来星标直接复用 .share-btn：32px、无描边、颜色和正文一个灰，
+   选中只把描边变橙 —— 在卡片角落里几乎看不见，用户反馈「不够醒目」。
+   这里给它独立的、明显是个按钮的样子：更大、有描边、有底色，
+   选中时整颗星填实并染成橙色。
+   ========================================================================== */
+.pin-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid var(--separator);
+  border-radius: var(--r-md);
+  background: var(--bg-raised);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+}
+
+.pin-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  transition: fill var(--dur-fast);
+}
+
+.pin-btn:hover {
+  background: var(--material-active);
+  border-color: var(--separator-strong);
+  color: var(--text-primary);
+}
+
+.pin-btn:focus-visible {
+  outline: 3px solid var(--accent-ring);
+  outline-offset: 1px;
+}
+
+/* 选中：填实 + 橙色 + 同色描边和浅底，一眼能看出「已收藏」 */
+.pin-btn.is-pinned {
+  color: var(--orange);
+  border-color: var(--orange);
+  background: rgba(255, 159, 10, 0.14);
+}
+
+.pin-btn.is-pinned svg {
+  fill: currentColor;
+}
+
+/* 「只看收藏」筛选 chip：图标 + 文字，激活时和星标一样变橙 */
+.chip--pin {
+  gap: 6px;
+  padding-inline: 10px;
+}
+
+.chip--pin svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.chip--pin.is-active {
+  color: var(--orange);
+  border-color: var(--orange);
+  background: rgba(255, 159, 10, 0.14);
+}
+
+.chip--pin.is-active svg {
+  fill: currentColor;
+}
+
+/* 工具箱里一行一个的紧凑列表，按钮小一号但保持描边 */
+.pin-btn--sm {
+  width: 32px;
+  height: 32px;
+  margin-left: 0;
+}
+
+.pin-btn--sm svg {
+  width: 16px;
+  height: 16px;
 }
 
 .post-nav {
