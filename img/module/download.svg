@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" width="480" height="300"
+  role="img" aria-label="示意图">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b35a00" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#ff9f0a" stop-opacity="0.16"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.24" r="0.7">
+      <stop offset="0" stop-color="#ff9f0a" stop-opacity="0.40"/>
+      <stop offset="1" stop-color="#ff9f0a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="480" height="300" fill="url(#bg)"/>
+  <rect width="480" height="300" fill="url(#glow)"/>
+
+  <!-- one faint rule so the panel does not read as an empty colour swatch -->
+  <line x1="0" y1="258" x2="480" y2="258" stroke="#ff9f0a" stroke-opacity="0.22" stroke-width="1"/>
+
+  <g transform="translate(180, 90) scale(5)">
+    <path d="M12 3v12" fill="none" stroke="#ff9f0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 11l5 5 5-5" fill="none" stroke="#ff9f0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 20h16" fill="none" stroke="#ff9f0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

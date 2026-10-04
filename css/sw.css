@@ -1723,24 +1723,26 @@ html[data-theme="light"] .hero--banner .hero__scrim {
    ========================================================================== */
 .module-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s-3);
 }
 
 /* --------------------------------------------------------------------------
-   首页板块卡
+   首页板块行
    --------------------------------------------------------------------------
-   这 8 张卡是首页的导航主体，用户靠它们决定去哪。所以「名字」和「数量」
-   要一眼看见：名字放大加粗、数量做成小徽章、图标按板块上色。颜色一律取
-   已有的调色板 token（图标用 --x，底色用配对的 --x-soft），浅色主题下这些
-   token 自带加深版本，不用另写一套。
-   说明文字仍是 12px 次要色 —— 它是解释，不是标题。
+   一行一个板块：左边名称 + 数量 + 说明，右边一张配图。
+
+   为什么从「两列小卡」改成「单列横排」：八个入口排成两列时每张只有约
+   500×92，配图放不下，只能塞一个 40px 图标；要求是「左边名称右边配图」。
+   改成整行之后图片按 8:5 有 168px 宽，一行也能同时讲清名称、数量和说明。
+
+   配图用 aspect-ratio 而不是写死高度，换图时不用同步改 CSS。
    -------------------------------------------------------------------------- */
 .module {
   display: flex;
   align-items: center;
-  gap: var(--s-3);
-  padding: var(--s-4);
+  gap: var(--s-5);
+  padding: var(--s-4) var(--s-5);
   border: 1px solid var(--separator);
   border-radius: var(--r-lg);
   background: var(--bg-elevated);
@@ -1754,23 +1756,23 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   color: var(--text-primary);
 }
 
-.module__icon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--r-lg);
-  background: var(--tint-soft, var(--material-hover));
-  color: var(--tint, var(--accent));
+/* 图在右。整行是一个链接，图只是这条链接的一部分，
+   不给它单独的 hover 效果，避免出现两个热区。 */
+.module__thumb {
   flex-shrink: 0;
+  width: 168px;
+  aspect-ratio: 8 / 5;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--separator);
+  background: var(--bg-inset);
 }
 
-.module__icon svg {
-  width: 20px;
-  height: 20px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
+.module__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .module__body {
@@ -3896,9 +3898,15 @@ html[data-theme="light"] .hero--banner .hero__scrim {
     width: 100%;
   }
 
-  /* 单列，避免两列在 360px 下把描述挤成两个字一行的碎片 */
-  .module-grid {
-    grid-template-columns: minmax(0, 1fr);
+  /* 板块行现在是单列，这条只保留缩略图的收缩。
+     360px 下 168px 的图会把名称和说明挤成碎行，所以图缩到 96px。 */
+  .module {
+    gap: var(--s-3);
+    padding: var(--s-3);
+  }
+
+  .module__thumb {
+    width: 96px;
   }
 
   .post-row__meta .tag {
