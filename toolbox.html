@@ -23,7 +23,7 @@ permalink: /toolbox/
       <h1 class="hero__title">工具箱</h1>
       <p class="hero__sub">
         {{ total }} 个常用站点的快捷入口，分 {{ groups | size }} 类。
-        所有链接都在新标签页打开，点星标可以把常用项收藏起来。
+        优先挑开源、免登录、能直接在浏览器里跑的工具；点星标可以把常用项收藏起来。
       </p>
     </div>
   </div>
@@ -76,8 +76,11 @@ permalink: /toolbox/
         </span>
 
         <div style="flex:1;min-width:0">
-          <a class="tool-tile__name" href="{{ item.url }}" rel="noopener noreferrer"
-            style="display:block;color:var(--text-primary)">{{ item.name }}</a>
+          <a class="tool-tile__name" href="{{ item.url }}" target="_blank" rel="noopener noreferrer"
+            style="display:block;color:var(--text-primary)">{{ item.name }}
+            {%- if item.oss %}<span class="tool-flag" title="开源项目">开源</span>{% endif -%}
+            {%- if item.cn %}<span class="tool-flag tool-flag--cn" title="国内站点，访问更快">国内</span>{% endif -%}
+          </a>
           <div class="tool-tile__desc">{{ item.desc }}</div>
         </div>
 

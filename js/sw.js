@@ -12,6 +12,24 @@
   };
   var BASE = (window.SW && window.SW.baseurl) || "";
 
+  /*
+   * 筛选把卡片一个个 .hidden 掉之后，装着它们的 <section> 还在：
+   * 安全工具库这类「一个分区一个大类」的页面，点「应急响应」会留下
+   * 6 个空标题，一路滚下去像 6 个渲染坏掉的板块（每个还占 103px）。
+   * 这里按「分区里的条目全被隐藏」来收起分区本身。
+   * 只认 <section> 作为分区，是为了不动 .controls、.pentest-wrap 里的
+   * 表格和空状态这些同样包含匹配元素的兄弟节点。
+   */
+  function hideEmptySections(target) {
+    var secs = $$("section", target);
+    for (var i = 0; i < secs.length; i++) {
+      var items = $$("[data-cat]", secs[i]);
+      if (!items.length) continue;
+      var any = items.some(function (el) { return !el.classList.contains("hidden"); });
+      secs[i].classList.toggle("hidden", !any);
+    }
+  }
+
   /* ----------------------------------------------------------------------
      1. Theme (dark default, persisted)
      ---------------------------------------------------------------------- */
@@ -135,6 +153,9 @@
       lastFocus = document.activeElement;
       drawer.classList.add("is-open");
       drawer.removeAttribute("aria-hidden");
+      // 必须同步 aria-expanded，否则读屏永远把按钮念成「已折叠」——
+      // 视觉上开了、语义上没开，是最容易被漏掉的那类无障碍缺陷。
+      if (openBtn) openBtn.setAttribute("aria-expanded", "true");
       document.body.style.overflow = "hidden";
       var first = drawer.querySelector("a, button");
       if (first) first.focus();
@@ -143,6 +164,7 @@
     function close() {
       drawer.classList.remove("is-open");
       drawer.setAttribute("aria-hidden", "true");
+      if (openBtn) openBtn.setAttribute("aria-expanded", "false");
       document.body.style.overflow = "";
       if (openBtn) openBtn.focus();
     }
@@ -297,6 +319,7 @@
           if (ok) shown++;
         });
         if (empty) empty.classList.toggle("hidden", shown > 0);
+        hideEmptySections(target);
       }
 
       // let the favorites toggle (section 14) re-run every filter group

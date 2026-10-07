@@ -38,11 +38,19 @@
   <link rel="apple-touch-icon" href="{{ '/pwa/icons/128.png' | relative_url }}">
   <link rel="manifest" href="{{ '/pwa/manifest.json' | relative_url }}">
 
-  {%- comment -%} Fonts — preconnect + display=swap to avoid FOIT {%- endcomment -%}
+  {%- comment -%}
+    Fonts, three roles:
+      Inter          — latin body / UI
+      Noto Serif SC  — Chinese display headings (the editorial voice)
+      JetBrains Mono — data: dates, sizes, version numbers, counts
+    Noto Serif SC is a large family, so only two weights are requested and
+    the browser splits it by unicode-range — latin text never pulls CJK
+    glyphs. `display=swap` keeps a slow font from blocking first paint.
+  {%- endcomment -%}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 
   {%- comment -%} Design system {%- endcomment -%}
   <link rel="stylesheet" href="{{ '/css/sw.css' | relative_url }}">

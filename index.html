@@ -40,51 +40,53 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
 
 {%- comment -%}
   ============ 页头 ============
-  首屏用一张大色块的抽象背景打底，口号用大字压在上面（旧站的做法）。
+  从「背景大横幅 + 白字压图」改成编辑式报头（masthead）。
 
-  为什么不是照片：仓库里唯一那张 home-bg.jpg 是一整面演出海报拼贴墙 ——
-  小字密密麻麻、明暗对比极强。字压上去要么遮罩压很重（图就看不见了），
-  要么压很轻（字就糊了），两头不讨好。换成几块平滑的大色块背景，
-  背后没有会跟文字抢的细节，图看得见、字也清楚。生成脚本：
-  tools/make-hero-bg.js，两个主题各一张，合计 5 KB。
+  为什么拆掉横幅：一张抽象背景图 + 一句大字口号 + 一层黑遮罩，这套组合
+  几乎每个模板化落地页都在用，一眼就能认出来。而且它自带一个解不开的
+  矛盾 —— 背景要有细节才值得铺满一屏，可细节一多，压在上面的字就必须
+  靠重遮罩才读得清，最后图也看不见、字也不清楚。
 
-  用 <picture> 而不是给 <img> 换 src：浏览器按主题各取所需，
-  不依赖 JS —— 主题是在 <html data-theme> 上切换的，
-  CSS 换图会有一瞬的空白，<picture> 没有这个问题。
+  改成报头后，首屏由三样东西构成，全靠排版组织：
+    1) 一行等宽大写的栏目标记（eyebrow）—— 交代这是什么站
+    2) 一句大号衬线标语 —— 整页唯一的视觉重音
+    3) 一段导语 + 一行等宽数据 —— 体量信息，退到次级
+
+  没有背景图，就不需要遮罩，也不需要 dark/light 两套底图，
+  「图糊了 / 字糊了」这个取舍从此不存在。
 {%- endcomment -%}
-<section class="hero hero--banner">
-  <picture>
-    <source srcset="{{ '/img/hero-dark.svg' | relative_url }}" media="(prefers-color-scheme: dark)">
-    <img class="hero__bg" src="{{ '/img/hero-light.svg' | relative_url }}" alt="" width="1600" height="620"
-      fetchpriority="high" decoding="async" data-hero-bg>
-  </picture>
-  <div class="hero__scrim" aria-hidden="true"></div>
-
+<section class="masthead">
   <div class="wrap">
-    <div class="hero__inner">
-      <h1 class="hero__title">折腾、记录，然后把它们做成能用的东西。</h1>
+    <p class="masthead__eyebrow">Sean Wang · 软件 / 工具 / AI / 折腾记录</p>
 
-      <p class="hero__sub">
-        {{ site.description }}。这里有我写的离线工具、踩过的坑，
-        以及一份持续更新的软件与资源清单。
-      </p>
+    <h1 class="masthead__title">折腾、记录，<br>然后把它们做成能用的东西。</h1>
 
-      {%- comment -%}
-        统计不再做成四个大数字 + 边框的行，改成一行小字。
-        内容是次要信息，不该和标题抢视觉重量。
-      {%- endcomment -%}
-      <p class="hero__stats">
-        {{ site.posts | size }} 篇文章 ·
-        {{ site.data.software | size }} 款软件 ·
-        {{ site.data.projects | size }} 个项目 ·
-        {{ site.tags | size }} 个标签
-      </p>
-    </div>
+    <p class="masthead__lede">
+      {{ site.description }}。这里有我写的离线工具、踩过的坑，
+      以及一份持续更新的软件与资源清单。
+    </p>
+
+    {%- comment -%}
+      统计做成等宽小字压在一条细线上，像报纸报头下的出版信息。
+      不放大数字卡片 —— 那是模板答案，这四项本来也不是主角。
+    {%- endcomment -%}
+    <p class="masthead__meta">
+      <span><b>{{ site.posts | size }}</b> 篇文章</span>
+      <span><b>{{ site.data.software | size }}</b> 款软件</span>
+      <span><b>{{ site.data.projects | size }}</b> 个项目</span>
+      <span><b>{{ site.tags | size }}</b> 个标签</span>
+    </p>
   </div>
 </section>
 
-{%- comment -%} ============ 板块导航 ============ {%- endcomment -%}
-<section class="wrap section" aria-labelledby="sec-modules">
+{%- comment -%}
+  ============ 板块索引（全站唯一的肉色带） ============
+  整幅铺一层肉色，左右通栏。八个板块就是这条带子存在的理由：它给八行一个
+  共同的地，让「八个分区」读起来是一件事，而不是八张并排的卡片。
+  外面是 .band--flesh（底色通栏），里面仍是 .wrap（内容 1100px）。
+{%- endcomment -%}
+<section class="band band--flesh" aria-labelledby="sec-modules">
+  <div class="wrap section">
   <div class="sec-head">
     <div>
       <h2 class="sec-head__title" id="sec-modules">八个板块，各管一件事</h2>
@@ -92,123 +94,57 @@ description: "Sean Wang 的个人站点 —— 博客、软件、工具与折腾
     </div>
   </div>
 
+  {%- comment -%}
+    八个板块用循环生成，不再手写八遍。
+    数量从各页自己的数据源现算：下载数走 site.data.downloads，
+    其余走 data 文件；工具箱 / 收藏夹 / 安全是嵌套结构，走 count-items.html。
+    序号由 forloop.index 生成并补零 —— 这是真实的分区顺序，不是装饰。
+  {%- endcomment -%}
   {%- capture tb_count %}{% include count-items.html data=site.data.toolbox %}{% endcapture -%}
   {%- capture bm_count %}{% include count-items.html data=site.data.bookmarks %}{% endcapture -%}
   {%- capture pt_count %}{% include count-items.html data=site.data.pentest key="tools" %}{% endcapture -%}
 
+  {%- assign modules = "" | split: "" -%}
+  {%- assign mod_blog = site.posts | size | append: " 篇" -%}
+  {%- assign mod_soft = site.data.software | size | append: " 款" -%}
+  {%- assign mod_drive = site.data.drive | size | append: " 个渠道" -%}
+  {%- assign mod_dl = site.data.downloads | size | append: " 个条目" -%}
+  {%- assign mod_proj = site.data.projects | size | append: " 个作品" -%}
+  {%- assign mod_pt = pt_count | strip | append: " 个条目" -%}
+  {%- assign mod_tb = tb_count | strip | append: " 个入口" -%}
+  {%- assign mod_bm = bm_count | strip | append: " 条收藏" -%}
+
   <div class="module-grid">
-    <a class="module module--blog" href="{{ '/blog/' | relative_url }}">
-      <span class="module__body">
-        <span class="module__head">
-          <span class="module__name">博客</span>
-          <span class="module__count">{{ site.posts | size }} 篇</span>
-        </span>
-        <span class="module__desc">长文与折腾记录：OCR、输入法、文档工具、硬件选购</span>
-      </span>
-      <span class="module__thumb">
-        <img src="{{ '/img/module/blog.svg' | relative_url }}" alt="" width="480" height="300"
-          loading="lazy" decoding="async">
-      </span>
-    </a>
+    {%- assign names = "博客,软件,云盘,下载,项目,安全,工具箱,收藏夹" | split: "," -%}
+    {%- assign slugs = "blog,soft,drive,download,projects,pentest,toolbox,bookmarks" | split: "," -%}
+    {%- assign lures = "/blog/,/software/,/drive/,/download/,/projects/,/pentest/,/toolbox/,/bookmarks/" | split: "," -%}
+    {%- assign descs = "长文与折腾记录：OCR、输入法、文档工具、硬件选购|自研离线工具：输入法套件、文档工作台、OCR，全部开源|常用网盘入口与分享说明，大文件优先走不限速渠道|安装包集中一处，标注版本、体积与平台，直链 Releases|作品墙：技术栈、状态、仓库与在线体验一键直达|渗透测试工具归档：信息收集、提权、内网、应急响应|常用在线工具聚合，带本地时钟与可收藏的快捷入口|长期沉淀的学习资料、文档与阅读源" | split: "|" -%}
+    {%- assign counts = mod_blog | append: "|" | append: mod_soft | append: "|" | append: mod_drive | append: "|" | append: mod_dl | append: "|" | append: mod_proj | append: "|" | append: mod_pt | append: "|" | append: mod_tb | append: "|" | append: mod_bm | split: "|" -%}
 
-    <a class="module module--soft" href="{{ '/software/' | relative_url }}">
-      <span class="module__body">
-        <span class="module__head">
-          <span class="module__name">软件</span>
-          <span class="module__count">{{ site.data.software | size }} 款</span>
-        </span>
-        <span class="module__desc">自研离线工具：输入法套件、文档工作台、OCR，全部开源</span>
-      </span>
-      <span class="module__thumb">
-        <img src="{{ '/img/module/soft.svg' | relative_url }}" alt="" width="480" height="300"
-          loading="lazy" decoding="async">
-      </span>
-    </a>
+    {%- comment -%}
+      色标块里的图标：和板块语义一一对应，取 _includes/icons.html 的 id。
+      整块是装饰（aria-hidden），图标也一样 —— 行里已经有名称、序号和说明，
+      读屏再念一遍图形是重复。
+    {%- endcomment -%}
+    {%- assign chip_icons = "book,box,cloud,download,layers,shield-check,tool,bookmark" | split: "," -%}
 
-    <a class="module module--drive" href="{{ '/drive/' | relative_url }}">
+    {%- for name in names -%}
+    {%- assign i = forloop.index0 -%}
+    <a class="module module--{{ slugs[i] }}" href="{{ lures[i] | relative_url }}">
+      <span class="module__num">{{ forloop.index | prepend: "0" | slice: -2, 2 }}</span>
       <span class="module__body">
         <span class="module__head">
-          <span class="module__name">云盘</span>
-          <span class="module__count">{{ site.data.drive | size }} 个渠道</span>
+          <span class="module__name">{{ name }}</span>
+          <span class="module__count">{{ counts[i] }}</span>
         </span>
-        <span class="module__desc">常用网盘入口与分享说明，大文件优先走不限速渠道</span>
+        <span class="module__desc">{{ descs[i] }}</span>
       </span>
-      <span class="module__thumb">
-        <img src="{{ '/img/module/drive.svg' | relative_url }}" alt="" width="480" height="300"
-          loading="lazy" decoding="async">
+      <span class="module__thumb" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+          stroke-linejoin="round"><use href="#i-{{ chip_icons[i] }}"></use></svg>
       </span>
     </a>
-
-    <a class="module module--download" href="{{ '/download/' | relative_url }}">
-      <span class="module__body">
-        <span class="module__head">
-          <span class="module__name">下载</span>
-          <span class="module__count">{{ site.data.downloads | size }} 个条目</span>
-        </span>
-        <span class="module__desc">安装包集中一处，标注版本、体积与平台，直链 Releases</span>
-      </span>
-      <span class="module__thumb">
-        <img src="{{ '/img/module/download.svg' | relative_url }}" alt="" width="480" height="300"
-          loading="lazy" decoding="async">
-      </span>
-    </a>
-
-    <a class="module module--projects" href="{{ '/projects/' | relative_url }}">
-      <span class="module__body">
-        <span class="module__head">
-          <span class="module__name">项目</span>
-          <span class="module__count">{{ site.data.projects | size }} 个作品</span>
-        </span>
-        <span class="module__desc">作品墙：技术栈、状态、仓库与在线体验一键直达</span>
-      </span>
-      <span class="module__thumb">
-        <img src="{{ '/img/module/projects.svg' | relative_url }}" alt="" width="480" height="300"
-          loading="lazy" decoding="async">
-      </span>
-    </a>
-
-    <a class="module module--pentest" href="{{ '/pentest/' | relative_url }}">
-      <span class="module__body">
-        <span class="module__head">
-          <span class="module__name">安全</span>
-          <span class="module__count">{{ pt_count | strip }} 个条目</span>
-        </span>
-        <span class="module__desc">渗透测试工具归档：信息收集、提权、内网、应急响应</span>
-      </span>
-      <span class="module__thumb">
-        <img src="{{ '/img/module/pentest.svg' | relative_url }}" alt="" width="480" height="300"
-          loading="lazy" decoding="async">
-      </span>
-    </a>
-
-    <a class="module module--toolbox" href="{{ '/toolbox/' | relative_url }}">
-      <span class="module__body">
-        <span class="module__head">
-          <span class="module__name">工具箱</span>
-          <span class="module__count">{{ tb_count | strip }} 个入口</span>
-        </span>
-        <span class="module__desc">常用在线工具聚合，带本地时钟与可收藏的快捷入口</span>
-      </span>
-      <span class="module__thumb">
-        <img src="{{ '/img/module/toolbox.svg' | relative_url }}" alt="" width="480" height="300"
-          loading="lazy" decoding="async">
-      </span>
-    </a>
-
-    <a class="module module--bookmarks" href="{{ '/bookmarks/' | relative_url }}">
-      <span class="module__body">
-        <span class="module__head">
-          <span class="module__name">收藏夹</span>
-          <span class="module__count">{{ bm_count | strip }} 条收藏</span>
-        </span>
-        <span class="module__desc">长期沉淀的学习资料、文档与阅读源</span>
-      </span>
-      <span class="module__thumb">
-        <img src="{{ '/img/module/bookmarks.svg' | relative_url }}" alt="" width="480" height="300"
-          loading="lazy" decoding="async">
-      </span>
-    </a>
-  
-    </div>
+    {%- endfor -%}
+  </div>
   </div>
 </section>

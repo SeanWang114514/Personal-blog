@@ -41,7 +41,14 @@ permalink: /about/
 </section>
 
 <div class="wrap section-tight">
-  {#- 侧边栏固定 300px，窄屏放不下会顶出横向滚动条，交给 CSS 断点处理 -#}
+  {%- comment -%}
+    侧边栏固定 260px，窄屏（≤1024px）放不下会顶出横向滚动条，
+    断点处理在 sw.css 的 @media (max-width: 1024px) 里。
+
+    注意：这一行原来用的是花括号加井号那种注释写法（Jinja/Twig 的语法），
+    Jekyll 不认识它，于是整行被当成正文渲染在页面上，访客会直接看到
+    这段中文。Jekyll 里只有 comment 标签这一种注释写法。
+  {%- endcomment -%}
   <div class="post-layout about-layout">
 
     {%- comment -%} 主内容 {%- endcomment -%}
@@ -162,17 +169,24 @@ permalink: /about/
         </p>
       </div>
 
-      {% if site.giscus.enabled and site.giscus.repo_id != "" %}
-      <div class="card">
-        <h2 class="card__title" style="font-size:var(--fs-15)">留言</h2>
-        <p class="card__desc">有任何想说的都可以写在下面。</p>
-      </div>
-      {% endif %}
+      {%- comment -%}
+        「留言」入口原来在这张卡片上，现在移到下面评论框正上方。
+        原因是卡片在侧边栏、评论框在主栏下方，两者相距上千像素，
+        卡片写着「写在下面」而下面什么都没有。
+      {%- endcomment -%}
     </aside>
   </div>
 
+  {%- comment -%}
+    评论区放在两栏之后，但收窄到和主栏同宽（860px），和正文左对齐。
+    标题写在评论框正上方，不再是一张孤零零待在侧边栏里的卡片 ——
+    原来那张卡片离它描述的评论框有 1131px 竖直距离，写着「写在下面」
+    下面却什么都没有。
+  {%- endcomment -%}
   {% if site.giscus.enabled and site.giscus.repo_id != "" %}
-  <div style="max-width:860px;margin-top:var(--s-12)">
+  <div class="about-comments">
+    <h2 class="about-comments__title">留言</h2>
+    <p class="about-comments__desc">有任何想说的都可以写在下面。用 GitHub 账号登录后即可发言。</p>
     {% include giscus.html %}
   </div>
   {% endif %}

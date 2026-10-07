@@ -18,7 +18,7 @@ Sean Wang（WSL）的个人站点 —— 博客、软件、云盘、下载、项
 | 云盘 | `/drive/` | 常用网盘入口、容量限速说明与备份原则 |
 | 下载 | `/download/` | 所有安装包集中一处，主推 + 完整清单 + FAQ |
 | 项目 | `/projects/` | 作品集，含技术栈分布 |
-| 工具箱 | `/toolbox/` | 38 个常用站点快捷入口，带本地时钟与可收藏 |
+| 工具箱 | `/toolbox/` | 104 个常用站点快捷入口（7 类，标注开源 / 国内），带本地时钟与可收藏 |
 | 收藏夹 | `/bookmarks/` | 长期沉淀的学习资料与文档 |
 | 归档 | `/archive/` | 按年份浏览全部文章 |
 | 友情链接 | `/friends/` | 友链 + 交换说明 |
@@ -95,6 +95,19 @@ bundle exec jekyll serve
 
 分别编辑 `_data/toolbox.yml`、`_data/bookmarks.yml`、`_data/friends.yml`。
 工具箱和收藏夹的条目自带「收藏到本机」按钮（数据存 localStorage）。
+
+工具箱的条目除 `name` / `url` / `desc` 外，还有两个可选标记：
+
+```yaml
+- name: Hoppscotch
+  url: https://hoppscotch.io
+  desc: 开源 API 调试客户端
+  oss: true      # 名称后挂「开源」小标
+  cn: true       # 名称后挂「国内」小标（访问更快）
+```
+
+分组用 `key` / `title` / `icon` / `desc`，`icon` 取 `_includes/icons.html` 里的图标 id（去掉 `i-` 前缀）。
+页面顶部「N 个站点 / M 类」是从 YAML 里自动算出来的，不用手动改。
 
 ### 调整顶栏导航
 

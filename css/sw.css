@@ -32,82 +32,128 @@
    01. 设计令牌
    ========================================================================== */
 :root {
-  /* —— 中性灰阶：Apple 系统灰，中性无蓝调 —— */
-  --gray-1: #8e8e93;
-  --gray-2: #636366;
-  --gray-3: #48484a;
-  --gray-4: #3a3a3c;
-  --gray-5: #2c2c2e;
-  --gray-6: #1c1c1e;
+  /* —— 暖陶中性阶 ——
+     全站只有一个色相家族：皮肤 / 陶土。中性色不是「灰加一点暖」——
+     那样会发脏；正确做法是取暖色的色相（15–30°）、只把饱和度压下来。
+     所以下面这六级的色相全都落在红橙区，整站读起来像同一块材料。 */
+  --gray-1: #a89a90;
+  --gray-2: #8d7f76;
+  --gray-3: #6d6058;
+  --gray-4: #4f443e;
+  --gray-5: #382f2a;
+  --gray-6: #241d19;
 
-  /* —— 深色外观（默认）—— */
-  --bg-base: #1c1c1e;
-  --bg-elevated: #2c2c2e;
-  --bg-raised: #3a3a3c;
-  --bg-inset: #141416;
-  --bg-canvas: #1c1c1e;
+  /* —— 八段暖色梯（肉色 → 陶土）——
+     首页八个板块各占一级，浅到深依次往下。这不是随手配的八种颜色：
+     梯级和「01–08」的分区顺序一一对应，颜色本身在复述顺序，
+     所以它承担的是信息，不是装饰。 */
+  /* 深色下这条梯子整体压深，并且翻转明暗方向：深底上要靠「更亮」分层次，
+     所以 01 最暗、08 最亮 —— 但仍然是单调序列，和浅色的读法一致。 */
+  --ramp-1: #5d4030;
+  --ramp-2: #6d4c39;
+  --ramp-3: #7d5842;
+  --ramp-4: #8d654b;
+  --ramp-5: #9d7155;
+  --ramp-6: #ae7e5f;
+  --ramp-7: #bf8b69;
+  --ramp-8: #d09874;
 
-  --text-primary: #f2f2f7;
-  --text-secondary: #aeaeb2;
-  /* Apple 的 tertiaryLabel #8e8e93 在 #2c2c2e 上只有 4.27:1，差一点点。
-     网站在卡片里大量使用这个色，所以调亮到 5.89:1。 */
-  /* 三级是「最暗但仍达 AA 的正文色」。实测：在 --bg-raised (#3a3a3c) 上
-     要过 4.5:1，最暗只能到 #a8a8ad；再暗一档就会掉到 4.05。
-     所以四级色只用于装饰性元素（图标、箭头、列表符号、时间线圆点），
-     不用于任何文字——深色下四级文字在卡片底上不可能达标。 */
-  --text-tertiary: #a8a8ad;
-  --text-quaternary: #7c7c81;
+  /* 色标块上那个装饰图标的墨色。梯子中段明暗翻转，墨色也跟着翻：
+     01–04 用浅墨，05–08 用深墨。实测最低 3.86:1，高于图形元素要求的 3:1。 */
+  --ramp-ink-1: #f6e6da;
+  --ramp-ink-2: #f6e6da;
+  --ramp-ink-3: #f6e6da;
+  --ramp-ink-4: #f6e6da;
+  --ramp-ink-5: #2a1a12;
+  --ramp-ink-6: #2a1a12;
+  --ramp-ink-7: #2a1a12;
+  --ramp-ink-8: #2a1a12;
+
+  /* —— 深色外观（默认）——
+     底是暖褐而不是中性黑：红 > 绿 > 蓝，和浅色那层肉色纸面同源，
+     两套主题切换时不会像换了一个站。 */
+  --bg-base: #171210;
+  --bg-elevated: #1f1815;
+  --bg-raised: #281f1a;
+  --bg-inset: #120e0c;
+  --bg-canvas: #171210;
+
+  /* 整幅「肉色带」的底色。浅色下它是全站唯一一块饱和面（首页板块索引），
+     深色下退成一档比底色略亮的暖褐，保持同样的结构位置。 */
+  --flesh: #2a1e18;
+
+  --text-primary: #f3e9e1;
+  --text-secondary: #b9a79b;
+  --text-tertiary: #a6958a;
+  /* 四级只用于装饰性元素（图标、箭头、列表符号、时间线圆点），不承载文字：
+     深色下它在卡片底上只有 3.22:1，做正文必然不达标。 */
+  --text-quaternary: #7d6c62;
   --text-on-accent: #ffffff;
 
-  --material-hover: rgba(255, 255, 255, 0.06);
-  --material-active: rgba(255, 255, 255, 0.11);
-  --material-sunken: rgba(0, 0, 0, 0.22);
+  --material-hover: rgba(255, 236, 224, 0.06);
+  --material-active: rgba(255, 236, 224, 0.11);
+  --material-sunken: rgba(0, 0, 0, 0.24);
 
-  /* hairline 分隔线：比实心描边轻，才有层次 */
-  --separator: rgba(255, 255, 255, 0.085);
-  --separator-strong: rgba(255, 255, 255, 0.14);
-  --border-control: rgba(255, 255, 255, 0.13);
-  --border-input: rgba(255, 255, 255, 0.11);
+  /* hairline 分隔线：比实心描边轻，才有层次。
+     用暖白（255,236,224）而不是纯白，否则压在暖褐底上会发青。 */
+  --separator: rgba(255, 236, 224, 0.09);
+  --separator-strong: rgba(255, 236, 224, 0.15);
+  --border-control: rgba(255, 236, 224, 0.14);
+  --border-input: rgba(255, 236, 224, 0.12);
 
-  /* —— 强调色 ——
-     Apple 的 systemBlue #0a84ff 在白字下只有 3.65:1，做正文/链接色时
-     在卡片底（#2c2c2e）上也只有 3.82:1，两端都不达标。
-     所以拆成两个 token：
-       --accent        用于填充按钮的底色（配白字，取更深的 #0a6ad8 → 5.16:1）
-       --accent-text   用于文字、链接、图标（取更亮的 #5aa9ff → 5.68:1）
-     这正是 Apple 自己在深色模式下的做法：控件底与文字色不是一个值。 */
-  --accent-fill: #0a6ad8;
-  --accent-fill-hover: #0a7ae8;
-  --accent-fill-pressed: #0059b3;
-  --accent: #5aa9ff;
-  --accent-hover: #7cc0ff;
-  --accent-pressed: #4da2ff;
-  --accent-soft: rgba(90, 169, 255, 0.15);
-  --accent-ring: rgba(90, 169, 255, 0.45);
+  /* —— 强调色：朱陶 ——
+     两端各取一个值，这是深色下唯一能同时达标的做法：
+       --accent-fill  填充按钮的底色，配白字 5.38:1
+       --accent       文字 / 链接 / 图标，取提亮后的肉粉，卡片底上 7.58:1
+     控件底与文字色拆开，思路和原来一致，只是把蓝换成了陶。 */
+  --accent-fill: #b24a28;
+  --accent-fill-hover: #c85a35;
+  --accent-fill-pressed: #96391c;
+  --accent: #eba07f;
+  --accent-hover: #f5b899;
+  --accent-pressed: #df8f6c;
+  --accent-soft: rgba(235, 160, 127, 0.15);
+  --accent-ring: rgba(235, 160, 127, 0.45);
 
   /* —— 语义色 ——
-     同样按背景调亮，保证落在卡片底（#2c2c2e）上 ≥ 4.5:1。 */
-  --green: #30d158;
-  --green-soft: rgba(48, 209, 88, 0.16);
-  --orange: #ff9f0a;
-  --orange-soft: rgba(255, 159, 10, 0.16);
-  --red: #ff8080;
-  --red-soft: rgba(255, 128, 128, 0.16);
-  --purple: #cb7df5;
-  --purple-soft: rgba(203, 125, 245, 0.16);
-  --teal: #40c8e0;
-  --teal-soft: rgba(64, 200, 224, 0.16);
+     同样往暖里偏一档：绿转橄榄、紫转藕、青转深水绿，避免在整片暖底上
+     跳出来。全部按卡片底（#281f1a）复核过，最低 6.63:1。 */
+  --green: #6fc46b;
+  --green-soft: rgba(111, 196, 107, 0.16);
+  --orange: #f0a15e;
+  --orange-soft: rgba(240, 161, 94, 0.16);
+  --red: #f08a7a;
+  --red-soft: rgba(240, 138, 122, 0.16);
+  --purple: #c79bdd;
+  --purple-soft: rgba(199, 155, 221, 0.16);
+  --teal: #5fc8be;
+  --teal-soft: rgba(95, 200, 190, 0.16);
 
-  /* —— 字号阶梯（贴近 macOS）—— */
-  --fs-11: 11px;
-  --fs-12: 12px;
-  --fs-13: 13px;
-  --fs-15: 15px;
-  --fs-17: 17px;
-  --fs-20: 20px;
-  --fs-24: 24px;
-  --fs-28: 28px;
-  --fs-34: 34px;
+  /* —— 字号阶梯 ——
+     旧版 16 个令牌全挤在 11–17px，最大的标题才 20px，全站没有一个
+     「大字」，所以不管怎么调配色都像后台管理系统。这里把阶梯拉开：
+     正文 16px，标题一路到 52px，相邻档位至少差 1.18 倍才看得出层级。
+     中文字形方正、字面大，同字号下比拉丁文更「满」，所以正文取 16px
+     而不是西文站的 17px。 */
+  --fs-11: 11.5px;   /* 角标、计数 */
+  --fs-12: 12.5px;   /* 元信息 */
+  --fs-13: 13.5px;   /* 次级说明 */
+  --fs-15: 15px;     /* 小标题、导航 */
+  --fs-17: 17px;     /* 卡片标题、导语 */
+  --fs-20: 20px;     /* 区块标题 */
+  --fs-24: 24px;     /* 页面标题 */
+  --fs-28: 28px;     /* 文章页标题 */
+  --fs-34: 34px;     /* 文章页大标题 */
+  --fs-40: 40px;     /* 首页口号（中屏） */
+  --fs-52: 52px;     /* 首页口号（大屏） */
+
+  --fs-body: 16px;
+
+  /* —— 行高 ——
+     中文没有西文那样的小写字母升降部，1.75 的正文行高比西文的 1.6
+     更好读；标题则相反，中文标题行高要收到 1.3 以内才紧凑。 */
+  --lh-body: 1.75;
+  --lh-tight: 1.28;
 
   /* —— 圆角：Apple 的连续圆角观感 —— */
   --r-sm: 4px;
@@ -146,62 +192,113 @@
   --z-drawer: 800;
   --z-top: 1200;
 
-  --wrap: 1080px;
+  --wrap: 1100px;
   --wrap-narrow: 720px;
-  --header-h: 52px;
+  --header-h: 60px;
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+  /* —— 字体 ——
+     三套角色，各管一件事：
+
+     --font-serif  标题。中文走「思源宋体 / 宋体」，西文走 Georgia 系。
+                   衬线是这套设计的气质来源：它让标题像印刷品的书名，
+                   而不是 App 里的界面文字。只用于 h1/h2 和引文，
+                   正文绝不用衬线（中文宋体小字号在屏上会糊）。
+     --font-sans   正文。中文优先苹方/微软雅黑，西文优先 Inter。
+     --font-mono   数据。日期、体积、版本号、计数一律等宽对齐，
+                   这是「技术编辑风」的第二条线索。 */
+  --font-serif: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "SimSun",
+    Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI",
     "Microsoft YaHei", "Source Han Sans SC", Roboto, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", "JetBrains Mono",
     Menlo, Consolas, "Liberation Mono", monospace;
 
+  /* 行尾箭头的形状。用 mask 而不是内联 <svg>：箭头要能跟着 currentColor
+     走，又要能只靠 CSS 切换透明度，mask 比多写一个 DOM 节点干净。
+     （内联 <svg> 也行，但那样每个板块都要复制一份 path。） */
+  --arrow-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='m12 5 7 7-7 7'/%3E%3C/svg%3E");
+
   color-scheme: dark;
 }
 
-/* —— 浅色外观 —— */
+/* —— 浅色外观 ——
+   底是暖瓷白（#faf3ec）。它比纯白柔，又比象牙黄更偏红 —— 说得准确一点，
+   它是「肉色被冲淡」，不是「纸被晒黄」。这一档红味是整套配色的地基：
+   后面所有中性色、分隔线、阴影都从它推出来。
+   卡片沿用同一底色 —— 见下面「去盒子化」一节，层级不再靠色差表达。 */
 html[data-theme="light"] {
-  --bg-base: #ffffff;
-  --bg-elevated: #ffffff;
-  --bg-raised: #f2f2f4;
-  --bg-inset: #f7f7f9;
-  --bg-canvas: #ffffff;
+  --bg-base: #faf3ec;
+  --bg-elevated: #faf3ec;
+  --bg-raised: #f3e7dc;
+  --bg-inset: #f6ede4;
+  --bg-canvas: #faf3ec;
 
-  --text-primary: #1d1d1f;
-  --text-secondary: #55555a;
-  /* #7c7c81 在白底上只有 4.15:1，压深到 5.0:1 左右 */
-  --text-tertiary: #6e6e73;
-  --text-quaternary: #86868b;
+  /* 全站唯一一块饱和面：首页板块索引那条整幅肉色带。
+     它存在的理由是「八个板块需要一条把它们绑在一起的地」，
+     不是给页面加装饰 —— 所以整站只有这一处用到它。 */
+  --flesh: #f1ded0;
 
-  --material-hover: rgba(0, 0, 0, 0.045);
-  --material-active: rgba(0, 0, 0, 0.08);
-  --material-sunken: rgba(0, 0, 0, 0.04);
+  --text-primary: #2a1b14;
+  --text-secondary: #6b544a;
+  /* 三级会落在肉色带（#f1ded0）上，所以按那块底复核：
+     #75604f 在带上是 4.54:1，再浅一档就掉到 4.40。 */
+  --text-tertiary: #75604f;
+  --text-quaternary: #8a7568;
 
-  --separator: rgba(0, 0, 0, 0.085);
-  --separator-strong: rgba(0, 0, 0, 0.14);
-  --border-control: rgba(0, 0, 0, 0.13);
-  --border-input: rgba(0, 0, 0, 0.1);
+  --material-hover: rgba(42, 27, 20, 0.045);
+  --material-active: rgba(42, 27, 20, 0.08);
+  --material-sunken: rgba(42, 27, 20, 0.04);
 
-  /* 浅色下 #0071e3 在白字上 4.70:1，已经够用，填充与文字共用即可 */
-  --accent-fill: #0071e3;
-  --accent-fill-hover: #0a7ff0;
-  --accent-fill-pressed: #0059b3;
-  --accent: #0071e3;
-  --accent-hover: #0059b3;
-  --accent-pressed: #004a99;
-  --accent-soft: rgba(0, 113, 227, 0.12);
-  --accent-ring: rgba(0, 113, 227, 0.32);
+  /* 分隔线用暖墨（42,27,20）而不是中性黑：压在肉色底上不会发灰。 */
+  --separator: rgba(42, 27, 20, 0.1);
+  --separator-strong: rgba(42, 27, 20, 0.18);
+  --border-control: rgba(42, 27, 20, 0.14);
+  --border-input: rgba(42, 27, 20, 0.11);
 
-  --green: #1f7a34;
-  --green-soft: rgba(31, 122, 52, 0.12);
-  --orange: #b32d00;
-  --orange-soft: rgba(179, 45, 0, 0.11);
-  --red: #c20012;
-  --red-soft: rgba(194, 0, 18, 0.1);
-  --purple: #7a3b99;
-  --purple-soft: rgba(122, 59, 153, 0.11);
-  --teal: #00678f;
-  --teal-soft: rgba(0, 103, 143, 0.11);
+  /* 文字用的 --accent 压到 #9e3b1e：在底色上 6.16:1，在肉色带上 5.20:1 ——
+     链接和板块序号两种底都会落，取更严的那一端。
+     填充用的 --accent-fill 保持 #b24a28，白字压上去 5.38:1。 */
+  --accent-fill: #b24a28;
+  --accent-fill-hover: #c2562f;
+  --accent-fill-pressed: #8f3517;
+  --accent: #9e3b1e;
+  --accent-hover: #7e2e16;
+  --accent-pressed: #66240f;
+  --accent-soft: rgba(158, 59, 30, 0.1);
+  --accent-ring: rgba(158, 59, 30, 0.32);
+
+  /* 语义色同样按肉色带复核过，最低 4.80:1（绿）。 */
+  --green: #3f6b2e;
+  --green-soft: rgba(63, 107, 46, 0.12);
+  --orange: #8f4415;
+  --orange-soft: rgba(143, 68, 21, 0.11);
+  --red: #a3231c;
+  --red-soft: rgba(163, 35, 28, 0.1);
+  --purple: #6e3a6b;
+  --purple-soft: rgba(110, 58, 107, 0.11);
+  --teal: #1f5f5b;
+  --teal-soft: rgba(31, 95, 91, 0.11);
+
+  /* 浅色下的暖色梯：01 最浅（几乎就是肉色本身），08 最深（陶土）。
+     方向与深色相反，但两端各自单调 —— 切主题时「越往下越靠后」的读法不变。 */
+  --ramp-1: #e8b79c;
+  --ramp-2: #dfa383;
+  --ramp-3: #d48e6c;
+  --ramp-4: #c7785a;
+  --ramp-5: #b96348;
+  --ramp-6: #a94f38;
+  --ramp-7: #96422e;
+  --ramp-8: #7e3524;
+
+  --ramp-ink-1: #3a2318;
+  --ramp-ink-2: #3a2318;
+  --ramp-ink-3: #3a2318;
+  --ramp-ink-4: #3a2318;
+  --ramp-ink-5: #fdf2ea;
+  --ramp-ink-6: #fdf2ea;
+  --ramp-ink-7: #fdf2ea;
+  --ramp-ink-8: #fdf2ea;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.07);
   --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.1);
@@ -229,8 +326,8 @@ html {
 
 body {
   font-family: var(--font-sans);
-  font-size: var(--fs-15);
-  line-height: 1.6;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: var(--bg-base);
@@ -333,6 +430,15 @@ button {
 
 /* ==========================================================================
    03. 排版
+   --------------------------------------------------------------------------
+   标题全部改用衬线（--font-serif）。这是整站气质的分水岭：无衬线大标题
+   到处都是，衬线大标题才像「有人编辑过」。
+
+   衬线的两个坑，这里都处理了：
+   1) 中文宋体在小字号下笔画会糊，所以衬线只用于 20px 以上的标题，
+      正文与小标题保持无衬线。
+   2) 衬线字的字面比无衬线窄、笔画更细，同样字号看起来更轻，所以
+      字重要提到 600/700，并用负字距把中西文拉紧。
    ========================================================================== */
 h1,
 h2,
@@ -340,10 +446,18 @@ h3,
 h4,
 h5,
 h6 {
+  font-family: var(--font-serif);
   font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+  line-height: var(--lh-tight);
+  letter-spacing: 0.01em;
   color: var(--text-primary);
+}
+
+/* 中文衬线不需要西文那样强的负字距；这里只对标题里的西文生效感更自然，
+   统一用 0.01em 的中性值，避免中西混排时挤在一起。 */
+h1,
+h2 {
+  letter-spacing: 0;
 }
 
 .text-muted {
@@ -360,12 +474,18 @@ h6 {
   font-weight: 600;
 }
 
+/* 小标签：原来是小号无衬线灰字，现在改成等宽大写，像印刷品的栏目标记。
+   等宽 + letter-spacing 让它读起来是「标注」而不是「正文」，这正是
+   技术编辑风的用法。 */
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
+  font-family: var(--font-mono);
   font-size: var(--fs-11);
-  font-weight: 600;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-tertiary);
   margin-bottom: var(--s-2);
 }
@@ -377,37 +497,55 @@ h6 {
 
 .subtitle {
   color: var(--text-secondary);
-  font-size: var(--fs-15);
+  font-size: var(--fs-17);
+  line-height: 1.65;
 }
 
 /* ==========================================================================
    04. 布局
+   --------------------------------------------------------------------------
+   全站一个容器宽度：1100px。比旧版 1080 略宽，但真正的变化是左右留白
+   改为随视口增长（padding-inline 用 clamp），窄屏不挤、宽屏不散。
    ========================================================================== */
 .wrap {
   width: 100%;
   max-width: var(--wrap);
   margin-inline: auto;
-  padding-inline: var(--s-6);
+  padding-inline: clamp(var(--s-4), 4vw, var(--s-8));
 }
 
 .wrap-narrow {
   width: 100%;
   max-width: var(--wrap-narrow);
   margin-inline: auto;
-  padding-inline: var(--s-6);
+  padding-inline: clamp(var(--s-4), 4vw, var(--s-8));
 }
 
-/* 区块间距大幅压缩：原版 96px 一屏看不到几样东西 */
+/* 区块间距：旧版 32px，区块之间几乎贴在一起。参考站（leerob / paco）
+   的呼吸感来自「区块之间远大于区块内部」，所以拉到 56–72px，
+   内部间距（16–24px）保持不变，靠两者之比建立节奏。 */
 .section {
-  padding-block: var(--s-8);
+  padding-block: clamp(var(--s-10), 6vw, 72px);
 }
 
 .section-tight {
-  padding-block: var(--s-6);
+  padding-block: clamp(var(--s-8), 4vw, var(--s-12));
 }
 
+/* 旧版每个区块都画一条通栏分隔线，整页像表格。现在只有「紧邻的两个
+   区块」之间才画，而且线不拉满容器 —— 收到内容宽度，像编辑标记。 */
 .section + .section {
   border-top: 1px solid var(--separator);
+}
+
+.section-tight + .section-tight {
+  border-top: 1px solid var(--separator);
+}
+
+/* 通栏色带：底色铺满视口宽度，内容照旧走里面的 .wrap。
+   全站只用一次（首页的 .band--flesh）—— 它是签名，不是通用组件。 */
+.band--flesh {
+  background: var(--flesh);
 }
 
 .grid {
@@ -473,6 +611,13 @@ h6 {
 
 /* ==========================================================================
    05. 顶栏
+   --------------------------------------------------------------------------
+   旧版顶栏塞了 10 个带图标的一级入口 + 搜索 + 主题切换，52px 高、字 13px，
+   一排挤满 —— 这是「像后台」最直接的来源。这里做三件事：
+   1) 高度放到 60px，导航字降到只保留字重差异，去掉图标（10 个图标在
+      一排里只会变成噪点，而不是导航）。
+   2) 导航靠右、与品牌拉满距离，中间留白本身就成了分隔。
+   3) 底边不发散：不用通栏实线，改成滚动时才出现的一条极淡的线。
    ========================================================================== */
 .topbar {
   position: sticky;
@@ -482,7 +627,14 @@ h6 {
   display: flex;
   align-items: center;
   background: var(--bg-base);
-  border-bottom: 1px solid var(--separator);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur);
+}
+
+/* 只有页面滚动后才画出底边：静止时顶栏和内容是融为一体的，
+   滚动时线才出现，告诉用户「这是一层浮在上面的东西」。 */
+.topbar.is-stuck {
+  border-bottom-color: var(--separator);
 }
 
 /* 浅色主题下的吸顶导航用一层极轻的毛玻璃，这是 macOS 工具栏的常规做法
@@ -490,27 +642,36 @@ h6 {
    内容从下面穿过时能看出层级，又不会像深色玻璃拟态那样抢戏。
    深色主题下顶栏是纯色，不做任何模糊。 */
 html[data-theme="light"] .topbar {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: saturate(160%) blur(12px);
-  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  background: rgba(250, 243, 236, 0.85);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+}
+
+html[data-theme="dark"] .topbar {
+  background: rgba(23, 18, 16, 0.88);
+  backdrop-filter: saturate(180%) blur(14px);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
 }
 
 .topbar__inner {
   display: flex;
   align-items: center;
-  gap: var(--s-5);
+  gap: var(--s-6);
   width: 100%;
   min-width: 0;
 }
 
+/* 品牌用衬线，和标题同一套语气；S 方块换成纯文字，少一个色块 */
 .brand {
   display: inline-flex;
-  align-items: center;
-  gap: var(--s-2);
+  align-items: baseline;
+  gap: 7px;
   flex-shrink: 0;
   color: var(--text-primary);
-  font-weight: 600;
-  font-size: var(--fs-15);
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: var(--fs-17);
+  letter-spacing: 0;
 }
 
 .brand:hover {
@@ -518,26 +679,20 @@ html[data-theme="light"] .topbar {
 }
 
 .brand__mark {
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: var(--r-sm);
-  background: var(--accent-fill);
-  color: #fff;
-  font-size: var(--fs-13);
-  font-weight: 600;
-  flex-shrink: 0;
+  display: none;
 }
 
 .brand__text {
   white-space: nowrap;
 }
 
+/* 导航：去掉图标，只留文字。10 个入口带 10 个图标时，图标之间没有
+   语义差别（都是细线方形），只会把一排挤成噪点。字距和字重接管层级：
+   当前项用 --text-primary + 一条下划线，其余用次级色。 */
 .nav {
   display: flex;
   align-items: center;
-  gap: var(--s-1);
+  gap: 2px;
   margin-left: auto;
   min-width: 0;
 }
@@ -545,32 +700,49 @@ html[data-theme="light"] .topbar {
 .nav a {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 30px;
-  padding: 0 9px;
+  height: 32px;
+  padding: 0 10px;
   border-radius: var(--r-sm);
   color: var(--text-secondary);
   font-size: var(--fs-13);
   font-weight: 500;
   white-space: nowrap;
-  transition: background var(--dur-fast), color var(--dur-fast);
+  transition: color var(--dur-fast);
 }
 
 .nav a:hover {
-  background: var(--material-hover);
+  background: transparent;
   color: var(--text-primary);
 }
 
 .nav a.current,
 .nav a[aria-current="page"] {
   color: var(--text-primary);
-  background: var(--material-hover);
+  background: transparent;
+  font-weight: 600;
 }
 
-.nav__icon {
-  width: 15px;
-  height: 15px;
-  color: var(--text-tertiary);
+/* 当前项的下划线。用一条 14px 的短线而不是整块底色 —— 底色会把
+   导航条切成一段段色块，线只指认位置，不制造第二个「面」。 */
+.nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  width: 14px;
+  height: 1.5px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+
+.nav a[aria-current="page"] {
+  position: relative;
+}
+
+/* 抽屉里仍需要图标做分组辨识，所以只隐藏「顶栏那一排」里的图标。
+   裸写 .nav__icon 会连抽屉一起关掉 —— 抽屉复用同一个类名，
+   必须带 .topbar 作用域限定。 */
+.topbar .nav__icon {
+  display: none;
 }
 
 .topbar__actions {
@@ -820,26 +992,33 @@ html:not([data-theme="light"]) .theme-toggle .i-moon {
 
 /* ==========================================================================
    07. 卡片
+   --------------------------------------------------------------------------
+   旧版卡片 = 描边 + 底色 + 圆角，而且全站每个块都是卡片，于是整页变成
+   一张密密麻麻的网格线 —— 这是「像后台管理系统」的根因。
+
+   新版只做一件事：卡片不再描边，只保留极淡的底色。
+   底色比描边弱得多，同一屏里放十几个也不会互相打架；需要强调时
+   （.card--glow）才补一条左侧竖线。空白与排版负责分组，卡片只负责
+   「这几行属于一起」。
    ========================================================================== */
 .card {
   display: flex;
   flex-direction: column;
   padding: var(--s-5);
   border-radius: var(--r-lg);
-  border: 1px solid var(--separator);
-  background: var(--bg-elevated);
+  border: 0;
+  background: var(--bg-inset);
 }
 
 html[data-theme="light"] .card {
-  border-color: var(--separator);
+  border-color: transparent;
 }
 
 .card--hover {
-  transition: border-color var(--dur-fast), background var(--dur-fast);
+  transition: background var(--dur-fast);
 }
 
 .card--hover:hover {
-  border-color: var(--separator-strong);
   background: var(--bg-raised);
 }
 
@@ -851,26 +1030,29 @@ html[data-theme="light"] .card {
   color: inherit;
 }
 
-/* 原来这里是渐变描边，改成左侧蓝色竖条表示强调 */
+/* 强调卡：左侧竖线。比整卡换色克制，也确实起到了「标记这一条」的作用 */
 .card--glow {
   border-left: 3px solid var(--accent);
+  border-radius: 0 var(--r-lg) var(--r-lg) 0;
 }
 
 .card__head {
   display: flex;
   align-items: center;
   gap: var(--s-2);
-  margin-bottom: var(--s-2);
+  margin-bottom: var(--s-3);
 }
 
+/* 卡片图标底色去掉：一页十几个淡色方块，除了噪声没有别的作用。
+   只保留图标本身的颜色。 */
 .card__icon {
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
-  border-radius: var(--r-sm);
-  background: var(--material-hover);
-  color: var(--text-secondary);
+  width: 20px;
+  height: 20px;
+  border-radius: 0;
+  background: none;
+  color: var(--accent);
   flex-shrink: 0;
 }
 
@@ -879,18 +1061,21 @@ html[data-theme="light"] .card {
   height: 16px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.6;
+  stroke-width: 1.7;
 }
 
+/* 卡片标题用衬线，和区块标题同一套语气 */
 .card__title {
-  font-size: var(--fs-15);
+  font-family: var(--font-serif);
+  font-size: var(--fs-17);
   font-weight: 600;
+  line-height: 1.4;
 }
 
 .card__desc {
   color: var(--text-secondary);
   font-size: var(--fs-13);
-  line-height: 1.55;
+  line-height: 1.7;
   flex: 1;
 }
 
@@ -900,23 +1085,26 @@ html[data-theme="light"] .card {
   justify-content: space-between;
   gap: var(--s-2);
   margin-top: auto;
-  padding-top: var(--s-2);
+  padding-top: var(--s-3);
 }
 
-/* 统计卡 */
+/* 统计卡：去掉盒子，只留数字 + 标签，四项之间靠间距分组 */
 .stat-card {
-  padding: var(--s-4);
-  border-radius: var(--r-lg);
-  border: 1px solid var(--separator);
-  background: var(--bg-elevated);
+  padding: 0;
+  border-radius: 0;
+  border: 0;
+  background: none;
 }
 
+/* 数字用等宽衬线大字，读起来像报表里的关键值 */
 .stat-card__num {
   display: block;
-  font-size: var(--fs-24);
+  font-family: var(--font-serif);
+  font-size: var(--fs-28);
   font-weight: 600;
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
+  color: var(--text-primary);
 }
 
 .stat-card__label {
@@ -1150,18 +1338,79 @@ html[data-theme="light"] .card {
 }
 
 /* ==========================================================================
-   09. 页头 Hero
+   09. 报头（首页）+ 内页页头
    --------------------------------------------------------------------------
-   首页首屏恢复成「大片」：home-bg.jpg 全宽打底、压一层遮罩、口号用大字
-   压在图上 —— 这是旧站（Hux Blog）的做法，也是之前一路删装饰时被削掉的
-   那部分视觉重量。
+   首页首屏（.masthead）不再用背景图，整块由排版构成 —— 理由见
+   index.html 顶部注释。这里只讲间距怎么定的：
 
-   克制仍在：只动首屏。图片之上不放任何花哨效果，没有渐变文字、没有光晕、
-   没有滚动动画；下面所有板块、卡片、列表维持原样。遮罩是必需的，不是装饰
-   —— 没有它，白色大字压在亮部会直接掉到可读性线以下。
+   标语上下各留一大段空白（clamp 40–88px），让它在首屏里是孤立的、
+   唯一的重音。参考站（leerob / paco / pedro）的首屏共同点就是这个 ——
+   一屏基本只讲一件事，其余全是留白。
 
-   深色模式把图压暗并降饱和，避免一张偏亮的照片和整站暗色底打架；
-   浅色模式用原图。
+   内页仍保留 .hero--compact（带底图的标题区），但压得更矮、更克制。
+   ========================================================================== */
+.masthead {
+  padding-block: clamp(48px, 9vw, 104px) clamp(32px, 5vw, 56px);
+}
+
+/* 栏目标记：等宽大写小字，像杂志的栏目名 */
+.masthead__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: clamp(var(--s-5), 3vw, var(--s-8));
+}
+
+/* 整页唯一的大字。衬线 + 700，行高压到 1.16，
+   中文大字行距放松会散，收紧才成块。
+
+   max-width 取 24ch、字号上限 5vw：20ch + 5.4vw 时，1440px 下标题会折成
+   三行、最后一行只剩「东西。」两个字 —— 中文的孤儿行比西文明显得多，
+   因为一个「词」可能只有两个字，断在哪里都很显眼。放宽一档并用
+   text-wrap:balance 让浏览器均分两行，这个孤儿就消失了。 */
+.masthead__title {
+  font-family: var(--font-serif);
+  font-size: clamp(30px, 5vw, var(--fs-52));
+  font-weight: 700;
+  line-height: 1.16;
+  letter-spacing: 0.01em;
+  max-width: 24ch;
+  text-wrap: balance;
+  margin-bottom: clamp(var(--s-5), 3vw, var(--s-6));
+}
+
+.masthead__lede {
+  font-size: var(--fs-17);
+  line-height: 1.75;
+  color: var(--text-secondary);
+  max-width: 52ch;
+}
+
+/* 出版信息：等宽小字 + 顶部细线，四项之间用「·」而不是分隔线，
+   避免又变成一排小盒子。 */
+.masthead__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-5);
+  margin-top: clamp(var(--s-6), 4vw, var(--s-10));
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--separator);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.masthead__meta b {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   09b. 内页页头 Hero
    ========================================================================== */
 .hero {
   position: relative;
@@ -1230,10 +1479,10 @@ div.hero__bg {
      现在改成一道从底部升起的渐变，背景在顶部完全通透。 */
   background: linear-gradient(
     to top,
-    rgba(8, 10, 14, 0.86) 0%,
-    rgba(8, 10, 14, 0.58) 38%,
-    rgba(8, 10, 14, 0.16) 72%,
-    rgba(8, 10, 14, 0) 100%
+    rgba(28, 14, 8, 0.86) 0%,
+    rgba(28, 14, 8, 0.58) 38%,
+    rgba(28, 14, 8, 0.16) 72%,
+    rgba(28, 14, 8, 0) 100%
   );
 }
 
@@ -1245,10 +1494,10 @@ div.hero__bg {
 html[data-theme="light"] .hero--banner .hero__scrim {
   background: linear-gradient(
     to top,
-    rgba(10, 14, 22, 0.82) 0%,
-    rgba(10, 14, 22, 0.52) 42%,
-    rgba(10, 14, 22, 0.14) 74%,
-    rgba(10, 14, 22, 0) 100%
+    rgba(28, 16, 10, 0.82) 0%,
+    rgba(28, 16, 10, 0.52) 42%,
+    rgba(28, 16, 10, 0.14) 74%,
+    rgba(28, 16, 10, 0) 100%
   );
 }
 
@@ -1260,9 +1509,9 @@ html[data-theme="light"] .hero--banner .hero__scrim {
 .hero--compact.has-bg .hero__scrim {
   background: linear-gradient(
     to top,
-    rgba(8, 10, 14, 0.74) 0%,
-    rgba(8, 10, 14, 0.66) 55%,
-    rgba(8, 10, 14, 0.62) 100%
+    rgba(28, 14, 8, 0.74) 0%,
+    rgba(28, 14, 8, 0.66) 55%,
+    rgba(28, 14, 8, 0.62) 100%
   );
 }
 
@@ -1651,206 +1900,277 @@ html[data-theme="light"] .hero--banner .hero__scrim {
 
 /* ==========================================================================
    10. 区块标题
+   --------------------------------------------------------------------------
+   旧版：标题 20px + 右侧说明 + 一条通栏底线。三个元素挤在一行、又被线
+   压住，读起来像设置面板的分组标题。
+
+   新版改用「栏目头」的排法：
+     · 标题放大到 24px 并换衬线，真正成为一节的开始
+     · 说明从「右侧对齐的灰字」改成「标题下面独立一行的导语」——
+       中文右对齐的短句非常难读，而且和标题基线对齐会左右打架
+     · 底线只留标题下方一小段（用 ::after 画），不是通栏 —— 通栏线会
+       把每一节切成表格行；短横线只标记「这一节从这里开始」
    ========================================================================== */
-/*
- * 区块标题是「让用户注意的内容」，所以要醒目：比正文大两档、加粗、
- * 色值拉到最亮。说明文字退到次级色，形成明确的层级，不跟标题抢。
- */
 .sec-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--s-4);
-  margin-bottom: var(--s-4);
-  padding-bottom: var(--s-2);
-  border-bottom: 1px solid var(--separator);
+  display: block;
+  margin-bottom: clamp(var(--s-5), 3vw, var(--s-8));
 }
 
 .sec-head__title {
-  font-size: var(--fs-20);
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: var(--fs-24);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
   color: var(--text-primary);
-  flex-shrink: 0;
+  padding-bottom: var(--s-3);
+  position: relative;
+}
+
+/* 标题下的短横线：宽度跟着文字走（max-content 由 inline-block 决定），
+   所以长标题有线、短标题也有线，看起来是「标了重点」而不是「画了边框」。 */
+.sec-head__title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
 }
 
 .sec-head__desc {
-  color: var(--text-tertiary);
-  font-size: var(--fs-13);
-  flex: 1;
-  min-width: 0;
-  text-align: right;
+  display: block;
+  color: var(--text-secondary);
+  font-size: var(--fs-15);
+  line-height: 1.7;
+  max-width: 60ch;
+  margin-top: var(--s-3);
+  text-align: left;
 }
 
-/* 分组标题（工具箱 / 收藏夹）：标题前带一个小图标方块 */
+/* 分组标题（工具箱 / 收藏夹）：图标方块去掉，改用左侧短竖条标记分组，
+   避免一页里出现十几个彩色方块。 */
 .sec-head--icon .sec-head__title {
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
+  display: inline-block;
+  padding-left: var(--s-4);
+}
+
+.sec-head--icon .sec-head__title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.25em;
+  width: 3px;
+  height: 1em;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.sec-head--icon .sec-head__title::after {
+  left: var(--s-4);
 }
 
 .sec-head__icon {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--r-md);
-  background: var(--material-hover);
-  color: var(--accent);
-  flex-shrink: 0;
-}
-
-.sec-head__icon svg {
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
+  display: none;
 }
 
 /* 分组之间拉开距离，让「分类」这件事一眼可辨 */
 .section-tight > .sec-head {
-  margin-bottom: var(--s-4);
+  margin-bottom: clamp(var(--s-5), 3vw, var(--s-8));
 }
 
 /* ==========================================================================
-   11. 首页板块导航
+   11. 首页板块索引 —— 全站唯一的「肉色带」
    --------------------------------------------------------------------------
-   7 张带底色的卡片，2 列布局。比最早的 333×172 三列大卡紧凑得多
-   （现在约 500×92），但保留图标、名称、数量、一句话说明——卡片本身
-   是「一眼扫完 7 个入口」的控件，所以留底色和描边来分组，
-   不做渐变/光晕/玻璃拟态那类装饰。
+   这一块是整站的签名。八个板块需要一条把它们绑在一起的地，所以整幅铺一层
+   肉色（--flesh），左右通栏、上下留足空白 —— 全站只有这一处用饱和面，
+   其余地方一律是底色加细线。饱和面是稀缺资源，用第二次就不再是签名。
+
+   行本身仍是索引：无盒子、无圆角，靠横线切行，左侧等宽序号 01–08。
+   变化在右侧那块色标 —— 八行依次取暖色梯的一级（--ramp-1 … --ramp-8），
+   从肉色一路走到陶土。它替换掉原来的八张示意图：示意图是「假截图」，
+   信息量是零；色标至少和序号讲的是同一件事 —— 顺序。
+
+   带子用 .band--flesh 包住 .wrap，所以底色通栏、内容仍受 1100px 约束。
    ========================================================================== */
 .module-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--s-3);
+  border-top: 1px solid var(--separator);
 }
 
-/* --------------------------------------------------------------------------
-   首页板块行
-   --------------------------------------------------------------------------
-   一行一个板块：左边名称 + 数量 + 说明，右边一张配图。
-
-   为什么从「两列小卡」改成「单列横排」：八个入口排成两列时每张只有约
-   500×92，配图放不下，只能塞一个 40px 图标；要求是「左边名称右边配图」。
-   改成整行之后图片按 8:5 有 168px 宽，一行也能同时讲清名称、数量和说明。
-
-   配图用 aspect-ratio 而不是写死高度，换图时不用同步改 CSS。
-   -------------------------------------------------------------------------- */
 .module {
   display: flex;
   align-items: center;
   gap: var(--s-5);
-  padding: var(--s-4) var(--s-5);
-  border: 1px solid var(--separator);
-  border-radius: var(--r-lg);
-  background: var(--bg-elevated);
+  padding: var(--s-5) var(--s-2);
+  border-bottom: 1px solid var(--separator);
+  border-radius: 0;
+  background: none;
   color: var(--text-primary);
-  transition: background var(--dur-fast), border-color var(--dur-fast);
+  transition: background var(--dur-fast);
 }
 
+/* hover 只用一层极淡的底色，不做位移、不换描边 —— 行列表里位移会让
+   整列跳动，反而显得廉价。 */
 .module:hover {
-  background: var(--bg-raised);
-  border-color: var(--separator-strong);
+  background: var(--material-hover);
   color: var(--text-primary);
 }
 
-/* 图在右。整行是一个链接，图只是这条链接的一部分，
-   不给它单独的 hover 效果，避免出现两个热区。 */
+/* 序号：等宽，固定在左侧，宽度写死让所有行的名称左边缘对齐。
+   01–08 是真实的分区顺序，不是装饰性编号。
+   颜色取 --text-tertiary 而不是 --text-quaternary：后者按本设计系统的
+   约定只用于装饰元素，而序号是内容（读屏会念出来），必须达到正文对比度。 */
+.module__num {
+  flex-shrink: 0;
+  width: 2.2em;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--dur-fast);
+}
+
+.module:hover .module__num {
+  color: var(--accent);
+}
+
+/* 色标块：一格实色，取本行自己的梯级（--ramp），中间一个线性图标，
+   墨色取 --ramp-ink —— 梯子中段明暗翻转，所以 01–04 深墨、05–08 浅墨，
+   两套主题各自把值给好了，这里不需要任何判断。
+   尺寸沿用原来的 88×55：它是色标，不是配图，不参与阅读。 */
 .module__thumb {
   flex-shrink: 0;
-  width: 168px;
+  display: grid;
+  place-items: center;
+  width: 88px;
   aspect-ratio: 8 / 5;
-  border-radius: var(--r-md);
-  overflow: hidden;
-  border: 1px solid var(--separator);
-  background: var(--bg-inset);
+  border-radius: var(--r-sm);
+  background: var(--ramp);
+  color: var(--ramp-ink);
+  transition: transform var(--dur-fast);
 }
 
-.module__thumb img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.module__thumb svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* hover 时色标轻轻放大 —— 和行尾淡入的箭头一起构成「整行可点」的提示。
+   不做位移：行列表里位移会让整列跳动，反而显得廉价。 */
+.module:hover .module__thumb {
+  transform: scale(1.06);
 }
 
 .module__body {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   min-width: 0;
   flex: 1;
 }
 
 .module__head {
   display: flex;
-  align-items: center;
-  gap: var(--s-2);
+  align-items: baseline;
+  gap: var(--s-3);
 }
 
+/* 名称回到衬线 —— 和页面标题同一套语气，整站才是一个声音 */
 .module__name {
+  font-family: var(--font-serif);
   font-size: var(--fs-17);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
 }
 
+/* 计数从「胶囊」改成等宽小字。胶囊会凭空多出八个色块，
+   等宽小字只是安静地提供一个数字。 */
 .module__count {
-  padding: 1px 7px;
-  border-radius: var(--r-full);
-  background: var(--material-hover);
-  font-size: var(--fs-11);
-  font-weight: 500;
-  color: var(--text-secondary);
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 400;
+  color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .module__desc {
-  font-size: var(--fs-12);
+  font-size: var(--fs-13);
   color: var(--text-secondary);
-  line-height: 1.45;
+  line-height: 1.6;
 }
 
-/* 每个板块一个色调：只设两个变量，图标与底色都取它 */
+/* 行尾的箭头：静止时不可见，hover 时淡入并右移。
+   这是唯一的动效，用来确认「整行可点」。 */
+.module::after {
+  content: "";
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity var(--dur-fast), transform var(--dur-fast);
+  background: currentColor;
+  color: var(--accent);
+  -webkit-mask: var(--arrow-mask) center / contain no-repeat;
+  mask: var(--arrow-mask) center / contain no-repeat;
+}
+
+.module:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 八个板块 = 暖色梯的八级。
+   这里只设两个变量，色标块的底和图标墨色都取它 —— 两套主题各自在
+   --ramp-N / --ramp-ink-N 里定义过，所以主题切换不用在这里再写一遍。
+   梯级和「01–08」的分区顺序绑定：颜色本身在复述顺序，这是信息不是装饰。 */
 .module--blog {
-  --tint: var(--accent);
-  --tint-soft: var(--accent-soft);
+  --ramp: var(--ramp-1);
+  --ramp-ink: var(--ramp-ink-1);
 }
 
 .module--soft {
-  --tint: var(--green);
-  --tint-soft: var(--green-soft);
+  --ramp: var(--ramp-2);
+  --ramp-ink: var(--ramp-ink-2);
 }
 
 .module--drive {
-  --tint: var(--teal);
-  --tint-soft: var(--teal-soft);
+  --ramp: var(--ramp-3);
+  --ramp-ink: var(--ramp-ink-3);
 }
 
 .module--download {
-  --tint: var(--orange);
-  --tint-soft: var(--orange-soft);
+  --ramp: var(--ramp-4);
+  --ramp-ink: var(--ramp-ink-4);
 }
 
 .module--projects {
-  --tint: var(--purple);
-  --tint-soft: var(--purple-soft);
+  --ramp: var(--ramp-5);
+  --ramp-ink: var(--ramp-ink-5);
 }
 
 .module--pentest {
-  --tint: var(--red);
-  --tint-soft: var(--red-soft);
+  --ramp: var(--ramp-6);
+  --ramp-ink: var(--ramp-ink-6);
 }
 
 .module--toolbox {
-  --tint: var(--accent);
-  --tint-soft: var(--accent-soft);
+  --ramp: var(--ramp-7);
+  --ramp-ink: var(--ramp-ink-7);
 }
 
 .module--bookmarks {
-  --tint: var(--orange);
-  --tint-soft: var(--orange-soft);
+  --ramp: var(--ramp-8);
+  --ramp-ink: var(--ramp-ink-8);
 }
 
 /* 模块数是偶数（8 个），正好铺满 2 列；如果将来增删成奇数，
@@ -1872,15 +2192,14 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   flex-direction: column;
   gap: var(--s-2);
   padding: var(--s-4);
-  border: 1px solid var(--separator);
+  border: 0;
   border-radius: var(--r-lg);
-  background: var(--bg-elevated);
-  transition: background var(--dur-fast), border-color var(--dur-fast);
+  background: var(--bg-inset);
+  transition: background var(--dur-fast);
 }
 
 .pentest-card:hover {
   background: var(--bg-raised);
-  border-color: var(--separator-strong);
 }
 
 .pentest-card__head {
@@ -2039,13 +2358,19 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   display: block;
 }
 
-/* 文章列表里的一行缩略图（首页 + 博客页都用） */
+/* 文章列表里的一行缩略图（首页 + 博客页都用）
+   img/preview/*.svg 是 640x360 的界面示意图，图里带文字，原来只有
+   72x44，缩到看不清，等于白占一块位置。现在按 16:9 给到 152px 宽
+   （约 86px 高）：行内文字本来就约 93px 高（标题 + 副标题 + 两行摘要），
+   所以放大之后并不会把行撑高，是「白捡」的。 */
+/* 缩略图去掉描边 —— 一张图本身就是一块内容，再框一圈只是多一条线。
+   圆角保留在图上（overflow:hidden 负责裁切）。 */
 .post-row__thumb {
   flex-shrink: 0;
-  width: 72px;
-  height: 44px;
-  border-radius: var(--r-sm);
-  border: 1px solid var(--separator);
+  width: 152px;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-md);
+  border: 0;
   overflow: hidden;
   background: var(--bg-inset);
 }
@@ -2066,6 +2391,12 @@ html[data-theme="light"] .hero--banner .hero__scrim {
 /* ==========================================================================   12. 文章卡片
    --------------------------------------------------------------------------
    首页「最新文章」用 .post-list，博客页用 .post-list--rich。
+
+   行标题改用衬线。文章列表是整个站点出现次数最多的元素，它的字体决定
+   了访客对「这个站是什么气质」的判断 —— 无衬线 15px 半粗体的文章标题，
+   任何博客模板都是这样；换成衬线之后，列表本身就带上了编辑感。
+
+   日期 / 阅读时长 / 浏览数交给等宽字体，和页头的数据行呼应。
    ========================================================================== */
 .post-list {
   display: grid;
@@ -2084,8 +2415,8 @@ html[data-theme="light"] .hero--banner .hero__scrim {
 .post-row__link {
   display: flex;
   align-items: center;
-  gap: var(--s-4);
-  padding: 12px var(--s-2);
+  gap: var(--s-5);
+  padding: var(--s-5) var(--s-2);
   border-bottom: 1px solid var(--separator);
   color: var(--text-primary);
   transition: background var(--dur-fast);
@@ -2099,34 +2430,43 @@ html[data-theme="light"] .hero--banner .hero__scrim {
 .post-row__main {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 5px;
   min-width: 0;
   flex: 1;
 }
 
+/* 标题用衬线、字重 600、允许两行。
+   旧版强制 nowrap + 省略号，中文标题经常被切在半句话上。 */
 .post-row__title {
-  font-size: var(--fs-15);
+  font-family: var(--font-serif);
+  font-size: var(--fs-17);
   font-weight: 600;
   line-height: 1.45;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .post-row__excerpt {
   font-size: var(--fs-13);
   color: var(--text-tertiary);
-  line-height: 1.5;
+  line-height: 1.6;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* 元信息：等宽 + 制表数字，和页头的数据行同一套写法 */
 .post-row__meta {
   display: flex;
   align-items: center;
   gap: var(--s-2);
   flex-shrink: 0;
+  font-family: var(--font-mono);
   font-size: var(--fs-12);
   color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
@@ -2135,23 +2475,22 @@ html[data-theme="light"] .hero--banner .hero__scrim {
 /* 博客页的加强版行：多一行副标题、摘要允许折到两行、
    标签与日期在右侧竖排。首页那版是一行一篇的极简版。 */
 .post-list--rich .post-row__link {
-  padding: 12px var(--s-2);
+  padding: var(--s-6) var(--s-2);
   align-items: flex-start;
 }
 
 .post-list--rich .post-row__main {
-  gap: 3px;
+  gap: 6px;
 }
 
 .post-list--rich .post-row__title {
-  font-size: var(--fs-17);
-  white-space: normal;
+  font-size: var(--fs-20);
 }
 
 .post-row__sub {
   font-size: var(--fs-13);
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .post-list--rich .post-row__excerpt {
@@ -2161,14 +2500,14 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   line-clamp: 2;
   -webkit-box-orient: vertical;
   font-size: var(--fs-13);
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .post-list--rich .post-row__meta {
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--s-1);
-  padding-top: 2px;
+  gap: var(--s-2);
+  padding-top: 4px;
 }
 
 /* ==========================================================================
@@ -2177,15 +2516,14 @@ html[data-theme="light"] .hero--banner .hero__scrim {
 .soft-card {
   display: flex;
   flex-direction: column;
-  padding: var(--s-4);
+  padding: var(--s-5);
   border-radius: var(--r-lg);
-  border: 1px solid var(--separator);
-  background: var(--bg-elevated);
-  transition: border-color var(--dur-fast), background var(--dur-fast);
+  border: 0;
+  background: var(--bg-inset);
+  transition: background var(--dur-fast);
 }
 
 .soft-card:hover {
-  border-color: var(--separator-strong);
   background: var(--bg-raised);
 }
 
@@ -2293,13 +2631,12 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   flex-direction: column;
   padding: var(--s-5);
   border-radius: var(--r-lg);
-  border: 1px solid var(--separator);
-  background: var(--bg-elevated);
-  transition: border-color var(--dur-fast), background var(--dur-fast);
+  border: 0;
+  background: var(--bg-inset);
+  transition: background var(--dur-fast);
 }
 
 .drive-card:hover {
-  border-color: var(--separator-strong);
   background: var(--bg-raised);
 }
 
@@ -2384,15 +2721,14 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   gap: var(--s-3);
   padding: 9px var(--s-3);
   border-radius: var(--r-md);
-  border: 1px solid var(--separator);
-  background: var(--bg-elevated);
+  border: 0;
+  background: var(--bg-inset);
   color: var(--text-primary);
   min-height: 46px;
   transition: border-color var(--dur-fast), background var(--dur-fast);
 }
 
 .tool-tile:hover {
-  border-color: var(--separator-strong);
   background: var(--bg-raised);
   color: var(--text-primary);
 }
@@ -2429,6 +2765,27 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   font-size: var(--fs-13);
   font-weight: 500;
   line-height: 1.3;
+}
+
+/* 条目右侧的小标记：开源 / 国内 */
+.tool-flag {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 0 5px;
+  border-radius: var(--r-sm);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 15px;
+  vertical-align: 1px;
+}
+
+.tool-flag--cn {
+  border-color: var(--separator-strong);
+  background: var(--material-hover);
+  color: var(--text-tertiary);
 }
 
 .tool-tile__desc {
@@ -2487,14 +2844,13 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   gap: var(--s-3);
   padding: var(--s-4);
   border-radius: var(--r-lg);
-  border: 1px solid var(--separator);
-  background: var(--bg-elevated);
+  border: 0;
+  background: var(--bg-inset);
   color: var(--text-primary);
-  transition: border-color var(--dur-fast), background var(--dur-fast);
+  transition: background var(--dur-fast);
 }
 
 .friend-card:hover {
-  border-color: var(--separator-strong);
   background: var(--bg-raised);
   color: var(--text-primary);
 }
@@ -2629,41 +2985,37 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   background: var(--material-hover);
 }
 
-/* 下载列表 */
+/* 下载列表：去掉外层描边框，改成「顶部一条线 + 每行一条分隔线」的
+   表格式排法。与首页板块索引同一套语言，全站的行列表现在是一致的。 */
 .dl-list {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--separator);
-  border-radius: var(--r-lg);
-  overflow: hidden;
+  border-top: 1px solid var(--separator);
 }
 
 .dl-row {
   display: flex;
   align-items: center;
   gap: var(--s-3);
-  padding: var(--s-3) var(--s-4);
-  background: var(--bg-elevated);
+  padding: var(--s-3) var(--s-2);
+  background: none;
   border-bottom: 1px solid var(--separator);
   min-height: 52px;
 }
 
-.dl-row:last-child {
-  border-bottom: none;
-}
-
 .dl-row:hover {
-  background: var(--bg-raised);
+  background: var(--material-hover);
 }
 
+/* 行图标去掉底色方块，只留图形本身 */
 .dl-row__icon {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: var(--r-sm);
-  background: var(--material-hover);
-  color: var(--text-secondary);
+  width: 20px;
+  height: 20px;
+  border-radius: 0;
+  background: none;
+  color: var(--text-tertiary);
   flex-shrink: 0;
 }
 
@@ -2681,7 +3033,7 @@ html[data-theme="light"] .hero--banner .hero__scrim {
 }
 
 .dl-row__name {
-  font-size: var(--fs-13);
+  font-size: var(--fs-15);
   font-weight: 500;
   color: var(--text-primary);
   overflow: hidden;
@@ -2689,10 +3041,13 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   white-space: nowrap;
 }
 
+/* 体积 / 平台走等宽，和页头数据行呼应 */
 .dl-row__meta {
-  margin-top: 1px;
+  margin-top: 2px;
+  font-family: var(--font-mono);
   font-size: var(--fs-12);
   color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
 }
 
 .dl-row__action {
@@ -2793,40 +3148,53 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   align-items: start;
 }
 
+/* .about-comments 的样式在文件后面的「关于页」一节统一给，
+   这里不再重复定义 —— 同一组选择器出现两次时，后一条会静默覆盖
+   前一条，改样式的人很容易改到不生效的那一份。 */
+
 .post-header {
-  padding-block: var(--s-8) var(--s-5);
-  border-bottom: 1px solid var(--separator);
+  padding-block: clamp(var(--s-8), 5vw, var(--s-12)) var(--s-6);
+  border-bottom: 0;
 }
 
+/* 文章标题：全站最大的字（34px 上限），衬线 + 700。
+   正文页的标题必须比列表页的标题明显更大，读者才知道「我进来了」。 */
 .post-header__title {
-  font-size: var(--fs-28);
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  margin-bottom: var(--s-3);
+  font-family: var(--font-serif);
+  font-size: clamp(var(--fs-24), 3.6vw, var(--fs-34));
+  font-weight: 700;
+  line-height: 1.28;
+  letter-spacing: 0.01em;
+  max-width: 26ch;
+  margin-bottom: var(--s-4);
 }
 
 .post-header__sub {
   color: var(--text-secondary);
   font-size: var(--fs-17);
-  line-height: 1.55;
-  margin-bottom: var(--s-4);
+  line-height: 1.7;
+  max-width: 62ch;
+  margin-bottom: var(--s-5);
 }
 
 .post-header__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  margin-bottom: var(--s-4);
+  margin-bottom: var(--s-5);
 }
 
+/* 文章元信息：等宽，和站内其他地方的数据同一套写法 */
 .post-header__meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--s-3) var(--s-4);
   color: var(--text-tertiary);
+  font-family: var(--font-mono);
   font-size: var(--fs-12);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--separator);
 }
 
 .post-header__meta-item {
@@ -2855,38 +3223,45 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   flex-shrink: 0;
 }
 
-/* 正文：阅读为主，行宽与行距是关键 */
+/* 正文：阅读为主，行宽与行距是关键。
+   17px / 1.8 / 最大 68ch —— 中文长文的舒适区比西文窄一点，
+   超过 70ch 视线回扫就开始丢行。 */
 .post-content {
   font-size: var(--fs-17);
-  line-height: 1.75;
+  line-height: 1.8;
   color: var(--text-primary);
-  padding-block: var(--s-6);
-  max-width: 72ch;
+  padding-block: var(--s-8);
+  max-width: 68ch;
 }
 
 .post-content > * + * {
   margin-top: var(--s-4);
 }
 
+/* 正文 h2/h3 用衬线，和文章标题连成一条线。
+   h2 去掉通栏底线（又一条「表格线」），改用顶部留白来分段 ——
+   长文里段落之间的空白比一条线更能说明「新的一节开始了」。 */
 .post-content h2 {
+  font-family: var(--font-serif);
   font-size: var(--fs-24);
   font-weight: 600;
-  letter-spacing: -0.01em;
-  margin-top: var(--s-10);
-  padding-bottom: var(--s-2);
-  border-bottom: 1px solid var(--separator);
+  letter-spacing: 0.01em;
+  margin-top: clamp(var(--s-10), 6vw, 56px);
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 
 .post-content h3 {
+  font-family: var(--font-serif);
   font-size: var(--fs-20);
   font-weight: 600;
-  margin-top: var(--s-8);
+  margin-top: var(--s-10);
 }
 
 .post-content h4 {
   font-size: var(--fs-17);
   font-weight: 600;
-  margin-top: var(--s-6);
+  margin-top: var(--s-8);
 }
 
 .post-content p {
@@ -3497,7 +3872,7 @@ html[data-theme="light"] .hero--banner .hero__scrim {
 .pin-btn.is-pinned {
   color: var(--orange);
   border-color: var(--orange);
-  background: rgba(255, 159, 10, 0.14);
+  background: var(--orange-soft);
 }
 
 .pin-btn.is-pinned svg {
@@ -3522,7 +3897,7 @@ html[data-theme="light"] .hero--banner .hero__scrim {
 .chip--pin.is-active {
   color: var(--orange);
   border-color: var(--orange);
-  background: rgba(255, 159, 10, 0.14);
+  background: var(--orange-soft);
 }
 
 .chip--pin.is-active svg {
@@ -3554,14 +3929,13 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   gap: 3px;
   padding: var(--s-4);
   border-radius: var(--r-lg);
-  border: 1px solid var(--separator);
-  background: var(--bg-elevated);
+  border: 0;
+  background: var(--bg-inset);
   color: var(--text-primary);
-  transition: border-color var(--dur-fast), background var(--dur-fast);
+  transition: background var(--dur-fast);
 }
 
 .post-nav__item:hover {
-  border-color: var(--separator-strong);
   background: var(--bg-raised);
   color: var(--text-primary);
 }
@@ -3611,6 +3985,73 @@ html[data-theme="light"] .hero--banner .hero__scrim {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
+}
+
+/* /about/ 的评论区（about.html 里的 .about-comments）。
+   它排在 .about-layout 两栏块之后，默认会撑满 wrap 整宽，看起来像挂在
+   页面外面的第 3 栏，所以必须收窄。
+
+   宽度不写死 860px，而是按网格算式反推：总宽 − 侧栏 260px − 栏间距。
+   写死数字在别的 wrap 宽度下会错位；反推出来的值让评论区的左右边缘
+   和上面正文栏完全对齐（1440px 下两者右边缘相差 0px）。 */
+.about-comments {
+  max-width: calc(100% - 260px - var(--s-10));
+  margin-top: clamp(var(--s-10), 6vw, var(--s-12));
+}
+
+/* 标题沿用 .sec-head__title 的「栏目头」写法：衬线 + 一条 40px 短横线。
+   全站的区块标题因此是同一个声音，而不是这里冒出一个 17px 无衬线标题。 */
+.about-comments__title {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: var(--fs-24);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  padding-bottom: var(--s-3);
+}
+
+.about-comments__title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+
+/* 注意 token 名：本设计系统里没有 --fs-14 也没有 --text-2，
+   写了会静默失效（var() 取不到值时该属性等于 unset，于是字号退回继承
+   来的 16px、颜色退回默认色），看起来「像生效了」其实没生效。
+   小字用 --fs-13，次级文字色用 --text-secondary。 */
+.about-comments__desc {
+  margin-top: var(--s-3);
+  color: var(--text-secondary);
+  font-size: var(--fs-15);
+  line-height: 1.7;
+  max-width: 60ch;
+  margin-bottom: var(--s-6);
+}
+
+/* 标题和说明已经把间距撑开了，评论块自己那份上边距和分隔线
+   在这里是多余的，留着会变成「标题底下一条横线」。 */
+.about-comments .comments {
+  margin-top: var(--s-5);
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* 关掉内层 giscus 自带的标题（「评论与讨论」）。
+   about.html 已经在外面写了「留言」+ 一句说明，内层再来一个标题，
+   读者会看到上下两行标题各说一遍同一件事。
+
+   只在 .about-comments 作用域内关：文章页也 include 了同一个
+   giscus.html，那里「评论与讨论」是唯一的标题，必须留着。 */
+.about-comments .comments__title {
+  display: none;
 }
 
 /* 时间线 */
@@ -3841,6 +4282,11 @@ html[data-theme="light"] .hero--banner .hero__scrim {
     gap: var(--s-6);
   }
 
+  /* 单栏之后没有侧栏可避让，评论区放满整宽 */
+  .about-comments {
+    max-width: none;
+  }
+
   .toc-col {
     display: none;
   }
@@ -3898,15 +4344,36 @@ html[data-theme="light"] .hero--banner .hero__scrim {
     width: 100%;
   }
 
-  /* 板块行现在是单列，这条只保留缩略图的收缩。
-     360px 下 168px 的图会把名称和说明挤成碎行，所以图缩到 96px。 */
+  /* 板块索引在窄屏的排版。
+     这一行有四个元素：序号 + （名称 / 数量 / 说明）+ 缩略图 + 箭头。
+     360–390px 下塞不进四列，取舍是：
+       · 缩略图直接收掉 —— 它只是色标，而名称和说明才是内容；
+         硬留下 88px 会把「长文与折腾记录：OCR、输入法、文档工具、
+         硬件选购」挤成四行碎句。
+       · 序号缩窄到 1.6em（01–08 两位数字够用），省下的宽度全给文字。
+       · 名称与数量不再并排：中文名称 + 数量在窄屏并排时，
+         数量会被挤到自己换行，看起来像掉出来的孤立小字。 */
   .module {
     gap: var(--s-3);
-    padding: var(--s-3);
+    padding: var(--s-4) var(--s-2);
+  }
+
+  .module__num {
+    width: 1.6em;
   }
 
   .module__thumb {
-    width: 96px;
+    display: none;
+  }
+
+  /* 行尾箭头也收掉：窄屏没有 hover，这个箭头永远不会出现，
+     留着只会白占 16px + gap 的宽度。 */
+  .module::after {
+    display: none;
+  }
+
+  .module__head {
+    gap: var(--s-2);
   }
 
   .post-row__meta .tag {
