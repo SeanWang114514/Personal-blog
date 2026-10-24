@@ -62,7 +62,35 @@
       app.querySelector("[data-admin-delete]").disabled = !current;
     }
   }
-  function canDiscard() { return (!dirty || confirm("当前文稿尚未提交，确定放弃这些修改？")) && (!settingsDirty || confirm("背景或音乐设置尚未保存，确定放弃这些修改？")); }
+  function fieldText(value) {
+    if (Array.isArray(value)) return value.join(", ");
+    return value === undefined || value === null ? "" : String(value);
+  }
+  function fillFields(data) {
+    data = data || {};
+    fields.title.value = data.title || "新文章";
+    fields.subtitle.value = fieldText(data.subtitle);
+    fields.date.value = (data.date || (localDate() + " 08:00")).replace(" ", "T").slice(0, 16);
+    fields.categories.value = fieldText(data.categories);
+    fields.tags.value = fieldText(data.tags);
+    fields.headerImage.value = fieldText(data.headerImage);
+  }
+  function discardEditorChanges() {
+    fillFields(current ? current.fields : {});
+    publishState.value = String(!!(current && current.published));
+    body.value = (current && typeof current.body === "string") ? current.body : "";
+    richBody.innerHTML = markdownToRichHtml(body.value);
+    dirty = false;
+    updateSaveState();
+  }
+  function canDiscard() {
+    if (dirty) {
+      if (!confirm("当前文稿尚未提交，确定放弃这些修改？")) return false;
+      discardEditorChanges();
+    }
+    if (settingsDirty && !confirm("背景或音乐设置尚未保存，确定放弃这些修改？")) return false;
+    return true;
+  }
   function localDate() {
     var now = new Date();
     return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
@@ -280,12 +308,7 @@
     path.readOnly = !!post;
     var data = (post && post.fields) || (imported && imported.fields) || (post ? { title: post.title, date: post.date, categories: (post.categories || []).join(", "), tags: (post.tags || []).join(", "), published: post.published } : {});
     sourceBase = (post && post.source) || (imported && imported.source) || "---\nlayout: post\ntitle: 新文章\ndate: " + localDate() + " 08:00:00\nauthor: Sean Wang\ncategory: \"\"\ntags: []\n---\n\n";
-    fields.title.value = data.title || "新文章";
-    fields.subtitle.value = data.subtitle || "";
-    fields.date.value = (data.date || (localDate() + " 08:00")).replace(" ", "T").slice(0, 16);
-    fields.categories.value = data.categories || "";
-    fields.tags.value = data.tags || "";
-    fields.headerImage.value = data.headerImage || "";
+    fillFields(data);
     publishState.value = String(post ? post.published : false);
     body.value = (post && post.body) || (imported && imported.body) || "";
     sourceMode = false;
@@ -330,11 +353,18 @@
     });
   }
   function returnToList() {
+    var hadChanges = dirty;
     if (!canDiscard()) return;
     current = null;
+    dirty = false;
+    sourceBase = "";
+    body.value = "";
+    richBody.replaceChildren();
+    updateSaveState();
     editor.hidden = true;
     app.querySelector("[data-admin-post-list]").hidden = false;
     showPosts();
+    status.textContent = hadChanges ? "已返回文章列表，未保存的修改已放弃。" : "已返回文章列表。";
   }
   function updateSaveState() {
     var published = publishState.value === "true";
