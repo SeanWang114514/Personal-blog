@@ -17,6 +17,7 @@ robots: noindex
     <div class="admin__topline"><span class="auth-admin-badge">管理员</span><span data-admin-account></span><a href="https://github.com/SeanWang114514/Personal-blog/actions" target="_blank" rel="noopener noreferrer">发布状态 ↗</a></div>
     <div class="admin__tabs" role="tablist" aria-label="后台栏目">
         <button type="button" role="tab" id="admin-tab-posts" aria-controls="admin-posts" aria-selected="true" data-admin-tab="posts"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-book"></use></svg>文章</button>
+        <button type="button" role="tab" id="admin-tab-moments" aria-controls="admin-moments" aria-selected="false" tabindex="-1" data-admin-tab="moments"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-coffee"></use></svg>碎碎念</button>
         <button type="button" role="tab" id="admin-tab-taxonomy" aria-controls="admin-taxonomy" aria-selected="false" tabindex="-1" data-admin-tab="taxonomy"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tag"></use></svg>标签与分类</button>
         <button type="button" role="tab" id="admin-tab-appearance" aria-controls="admin-appearance" aria-selected="false" tabindex="-1" data-admin-tab="appearance"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-image"></use></svg>背景与音乐</button>
         <button type="button" role="tab" id="admin-tab-comments" aria-controls="admin-comments" aria-selected="false" tabindex="-1" data-admin-tab="comments"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-message"></use></svg>评论</button>
@@ -67,6 +68,25 @@ robots: noindex
           <textarea id="admin-post-body" class="admin__source-text" name="body" rows="24" spellcheck="true" placeholder="Markdown 源码"></textarea>
           <div class="admin__savebar"><span data-editor-save-hint>新文章默认保存为草稿</span><div class="admin__toolbar"><button class="community__button" type="button" data-admin-download><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-download"></use></svg>导出</button><button class="community__button community__button--danger" type="button" data-admin-delete disabled><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-close"></use></svg>删除</button><button class="community__button community__button--primary" type="submit" data-admin-save><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-send"></use></svg><span data-admin-save-label>保存草稿</span></button></div></div>
       </form>
+    </section>
+    <section id="admin-moments" role="tabpanel" aria-labelledby="admin-tab-moments" data-admin-panel="moments" hidden>
+      <p>碎碎念写进仓库的 <code>_data/moments.yml</code>：一句话也行，提交后网站重新构建时出现在碎碎念页和首页。内容是纯文本，换行会保留，不解析 Markdown。</p>
+      <form class="admin__moment-form" data-admin-moment-form>
+        <div class="admin__fields">
+          <div><label for="admin-moment-date">日期</label><input id="admin-moment-date" name="date" type="date" required></div>
+          <div><label for="admin-moment-tags">标签</label><input id="admin-moment-tags" name="tags" maxlength="140" placeholder="多个标签用逗号分隔，最多 5 个"></div>
+          <div><label for="admin-moment-location">地点</label><input id="admin-moment-location" name="location" maxlength="60" placeholder="可留空"></div>
+          <div class="admin__moment-pin"><label for="admin-moment-pinned"><input id="admin-moment-pinned" name="pinned" type="checkbox"> 置顶这条</label></div>
+        </div>
+        <label class="admin__moment-label" for="admin-moment-content">内容</label>
+        <textarea id="admin-moment-content" class="admin__moment-text" name="content" rows="4" maxlength="2000" required placeholder="今天…（支持换行）"></textarea>
+        <div class="admin__toolbar">
+          <button class="community__button community__button--primary" type="submit" data-admin-moment-submit><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-send"></use></svg><span data-admin-moment-submit-label>写入碎碎念</span></button>
+          <button class="community__button" type="button" data-admin-moment-cancel hidden>取消编辑</button>
+          <button class="community__button" type="button" data-admin-moment-reload><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-refresh"></use></svg><span class="sr-only">刷新碎碎念</span></button>
+        </div>
+      </form>
+      <div class="admin__moment-list" data-admin-moment-list aria-label="碎碎念列表"></div>
     </section>
     <section id="admin-taxonomy" role="tabpanel" aria-labelledby="admin-tab-taxonomy" data-admin-panel="taxonomy" hidden><div class="admin__taxonomies" data-admin-taxonomies></div></section>
     <section id="admin-appearance" role="tabpanel" aria-labelledby="admin-tab-appearance" data-admin-panel="appearance" hidden>

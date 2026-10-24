@@ -182,6 +182,111 @@ function to64(content: string) {
   return btoa(binary);
 }
 
+const momentsPath = "_data/moments.yml";
+const momentsTemplate = [
+  "# 碎碎念：一句话式的短记录，按日期倒序显示在 /moments/ 与首页。",
+  "# 字段：date（YYYY-MM-DD）、content（正文，支持换行）、tags（可省）、location（可省）、images（可省）、pinned（true = 置顶）。",
+  ""
+].join("\n");
+
+export type MomentValues = { date: string; content: string; tags: string[]; location: string; pinned: boolean };
+
+function momentRanges(lines: string[]): { start: number; end: number }[] {
+  const starts: number[] = [];
+  for (let index = 0; index < lines.length; index++) if (/^- /.test(lines[index])) starts.push(index);
+  return starts.map((start, position) => {
+    let end = position + 1 < starts.length ? starts[position + 1] : lines.length;
+    while (end > start + 1 && lines[end - 1].trim() === "") end--;
+    return { start, end };
+  });
+}
+
+export function listMoments(source: string) {
+  const document = parseDocument(source, { uniqueKeys: true });
+  if (document.errors.length) throw new Error("碎碎念数据格式有误。");
+  const list = document.toJS({ maxAliasCount: 0 });
+  if (list === null || list === undefined) return [];
+  if (!Array.isArray(list)) throw new Error("碎碎念数据需要是一个列表。");
+  return list.map((item, index) => {
+    const values = item && typeof item === "object" && !Array.isArray(item) ? item as Record<string, unknown> : {};
+    const raw = values.date instanceof Date ? values.date.toISOString().slice(0, 10) : String(values.date ?? "").slice(0, 10);
+    return {
+      index,
+      date: raw,
+      content: typeof values.content === "string" ? values.content : "",
+      tags: names(values.tags),
+      location: typeof values.location === "string" ? values.location : "",
+      pinned: values.pinned === true
+    };
+  });
+}
+
+function momentFragment(entry: Record<string, unknown>): string[] {
+  return stringify(entry, { lineWidth: 0 }).replace(/\n$/, "").split("\n").map((line, index) => index ? "  " + line : "- " + line);
+}
+
+function momentTags(value: unknown): string[] {
+  const list = Array.isArray(value) ? value : typeof value === "string" ? value.split(/[,，\n]/) : [];
+  return Array.from(new Set(list.filter(item => typeof item === "string").map(item => (item as string).trim()).filter(Boolean)));
+}
+
+export function validateMoment(input: Record<string, unknown>): MomentValues {
+  const date = typeof input.date === "string" ? input.date.trim() : "";
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(date + "T00:00:00Z"))) throw new Error("碎碎念日期需为 YYYY-MM-DD。");
+  const content = typeof input.content === "string" ? input.content.replace(/\r\n?/g, "\n").trim() : "";
+  if (!content || content.length > 2000) throw new Error("碎碎念正文需为 1 至 2000 个字符。");
+  const tags = momentTags(input.tags);
+  if (tags.length > 5) throw new Error("一条碎碎念最多 5 个标签。");
+  if (tags.some(tag => tag.length > 24)) throw new Error("每个标签最多 24 个字符。");
+  const location = typeof input.location === "string" ? input.location.trim().replace(/[\r\n]/g, " ") : "";
+  if (location.length > 60) throw new Error("地点最多 60 个字符。");
+  return { date, content, tags, location, pinned: input.pinned === true };
+}
+
+export function writeMoment(source: string, index: unknown, values: MomentValues): string {
+  const lines = source.split("\n");
+  const ranges = momentRanges(lines);
+  const target = index === null || index === undefined || index === "" ? -1 : Number(index);
+  if (target !== -1 && (!Number.isInteger(target) || target < 0 || target >= ranges.length)) throw new Error("要修改的碎碎念已不存在，请刷新后重试。");
+  let entry: Record<string, unknown> = {};
+  if (target >= 0) {
+    const values = parseDocument(source, { uniqueKeys: true }).toJS({ maxAliasCount: 0 }) as unknown;
+    const current = Array.isArray(values) ? values[target] : null;
+    if (!current || typeof current !== "object" || Array.isArray(current)) throw new Error("要修改的碎碎念已不存在，请刷新后重试。");
+    entry = { ...(current as Record<string, unknown>) };
+    if (typeof entry.date !== "string") delete entry.date;
+  }
+  entry.date = values.date;
+  entry.content = values.content;
+  if (values.tags.length) entry.tags = values.tags; else delete entry.tags;
+  if (values.location) entry.location = values.location; else delete entry.location;
+  if (values.pinned) entry.pinned = true; else delete entry.pinned;
+  const fragment = momentFragment(entry);
+  if (target >= 0) {
+    const { start, end } = ranges[target];
+    return [...lines.slice(0, start), ...fragment, ...lines.slice(end)].join("\n");
+  }
+  if (!ranges.length) {
+    const head = [...lines];
+    while (head.length && head[head.length - 1].trim() === "") head.pop();
+    return [...(head.length ? [...head, ""] : []), ...fragment, ""].join("\n");
+  }
+  const prefix = lines.slice(0, ranges[0].start);
+  if (prefix.length && prefix[prefix.length - 1].trim() !== "") prefix.push("");
+  return [...prefix, ...fragment, "", ...lines.slice(ranges[0].start)].join("\n");
+}
+
+export function removeMoment(source: string, index: unknown): string {
+  const lines = source.split("\n");
+  const ranges = momentRanges(lines);
+  const target = Number(index);
+  if (!Number.isInteger(target) || target < 0 || target >= ranges.length) throw new Error("要删除的碎碎念已不存在，请刷新后重试。");
+  const { start, end } = ranges[target];
+  if (end < lines.length && lines[end].trim() === "") return [...lines.slice(0, start), ...lines.slice(end + 1)].join("\n");
+  if (start > 0 && lines[start - 1].trim() === "") return [...lines.slice(0, start - 1), ...lines.slice(end)].join("\n");
+  return [...lines.slice(0, start), ...lines.slice(end)].join("\n");
+}
+
 export async function handle(request: Request): Promise<Response> {
   const origin = request.headers.get("Origin") || "";
   const cors: Record<string, string> = { "Content-Type": "application/json; charset=utf-8", "Vary": "Origin" };
@@ -292,6 +397,40 @@ export async function handle(request: Request): Promise<Response> {
       if (!/^[a-f0-9]{40}$/.test(input.sha || "")) throw new Error("请先读取文章的最新版本。");
       await github("/contents/" + encoded(path), "DELETE", { message: "blog: remove " + path.split("/").pop(), sha: input.sha, branch });
       return reply({ message: "文章已从仓库移除，等待重新发布。" });
+    }
+
+    if (input.action === "moments") {
+      const file = await readFile(momentsPath);
+      if (!file) return reply({ exists: false, sha: "", entries: listMoments(momentsTemplate) });
+      const source = from64(file.content);
+      return reply({ exists: true, sha: file.sha, entries: listMoments(source), source });
+    }
+    if (input.action === "save-moment") {
+      const values = validateMoment(input as Record<string, unknown>);
+      const editing = input.index !== null && input.index !== undefined;
+      if (editing && !Number.isInteger(Number(input.index))) throw new Error("要修改的碎碎念序号无效。");
+      const file = await readFile(momentsPath);
+      if (file && !/^[a-f0-9]{40}$/.test(file.sha || "")) throw new Error("无法读取碎碎念文件，请稍后重试。");
+      if (file && input.sha && input.sha !== file.sha) throw new Error("碎碎念文件已变化，请刷新后重试。");
+      if (!file && input.sha) throw new Error("碎碎念文件已变化，请刷新后重试。");
+      const source = writeMoment(file ? from64(file.content) : momentsTemplate, editing ? input.index : null, values);
+      if (input.dryRun === true) return reply({ source });
+      const result = await github("/contents/" + encoded(momentsPath), "PUT", {
+        message: "blog: " + (editing ? "update moment " : "add moment ") + values.date,
+        content: to64(source), branch, ...(file ? { sha: file.sha } : {})
+      });
+      return reply({ sha: result.content.sha, source, url: result.commit.html_url, message: editing ? "碎碎念已更新，网站将在构建完成后显示新内容。" : "碎碎念已提交，网站将在构建完成后显示。" });
+    }
+    if (input.action === "delete-moment") {
+      const file = await readFile(momentsPath);
+      if (!file) return reply({ error: "碎碎念文件不存在，请刷新后重试。" }, 404);
+      if (input.sha && input.sha !== file.sha) throw new Error("碎碎念文件已变化，请刷新后重试。");
+      const source = removeMoment(from64(file.content), input.index);
+      if (input.dryRun === true) return reply({ source });
+      const result = await github("/contents/" + encoded(momentsPath), "PUT", {
+        message: "blog: remove moment", content: to64(source), branch, sha: file.sha
+      });
+      return reply({ sha: result.content.sha, url: result.commit.html_url, message: "碎碎念已删除，网站将在构建完成后更新。" });
     }
     if (input.action === "taxonomy") {
       if (!["tags", "categories"].includes(input.kind)) throw new Error("分类类型无效。");

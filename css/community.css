@@ -51,6 +51,17 @@
 .admin__post-row:hover { transform: translateY(-1px); }
 .admin__post-row strong { display: block; font-size: 0.8125rem; line-height: 1.6; font-weight: 600; }
 .admin__post-row small { color: var(--content-meta); font-size: 0.75rem; }
+.admin__moment-form { margin-block: 1rem 1.5rem; padding: 1rem; border: 1px solid var(--line-color); border-radius: 8px; background: var(--card-bg); }
+.admin__moment-label { display: block; margin: 0.75rem 0 0.3rem; font-size: 0.8125rem; font-weight: 600; }
+.admin__moment-text { display: block; width: 100%; box-sizing: border-box; min-height: 6rem; padding: 0.6rem 0.75rem; border: 1px solid var(--line-divider); border-radius: 6px; background: var(--card-bg); color: var(--deep-text); font: inherit; line-height: 1.7; resize: vertical; }
+.admin__moment-pin label { display: inline-flex; align-items: center; gap: 0.4rem; margin: 0.5rem 0 0.3rem; font-size: 0.8125rem; }
+.admin__moment-list { display: grid; gap: 0.75rem; padding-block: 0.5rem 1.5rem; }
+.admin__moment { padding: 0.9rem 1rem; border: 1px solid var(--line-divider); border-radius: 6px; background: color-mix(in srgb, var(--card-bg) 88%, transparent); }
+.admin__moment-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; color: var(--content-meta); font-size: 0.75rem; }
+.admin__moment-head time { font-variant-numeric: tabular-nums; }
+.admin__moment-place { margin-left: auto; }
+.admin__moment-body { margin: 0.5rem 0 0; line-height: 1.8; overflow-wrap: anywhere; white-space: pre-wrap; }
+.admin__moment .admin__toolbar { display: flex; gap: 0.5rem; margin: 0.6rem 0 0; }
 .admin__editor { width: min(100%, 96rem); margin-inline: auto; padding-bottom: 2rem; }
 .admin__editor label { display: block; margin: 0.5rem 0 0.3rem; font-size: 0.8125rem; font-weight: 600; }
 .admin__fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1rem; }

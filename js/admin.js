@@ -593,6 +593,108 @@
     commentMore.hidden = result.data.length < 30;
     status.textContent = commentsOffset ? "已读取 " + commentsOffset + " 条评论。" : "暂无评论。";
   }
+  var momentForm = app.querySelector("[data-admin-moment-form]");
+  var momentList = app.querySelector("[data-admin-moment-list]");
+  var momentFields = momentForm.elements;
+  var momentSubmitLabel = app.querySelector("[data-admin-moment-submit-label]");
+  var momentCancel = app.querySelector("[data-admin-moment-cancel]");
+  var moments = [], momentsSha = "", momentEdit = null;
+  function momentTagsOf(value) {
+    var tags = [];
+    String(value || "").split(/[,，]/).forEach(function (item) {
+      var tag = item.trim();
+      if (tag && tags.indexOf(tag) < 0) tags.push(tag);
+    });
+    return tags.slice(0, 5);
+  }
+  function fillMomentForm(moment) {
+    momentEdit = moment ? { date: moment.date, content: moment.content } : null;
+    momentFields.date.value = moment ? moment.date : localDate();
+    momentFields.tags.value = moment ? (moment.tags || []).join(", ") : "";
+    momentFields.location.value = moment ? moment.location || "" : "";
+    momentFields.pinned.checked = !!(moment && moment.pinned);
+    momentFields.content.value = moment ? moment.content : "";
+    momentCancel.hidden = !moment;
+    momentSubmitLabel.textContent = moment ? "保存修改" : "写入碎碎念";
+  }
+  function renderMoments() {
+    momentList.replaceChildren();
+    if (!moments.length) { momentList.appendChild(node("p", "还没有碎碎念。写第一条吧。")); return; }
+    moments.slice().sort(function (a, b) {
+      return a.pinned === b.pinned ? b.date.localeCompare(a.date) : a.pinned ? -1 : 1;
+    }).forEach(function (moment) {
+      var item = node("article", undefined, "admin__moment");
+      var head = node("div", undefined, "admin__moment-head");
+      head.appendChild(node("time", moment.date));
+      if (moment.pinned) head.appendChild(node("span", "置顶", "community__badge"));
+      (moment.tags || []).forEach(function (tag) { head.appendChild(node("span", tag, "community__badge")); });
+      if (moment.location) head.appendChild(node("span", moment.location, "admin__moment-place"));
+      item.appendChild(head);
+      item.appendChild(node("p", moment.content, "admin__moment-body"));
+      var actions = node("div", undefined, "admin__toolbar");
+      actions.appendChild(button("编辑这条碎碎念", "pen", function () { fillMomentForm(moment); momentFields.content.focus(); }));
+      actions.appendChild(button("删除这条碎碎念", "close", function () {
+        if (!confirm("删除 " + moment.date + " 的这条碎碎念？删除会提交到仓库。")) return;
+        operation(async function () {
+          var listed = await api.adminRequest({ action: "moments" });
+          var index = (listed.entries || []).findIndex(function (entry) { return entry.date === moment.date && entry.content === moment.content; });
+          if (index < 0) throw new Error("这条碎碎念已经被改动或删除，请刷新后重试。");
+          var result = await api.adminRequest({ action: "delete-moment", sha: listed.sha || "", index: index });
+          await loadMoments(true);
+          status.textContent = result.message || "碎碎念已删除，网站将在构建完成后更新。";
+        });
+      }));
+      item.appendChild(actions);
+      momentList.appendChild(item);
+    });
+  }
+  async function loadMoments(quiet) {
+    var result = await api.adminRequest({ action: "moments" });
+    moments = (result.entries || []).map(function (entry, index) {
+      return { index: typeof entry.index === "number" ? entry.index : index, date: entry.date || "", content: entry.content || "", tags: entry.tags || [], location: entry.location || "", pinned: entry.pinned === true };
+    });
+    momentsSha = result.sha || "";
+    renderMoments();
+    if (!quiet) status.textContent = moments.length ? "已读取 " + moments.length + " 条碎碎念。" : "碎碎念文件里还没有内容，写入第一条吧。";
+  }
+  momentForm.addEventListener("invalid", function (event) {
+    var field = event.target;
+    var message = field === momentFields.date ? "请先选择碎碎念日期。" : field === momentFields.content ? "碎碎念内容不能为空。" : "";
+    if (!message) return;
+    status.textContent = message;
+    status.classList.add("is-error");
+  }, true);
+  momentForm.addEventListener("input", function () {
+    status.classList.remove("is-error");
+  });
+  momentForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var values = { date: momentFields.date.value, content: momentFields.content.value, tags: momentTagsOf(momentFields.tags.value), location: momentFields.location.value.trim(), pinned: momentFields.pinned.checked };
+    if (!values.date) { status.textContent = "请先选择碎碎念日期。"; status.classList.add("is-error"); momentFields.date.focus(); return; }
+    if (!values.content.trim()) { status.textContent = "碎碎念内容不能为空。"; status.classList.add("is-error"); momentFields.content.focus(); return; }
+    var editing = momentEdit;
+    operation(async function () {
+      var listed = await api.adminRequest({ action: "moments" });
+      var payload = { action: "save-moment", sha: listed.sha || "", date: values.date, content: values.content, tags: values.tags, location: values.location, pinned: values.pinned, index: null };
+      if (editing) {
+        var index = (listed.entries || []).findIndex(function (entry) { return entry.date === editing.date && entry.content === editing.content; });
+        if (index < 0) throw new Error("这条碎碎念已经被改动或删除，请刷新后重试。");
+        payload.index = index;
+      }
+      var result = await api.adminRequest(payload);
+      await loadMoments(true);
+      fillMomentForm(null);
+      status.textContent = result.message || "碎碎念已提交，网站将在构建完成后显示。";
+    });
+  });
+  app.querySelector("[data-admin-moment-reload]").addEventListener("click", function () {
+    operation(function () { return loadMoments(); });
+  });
+  momentCancel.addEventListener("click", function () {
+    fillMomentForm(null);
+    status.textContent = "已取消编辑。";
+  });
+  fillMomentForm(null);
   function selectTab(tab) {
     if (!canDiscard()) return;
     if (tab.getAttribute("data-admin-tab") === "appearance" && !mediaLoaded) {
@@ -605,6 +707,7 @@
       button.tabIndex = selected ? 0 : -1;
       app.querySelector('[data-admin-panel="' + button.getAttribute("data-admin-tab") + '"]').hidden = !selected;
     });
+    if (tab.getAttribute("data-admin-tab") === "moments") operation(function () { return loadMoments(); });
     if (tab.getAttribute("data-admin-tab") === "comments") operation(function () { return loadComments(true); });
   }
   tabs.forEach(function (tab, index) {
