@@ -117,9 +117,37 @@
 - **本轮没有对生产文章执行真实保存**：保存与 `export` 共用 `updatePost`，PUT 与乐观并发已由 Edge 测试覆盖；为免在验证阶段写 `main`，只用只读 `export` 验证内容无损。首次真实保存建议先挑一篇草稿试。
 - 复现脚本（工作区根目录，不在仓库内）：`tmp-verify/probe35.mjs`（CDP 执行器，读 `RTEXPR` 指定的表达式文件）、`probe36/38/39/40/41.expr.js`（线上 parse/export/往返/按钮状态探测）。真实会话 profile 副本见下节。
 
+## 追加轮次四：反复弹「当前文稿尚未提交，确定放弃这些修改？」（D12，已修）
+
+- **症状（用户报告）**：放弃过一次修改后，每次从文章列表点开**任何**一篇文章都会再弹一次「当前文稿尚未提交，确定放弃这些修改？」，看起来永远退不出、也打不开别的文章；刷新页面还会被浏览器拦下询问是否离开。
+- **根因**：`canDiscard()`（旧实现只做确认、不做放弃）在用户点「确定」后**没有把 `dirty` 复位**，也没有还原字段与正文；`returnToList()` 只清了 `current`，同样没有复位 `dirty`。于是：
+  1. 列表页仍处于 `dirty = true`，列表行点击守卫 `if (!canDiscard()) return;` 每次都弹框；取消就什么都打不开。
+  2. `window.addEventListener("beforeunload", …)` 因为 `dirty` 恒为 true，刷新或关闭页面持续拦截。
+  3. 用户确认“放弃”后，标题等元数据字段仍保留着被“放弃”的值，状态栏却显示已同步 —— 语义自相矛盾。
+- **修复**（`js/admin.js`）：
+  - 新增 `fieldText()` / `fillFields(data)`，把 `edit()` 里原来 6 行字段填充抽成可复用函数（title、subtitle、date、categories、tags、headerImage；数组自动 join，无值填空串）。
+  - 新增 `discardEditorChanges()`：用 `current.fields` 还原全部字段、`publishState`、`body.value` 与富文本，然后 `dirty = false; updateSaveState();`。
+  - `canDiscard()`：确认成功后**立即执行** `discardEditorChanges()`，再判断 `settingsDirty`；列表行点击、切换标签页、新建文章、导入文件四个入口因此都拿到真正干净的编辑状态。
+  - `returnToList()`：关闭编辑器时同时 `dirty = false`、清空 `sourceBase` / `body.value` / `richBody`、调用 `updateSaveState()`，并按是否有改动分别提示“已返回文章列表，未保存的修改已放弃。”或“已返回文章列表。”。
+- **实测**（headless Chrome + 真实管理员 profile 副本，`tmp-verify/probe44.expr.js`、`probe45.expr.js`，站点已重新 `jekyll build`）：
+
+  | 场景 | 结果 |
+  | --- | --- |
+  | 打开文章不改动 | dirty 文案“已与仓库同步”，无自发 `input` 事件（6/6 篇） |
+  | 改标题 → 点「文章列表」→ 确定 | 弹 1 次；编辑器关闭、列表出现、dirty 复位 |
+  | 放弃后再点开同一篇 | **0 次弹框**，dirty“已与仓库同步”，标题还原为仓库值 |
+  | 放弃后再点开另一篇 | **0 次弹框**，正确载入《Note Studio…》 |
+  | 改标题 → 切「外观」标签 → 确定 | 弹 1 次；标题/副标题/正文全部还原（富文本回到 14577 字符），dirty“已与仓库同步” |
+  | 新建文章 / 从列表返回 | 0 次弹框 |
+  | 改标题 → 返回 → **取消** | 编辑器保持打开、内容保留（不静默丢弃） |
+  | 取消后再确定放弃 → 再打开 | 0 次弹框，标题还原 |
+
+- **回归复跑**：`node --check js/admin.js` 通过；Node 测试 13 pass / 0 fail；`deno check` 通过；Deno Edge 测试 **12 passed / 0 failed**；`bundle exec jekyll build` exit 0（2.68 s）。
+- 提交：`50bdea7` fix(admin): clear unsaved state when the user actually discards edits（仅 `js/admin.js`）。Edge Function 未改动，**无需重新部署**。
+
 ## 关键现状与边界
 
-- 本地仓库：`D:\VibeCoding\个人blog优化\dst-blog`，远端 `SeanWang114514/Personal-blog`，当前分支 `codex/admin-editor-handoff-20261024`。提交顺序：代码 `8f15039` → 文档 `10c189a` / `79d0c7a` → 验证记录 `b543ea8` → **缺陷修复 `13b89b1`（本轮，已推送）**。工作区仍有 73 条未提交的整站改造文件未动。
+- 本地仓库：`D:\VibeCoding\个人blog优化\dst-blog`，远端 `SeanWang114514/Personal-blog`，当前分支 `codex/admin-editor-handoff-20261024`。提交顺序：代码 `8f15039` → 文档 `10c189a` / `79d0c7a` → 验证记录 `b543ea8` → 缺陷修复 `cd09c64` → 编辑区尺寸与失败提示 `e6bf07e` → 封面相对路径与 front matter 折行 `9334108` → **放弃修改后未复位 `dirty` `50bdea7`（已推送）**。工作区仍有 73 条未提交的整站改造文件未动。
 - 本地服务地址：`http://127.0.0.1:4000/Personal-blog/admin/`。当前已有 `bundle exec jekyll serve` 在跑（PID 23564，`ruby.exe`）；**不要另起第二个实例**，需要重启时先结束 20476/23564 进程树。
 - **带管理员登录态的自动化方法**：把本机真实 Chrome profile 的 `Local Storage`、`IndexedDB`、`Cookies` 三个目录复制到 `tmp-verify/cprofReal/Default/`，用该副本启动 headless Chrome；打开 `/admin/` 后**必须等约 11–12 秒**（状态栏先显示“正在处理…”，随后才出结果）。每次跑脚本前用 `cp -r tmp-verify/cprofReal tmp-verify/cprofXXX` 复制副本并换端口，跑完 kill Chrome。
 - 线上 Edge Function 已部署并支持 `{ action: "read", path: "_posts/..." }`（VERSION 4，2026-10-24 15:01 UTC）；此前“未知操作”的症状已消失，线上读取与仓库正文逐行一致。
