@@ -143,14 +143,47 @@
   | 取消后再确定放弃 → 再打开 | 0 次弹框，标题还原 |
 
 - **回归复跑**：`node --check js/admin.js` 通过；Node 测试 13 pass / 0 fail；`deno check` 通过；Deno Edge 测试 **12 passed / 0 failed**；`bundle exec jekyll build` exit 0（2.68 s）。
+## 追加轮次：碎碎念（moments）后台与验证
+
+**功能**：后台新增「碎碎念」面板，读写仓库根 `_data/moments.yml`（纯文本 + 日期 + 标签 + 地点 + 置顶），不做 Markdown 解析。
+
+- 服务端（`supabase/functions/blog-admin/index.ts`）：新增 `listMoments` / `writeMoment` / `removeMoment` / `validateMoment`，三个 action 走同一套 GitHub Contents 读改写：`{ action: "moments" }`、`{ action: "save-moment", sha, date, content, tags, location, pinned, index }`（`index: null` 为新建）、`{ action: "delete-moment", sha, index }`。写入按列表级解析后只重建被改的那一条，**保留其它条目的原始字节**，并保留未编辑条目的 `images` 字段；`sha` 不匹配按冲突报错（不覆盖）。
+- 校验：日期必须 `YYYY-MM-DD` 且真实存在；内容 1–2000 字符（去首尾空白后非空）；标签最多 5 个、每个 ≤24 字符；地点 ≤60 字符。`_data/moments.yml` 不存在时按模板头部注释新建。
+- 前端（`admin.html` / `js/admin.js` / `css/community.css`）：「碎碎念」标签页 = 列表（置顶优先、日期倒序，显示日期/正文/标签/地点）+ 表单（日期、内容、标签、地点、置顶、保存/取消）。编辑时按钮变「保存修改」并出现取消；删除走确认框。说明文字明确「内容是纯文本，换行会保留，不解析 Markdown」——与站点模板 `_includes/ff/moment-card.html:15`（`{{ m.content }}`）、`_includes/ff/widgets/moments.html:25`（`strip_newlines | truncate: 60`）一致。
+- **D13**（原生校验静默失败）：内容为空时点提交，浏览器原生 `required` 先拦下 submit，页面毫无反应、状态栏也不刷新。修复：`momentForm` 增加捕获阶段 `invalid` 监听，按字段提示「请先选择碎碎念日期。」/「碎碎念内容不能为空。」并给状态栏加 `is-error`，`input` 时清除。修前该场景**零请求**，修后提示可见且仍不发请求。
+- **D14**（标签重复）：`momentTagsOf` 去重后再 `slice(0, 5)`（`建站, 后台 ， 后台` → `["建站","后台"]`）；服务端 `validateMoment` 同样去重，前端只为体验一致。
+
+**浏览器实测**（headless Chrome + 真实管理员 profile 副本；因线上函数尚未部署 `moments`，用例把 `window.BlogCommunity.adminRequest` 换成记录型 stub，其余全走真实 DOM 事件）
+
+| 场景 | 结果 |
+| --- | --- |
+| 切到「碎碎念」 | 拉一次 `{action:"moments"}`，状态「已读取 3 条碎碎念。」 |
+| 新建（标签 `建站, 后台 ， 后台`） | payload `{action:"save-moment", sha:"c"×40, date:"2026-10-25", tags:["建站","后台"], location:"上海", pinned:true, index:null}`，列表 4 条、置顶在前 |
+| 内容为空提交 | 状态「碎碎念内容不能为空。」+ `is-error`，**请求数 0** |
+| 编辑第二条 | 按钮变「保存修改」、取消可见，payload `index: 1` |
+| 删除第一条 | `{action:"delete-moment", sha, index: 0}`，列表同步 |
+| 切走再切回 | 重新拉 `moments`（调用计数递增），列表仍 3 条 |
+| 取消编辑 | `fillMomentForm(null)` 复位内容与按钮文案 |
+
+**布局**：1440×900 → 面板 1318 宽、textarea 1284 宽、无横向溢出；模拟 390×844 → 单列面板 358、textarea 324、`scrollWidth 390 = clientWidth 390` 无横向滚动；取消按钮在 `[hidden]` 时 rect 为 0。截图 `tmp-verify/shots/admin-90-moments-1440.png`、`tmp-verify/shots/admin-91-moments-390.png`；视觉复核（vision.js / Qwen3-VL）未发现溢出、截断或重叠。
+
+**自动化**：`deno check` 通过；`deno test --allow-env _tests/admin-edge.test.ts` → **17 passed / 0 failed**（新增 5 条：列表解析、单条改删不动其它条目、输入校验、文件不存在时新建、乐观并发）；`node --check js/admin.js` 通过；`bundle exec jekyll build` 首次因 `_site/audio/dream-culture.mp3` 被占用报 `Errno::EACCES`，立即重试 exit 0。
+
+**线上状态（重要）**：线上 Edge Function 仍是上一轮部署的版本（支持 `read`，**不含** `moments` / `save-moment` / `delete-moment`）。本轮想用真实登录态复验时，本机 Chrome 的 Supabase 会话已不存在（`Local Storage/leveldb` 里搜不到 `sw-github-auth`），匿名调用一律 401「请先使用 GitHub 登录。」，因此**无法用浏览器证明线上缺哪些 action**；部署与线上复验前需要用户重新登录一次后台。
+
+**远端**：main 上既没有 `_data/moments.yml`（404）也没有 `moments.html`（404），`_includes/ff/` 也是本地未提交改造 —— 即使现在部署并成功写入，整站改造合并前线上站点不会显示碎碎念。
+
+**Node 测试的既有失配（非本轮改动）**：`_tests/github-auth.test.cjs` 13 项里 4 项失败（`ui.calls.onChange is not a function`、`ui.scheduled.pop(...) is not a function`）。原因：`js/sw.js` 改成按需启动 Supabase，`js/sw.js:1466-1477` 的 `startGithub()` 只在 `callbackPage || window.SW.path === "/admin/" || supabaseSessionHint()` 时才注册 `onAuthStateChange`（`js/sw.js:1284`），而测试夹具只写 `localStorage` 的 `sw-auth`、不写 SDK 的 `SUPABASE_SDK.storeKey`（`js/sw.js:977`）。用 `git show HEAD:js/sw.js` 跑同一份测试**同样 4 项失败**，证明与碎碎念改动无关；要修需由站点改造的所有者决定：改测试夹具（补 `window.SW.path = "/admin/"` 或预置 SDK session）还是改 `supabaseSessionHint`。
+
 - 提交：`50bdea7` fix(admin): clear unsaved state when the user actually discards edits（仅 `js/admin.js`）。Edge Function 未改动，**无需重新部署**。
 
 ## 关键现状与边界
 
-- 本地仓库：`D:\VibeCoding\个人blog优化\dst-blog`，远端 `SeanWang114514/Personal-blog`，当前分支 `codex/admin-editor-handoff-20261024`。提交顺序：代码 `8f15039` → 文档 `10c189a` / `79d0c7a` → 验证记录 `b543ea8` → 缺陷修复 `cd09c64` → 编辑区尺寸与失败提示 `e6bf07e` → 封面相对路径与 front matter 折行 `9334108` → **放弃修改后未复位 `dirty` `50bdea7`（已推送）**。工作区仍有 73 条未提交的整站改造文件未动。
+- 本地仓库：`D:\VibeCoding\个人blog优化\dst-blog`，远端 `SeanWang114514/Personal-blog`，当前分支 `codex/admin-editor-handoff-20261024`。提交顺序：代码 `8f15039` → 文档 `10c189a` / `79d0c7a` → 验证记录 `b543ea8` → 缺陷修复 `cd09c64` → 编辑区尺寸与失败提示 `e6bf07e` → 封面相对路径与 front matter 折行 `9334108` → 放弃修改后未复位 `dirty` `50bdea7` → **碎碎念后台 `41ce306`（已推送）**。工作区仍有 88 条未提交的整站改造文件未动。
 - 本地服务地址：`http://127.0.0.1:4000/Personal-blog/admin/`。当前已有 `bundle exec jekyll serve` 在跑（PID 23564，`ruby.exe`）；**不要另起第二个实例**，需要重启时先结束 20476/23564 进程树。
 - **带管理员登录态的自动化方法**：把本机真实 Chrome profile 的 `Local Storage`、`IndexedDB`、`Cookies` 三个目录复制到 `tmp-verify/cprofReal/Default/`，用该副本启动 headless Chrome；打开 `/admin/` 后**必须等约 11–12 秒**（状态栏先显示“正在处理…”，随后才出结果）。每次跑脚本前用 `cp -r tmp-verify/cprofReal tmp-verify/cprofXXX` 复制副本并换端口，跑完 kill Chrome。
-- 线上 Edge Function 已部署并支持 `{ action: "read", path: "_posts/..." }`（VERSION 4，2026-10-24 15:01 UTC）；此前“未知操作”的症状已消失，线上读取与仓库正文逐行一致。
+- 线上 Edge Function 已部署并支持 `{ action: "read", path: "_posts/..." }`（VERSION 4，2026-10-24 15:01 UTC）；此前“未知操作”的症状已消失，线上读取与仓库正文逐行一致。**碎碎念三个 action 尚未部署**，需重新登录后执行 `supabase functions deploy blog-admin --project-ref sjhcqdicvahlqlpnupas --use-api` 并复验。
+- **本机管理员登录态已失效**：2026-10-25 01:26 复制真实 Chrome profile 后，`Local Storage/leveldb` 中搜不到 `sw-github-auth`，`/admin/` 显示“请先使用 GitHub 登录。”。下一轮做线上复验前，必须请用户在浏览器里重新登录一次后台，再重新复制 profile。
 - GitHub 功能分支目前只推送了 9 个编辑器、Edge Function、测试和交接文档文件；完整 Firefly 版站点的其他依赖仍是本地未提交改动，未上传。远端分支单独检出时不是完整可部署站点（`admin.html` 加载的 `js/admin.js`/`js/community.js`/`css/community.css` 真正被页面引用的接线在未提交的 `_includes/footer.html:111-113`、`_includes/head.html:67`、`head.html:130-134`），不要直接合并该分支或据此发布。
 - GitHub Pages 部署只会发布仓库分支中的静态站点；它不会自动部署 Supabase Edge Function。
 - 此工作区已有许多网站整体改造的未提交改动，它们组成当前 Firefly 版站点依赖；先厘清这些改动的归属并与用户确认后，再决定是否一起上传。不要用 reset、checkout、clean 等操作清除现有工作。
