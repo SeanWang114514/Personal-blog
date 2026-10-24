@@ -65,10 +65,9 @@
 - [x] 隔离分支 `codex/admin-editor-handoff-20261024` 已创建并推送（见下方「关键现状与边界」的提交记录）。
 - [x] 编辑器 Markdown 往返缺陷 D1–D6 已修复，回归数据见上；代码提交与文档提交已在同一分支。
 - [x] **Draft PR 已创建**：https://github.com/SeanWang114514/Personal-blog/pull/2 （未合并，等站点范围确认）。
-- [ ] **部署 `blog-admin` Edge Function（唯一硬阻塞）**：本机没有 `supabase` CLI、也没有 access token，需要仓库所有者执行 `supabase login` 后运行
-      `supabase functions deploy blog-admin --project-ref sjhcqdicvahlqlpnupas --use-api`
-      部署前确认登录的是项目 `sjhcqdicvahlqlpnupas`，保留现有 `GITHUB_CONTENT_TOKEN` Secret（有效期至 2027-01-16），不要输出或复制任何 Secret。
-- [ ] 部署后回到浏览器复测：点开任意已发布文章 → 正文非空、标题/日期/分类/标签/封面与仓库一致 → 再跑一遍 Node 测试、Deno check/test、Jekyll 构建并记录结果。
+- [x] **部署 `blog-admin` Edge Function**：用户在本机终端完成 `supabase login` 后，本轮已部署上线（详见下方「追加轮次三」），`GITHUB_CONTENT_TOKEN` 未改动。
+- [x] 部署后浏览器复测：6 篇已发布文章均可读取，正文与仓库逐行一致；Node 测试 13 项、Deno check、Deno test 12 项、Jekyll 构建均通过。
+- [ ] **D11 修复（封面校验 + front matter 折行）尚未提交**：改完的 `supabase/functions/blog-admin/index.ts`、`_tests/admin-edge.test.ts`、`admin.html` 需要一并提交；下一次部署前请先 `git status` 确认没有把 `supabase/.temp/`、`config.toml` 带进提交。
 - [ ] 与用户确认「整站 Firefly 改造」的上传范围后再决定是否把未提交站点文件并入分支；未确认前不合并 `main`、不发布。
 
 ## 追加轮次二：正文纸面尺寸与失败提示（D8 / D9）
@@ -91,11 +90,39 @@
 - **部署前置条件已进一步收窄**：`npx --yes supabase --version` 返回 `2.122.0`，即 CLI 可通过 npx 取到，本机只缺登录态（`~/.supabase` 只有 telemetry.json，环境变量无 `SUPABASE_ACCESS_TOKEN`）。用户二选一即可解锁部署：终端跑 `npx supabase login`，或到 Dashboard → Account → Access Tokens 生成后 `SUPABASE_ACCESS_TOKEN=sbp_xxx npx supabase functions deploy blog-admin --project-ref sjhcqdicvahlqlpnupas --use-api`（仍要保留 `GITHUB_CONTENT_TOKEN`，不要打印任何 Secret）。
 - **探测方法教训**：复制 `tmp-verify/cprof2` 已不再携带管理员登录态（localStorage 无 `sw-github-auth-*`），点列表得到的只是 gate「请使用管理员 GitHub 账号登录」。纯布局验证请用 `tmp-verify/audit27.mjs` / `audit28.mjs` 的做法：解锁 `[data-admin-gate]`、`[data-admin-workspace]`、`form[data-admin-editor]` 的 hidden 并注入示例正文后量取几何值，不依赖登录。
 
+## 追加轮次三：线上部署与真实文章读取验证（D10 / D11）
+
+用户完成 `supabase login` 后，本轮把 `blog-admin` 真正部署上线，并做了线上端到端验证。
+
+- **部署**：`npx --yes supabase functions deploy blog-admin --project-ref sjhcqdicvahlqlpnupas --use-api` → exit 0；`functions list` 现为 `blog-admin | ACTIVE | VERSION 4 | 2026-10-24 15:01:26 UTC`。`GITHUB_CONTENT_TOKEN` 未改动。
+- **线上读取（真实管理员会话，headless Chrome 用真实 profile 副本）**：列表返回 6 篇；点第一篇 `_posts/2026-09-30-weasel-vmenu-suite.markdown` → 状态“已载入《Rime VMenu 全家桶：一个 v 键，把小狼毫变成输入套件》，正文共 15547 个字符。”；源码模式 textarea 值 15547 字符 / 229 行，与仓库正文**逐行 0 差异**；富文本结构 h2×10 / p×27 / pre×3 / code×84 / table×1 / blockquote×1 / ul×6 / a×10 / script×0；网络只有 `list`、`read` 两个 POST，没有 save/publish。
+- **源码 ↔ 富文本往返**：源码 → 富文本 → 源码后 `original === roundtrip` 为 true（15547 字符完全一致）。
+- **未保存离开提示**：改标题后 dirty 变“有未保存修改”，点「文章列表」弹出「当前文稿尚未提交，确定放弃这些修改？」；取消后编辑器保持打开、列表仍隐藏。
+- **D10 结论：不是缺陷**。线上 read 的 `categories` 为空曾疑似丢分类，实测原因是 **GitHub 上的该文章 front matter 没有 `category` 行**（只有本地未提交版本才有 `category: "输入法"`）；把本地 front matter 原样交给线上 `parse`，`categories` 正确返回“输入法”。`names()` 同时支持字符串与数组，无需改动。
+- **D11（真实缺陷，已修）**：`updatePost` 的封面校验只接受 `/` 开头的站内路径或 HTTPS，而 6 篇文章全部使用相对路径 `header-img: "img/preview/*.svg"`（站点侧用 `absolute_url` 解析），结论是**任何已发布文章一点保存就报「封面地址需为站内路径或 HTTPS 链接。」**。修复：新增 `safeCoverUrl()`，接受 `img/preview/x.svg`、`/img/x.svg`、`https://…`，拒绝 `javascript:`、`data:`、`//host`、反斜杠与空格；`admin.html` 封面 placeholder 同步改为 `img/example.webp 或 https://…`。
+- **顺带修掉保存时的 front matter 折行**：`document.toString()` 默认 `lineWidth: 80` 会把长 `subtitle` 折成两行（YAML 折行会改变字符串里的空白），改为 `document.toString({ lineWidth: 0 })`。
+- **新增回归测试**（`_tests/admin-edge.test.ts`，现 12 项全绿）：相对/绝对/HTTPS 封面都可保存且保留无关键；`javascript:`/`data:`/`//host`/`ftp:`/含空格/反斜杠被拒；单数 `category` 的文章编辑后分类不丢，清空分类后该键被删除。
+- **线上往返矩阵（`read` → `parse` → `export`，只读，不写 GitHub）**：
+
+  | 文章 | 正文字符 | fields 一致 | 正文一致 | front matter 差异行 |
+  | --- | --- | --- | --- | --- |
+  | 2026-09-30-weasel-vmenu-suite | 15547 | ✅ | ✅ | 10 |
+  | 2026-09-19-note-studio | 30071 | ✅ | ✅ | 10 |
+  | 2026-09-05-ppocrv6-desktop | 19881 | ✅ | ✅ | 10 |
+  | 2026-08-13-deepseek-poster-52 | 1517 | ✅ | ✅ | 8 |
+  | 2026-08-02-geekbench-value-ladder | 1241 | ✅ | ✅ | 9 |
+  | 2026-08-02-github-hot-repos | 1235 | ✅ | ✅ | 8 |
+
+  差异行全部是可接受的外观重排：`key:      value` 的对齐空格被去掉、`date: 2026-09-30 08:00:00` → `2026-09-30 08:00`（编辑器是分钟精度的 `datetime-local`）。**没有任何键丢失**，`author`、`catalog`、`category`、`tags`、`header-img` 都在。
+- **本轮没有对生产文章执行真实保存**：保存与 `export` 共用 `updatePost`，PUT 与乐观并发已由 Edge 测试覆盖；为免在验证阶段写 `main`，只用只读 `export` 验证内容无损。首次真实保存建议先挑一篇草稿试。
+- 复现脚本（工作区根目录，不在仓库内）：`tmp-verify/probe35.mjs`（CDP 执行器，读 `RTEXPR` 指定的表达式文件）、`probe36/38/39/40/41.expr.js`（线上 parse/export/往返/按钮状态探测）。真实会话 profile 副本见下节。
+
 ## 关键现状与边界
 
 - 本地仓库：`D:\VibeCoding\个人blog优化\dst-blog`，远端 `SeanWang114514/Personal-blog`，当前分支 `codex/admin-editor-handoff-20261024`。提交顺序：代码 `8f15039` → 文档 `10c189a` / `79d0c7a` → 验证记录 `b543ea8` → **缺陷修复 `13b89b1`（本轮，已推送）**。工作区仍有 73 条未提交的整站改造文件未动。
 - 本地服务地址：`http://127.0.0.1:4000/Personal-blog/admin/`。当前已有 `bundle exec jekyll serve` 在跑（PID 23564，`ruby.exe`）；**不要另起第二个实例**，需要重启时先结束 20476/23564 进程树。
-- 本地 Edge Function 源码已支持 `{ action: "read", path: "_posts/..." }`；线上服务目前不识别该 action，所以本地构建与测试通过不等于线上编辑可用。
+- **带管理员登录态的自动化方法**：把本机真实 Chrome profile 的 `Local Storage`、`IndexedDB`、`Cookies` 三个目录复制到 `tmp-verify/cprofReal/Default/`，用该副本启动 headless Chrome；打开 `/admin/` 后**必须等约 11–12 秒**（状态栏先显示“正在处理…”，随后才出结果）。每次跑脚本前用 `cp -r tmp-verify/cprofReal tmp-verify/cprofXXX` 复制副本并换端口，跑完 kill Chrome。
+- 线上 Edge Function 已部署并支持 `{ action: "read", path: "_posts/..." }`（VERSION 4，2026-10-24 15:01 UTC）；此前“未知操作”的症状已消失，线上读取与仓库正文逐行一致。
 - GitHub 功能分支目前只推送了 9 个编辑器、Edge Function、测试和交接文档文件；完整 Firefly 版站点的其他依赖仍是本地未提交改动，未上传。远端分支单独检出时不是完整可部署站点（`admin.html` 加载的 `js/admin.js`/`js/community.js`/`css/community.css` 真正被页面引用的接线在未提交的 `_includes/footer.html:111-113`、`_includes/head.html:67`、`head.html:130-134`），不要直接合并该分支或据此发布。
 - GitHub Pages 部署只会发布仓库分支中的静态站点；它不会自动部署 Supabase Edge Function。
 - 此工作区已有许多网站整体改造的未提交改动，它们组成当前 Firefly 版站点依赖；先厘清这些改动的归属并与用户确认后，再决定是否一起上传。不要用 reset、checkout、clean 等操作清除现有工作。

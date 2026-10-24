@@ -59,7 +59,7 @@ export function updatePost(source: string, fields: unknown, body: unknown): stri
   if (!title || title.length > 200 || /[\r\n]/.test(title)) throw new Error("标题需为 1 至 200 个字符。");
   if (subtitle.length > 300 || /[\r\n]/.test(subtitle)) throw new Error("副标题不能超过 300 个字符或包含换行。");
   if (!/^\d{4}-\d{2}-\d{2}(?: \d{2}:\d{2})?$/.test(date) || Number.isNaN(Date.parse(date))) throw new Error("请选择有效的发布时间。");
-  if (headerImage.length > 1024 || /[\r\n]/.test(headerImage) || (headerImage && !/^(?:\/(?!\/)[A-Za-z0-9_./%+-]+|https:\/\/[^\s<>"']+)$/i.test(headerImage))) throw new Error("封面地址需为站内路径或 HTTPS 链接。");
+  if (headerImage.length > 1024 || /[\r\n]/.test(headerImage) || (headerImage && !safeCoverUrl(headerImage))) throw new Error("封面地址需为站内路径（如 img/preview/cover.svg）或 HTTPS 链接。");
   const categories = splitNames(values.categories, "分类");
   const tags = splitNames(values.tags, "标签");
   document.set("title", title);
@@ -72,7 +72,12 @@ export function updatePost(source: string, fields: unknown, body: unknown): stri
   document.set("tags", tags);
   if (headerImage) document.set("header-img", headerImage); else document.delete("header-img");
   if (published) document.delete("published"); else document.set("published", false);
-  return "---\n" + document.toString().trimEnd() + "\n---\n" + body;
+  return "---\n" + document.toString({ lineWidth: 0 }).trimEnd() + "\n---\n" + body;
+}
+
+export function safeCoverUrl(value: string) {
+  if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return /^https:\/\/[^\s<>"']+$/i.test(value);
+  return !value.startsWith("//") && /^[A-Za-z0-9_./%~+-]+$/.test(value);
 }
 
 function safeAssetUrl(value: unknown, kind: "image" | "audio", storageOrigin: string): string {

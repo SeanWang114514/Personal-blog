@@ -144,3 +144,25 @@ Deno.test("verified admins publish only the validated article path with optimist
     assert(atob(draftCommit.content).includes("published: false"));
   } finally { globalThis.fetch = originalFetch; }
 });
+
+Deno.test("cover paths accept the site-relative artwork every published post uses", () => {
+  const base = { title: "封面测试", date: "2026-10-20 12:30", categories: "", tags: "" };
+  const relative = updatePost(article, { ...base, headerImage: "img/preview/note-studio.svg" }, "正文");
+  assert(parsePost(relative).data["header-img"] === "img/preview/note-studio.svg");
+  assert(parsePost(relative).data.custom === "keep");
+  const rooted = updatePost(article, { ...base, headerImage: "/img/preview/note-studio.svg" }, "正文");
+  assert(parsePost(rooted).data["header-img"] === "/img/preview/note-studio.svg");
+  const remote = updatePost(article, { ...base, headerImage: "https://cdn.example.com/a.webp" }, "正文");
+  assert(parsePost(remote).data["header-img"] === "https://cdn.example.com/a.webp");
+  for (const bad of ["javascript:alert(1)", "data:image/svg+xml;base64,AA", "//evil.example/a.svg", "ftp://evil.example/a.svg", "img cover.svg", "img\\cover.svg"]) {
+    rejects(() => updatePost(article, { ...base, headerImage: bad }, "正文"));
+  }
+});
+Deno.test("a post classified with the singular category key keeps that classification when edited", () => {
+  const source = "---\nlayout: post\ntitle: 单数分类\ncategory: 输入法\ntags: [Rime]\n---\n\n正文\n";
+  const edited = updatePost(source, { title: "单数分类", date: "2026-10-20 12:30", categories: "输入法", tags: "Rime", headerImage: "" }, parsePost(source).body);
+  assert(parsePost(edited).data.category === "输入法");
+  assert(parsePost(edited).data.categories === undefined);
+  const cleared = updatePost(source, { title: "单数分类", date: "2026-10-20 12:30", categories: "", tags: "Rime", headerImage: "" }, parsePost(source).body);
+  assert(parsePost(cleared).data.category === undefined);
+});
