@@ -142,7 +142,9 @@
   | 改标题 → 返回 → **取消** | 编辑器保持打开、内容保留（不静默丢弃） |
   | 取消后再确定放弃 → 再打开 | 0 次弹框，标题还原 |
 
-- **回归复跑**：`node --check js/admin.js` 通过；Node 测试 13 pass / 0 fail；`deno check` 通过；Deno Edge 测试 **12 passed / 0 failed**；`bundle exec jekyll build` exit 0（2.68 s）。
+- **回归复跑**：`node --check js/admin.js` 通过；Node 测试 13 pass / 0 fail；`deno check` 通过；Deno Edge 测试 **12 passed / 0 failed**；`bundle exec jekyll build` exit 0（2.68 s）。（该数字对应当轮的 `js/sw.js`；23:43 之后的站点改造使认证测试失配，见本节末说明）
+- 提交：`50bdea7` fix(admin): clear unsaved state when the user actually discards edits（仅 `js/admin.js`）。Edge Function 未改动，**无需重新部署**。
+
 ## 追加轮次：碎碎念（moments）后台与验证
 
 **功能**：后台新增「碎碎念」面板，读写仓库根 `_data/moments.yml`（纯文本 + 日期 + 标签 + 地点 + 置顶），不做 Markdown 解析。
@@ -173,9 +175,12 @@
 
 **远端**：main 上既没有 `_data/moments.yml`（404）也没有 `moments.html`（404），`_includes/ff/` 也是本地未提交改造 —— 即使现在部署并成功写入，整站改造合并前线上站点不会显示碎碎念。
 
-**Node 测试的既有失配（非本轮改动）**：`_tests/github-auth.test.cjs` 13 项里 4 项失败（`ui.calls.onChange is not a function`、`ui.scheduled.pop(...) is not a function`）。原因：`js/sw.js` 改成按需启动 Supabase，`js/sw.js:1466-1477` 的 `startGithub()` 只在 `callbackPage || window.SW.path === "/admin/" || supabaseSessionHint()` 时才注册 `onAuthStateChange`（`js/sw.js:1284`），而测试夹具只写 `localStorage` 的 `sw-auth`、不写 SDK 的 `SUPABASE_SDK.storeKey`（`js/sw.js:977`）。用 `git show HEAD:js/sw.js` 跑同一份测试**同样 4 项失败**，证明与碎碎念改动无关；要修需由站点改造的所有者决定：改测试夹具（补 `window.SW.path = "/admin/"` 或预置 SDK session）还是改 `supabaseSessionHint`。
+**Node 测试的既有失配（非本轮改动，属进行中的站点改造）**：`node --test _tests/content-motion.test.cjs _tests/github-auth.test.cjs` 现在是 **content-motion 2/2 通过，github-auth 2 通过 / 9 失败**（`ui.calls.onChange is not a function`、`ui.scheduled.pop(...) is not a function`，以及 `[data-auth-callback-status]` 断言拿到空串）。定位：
 
-- 提交：`50bdea7` fix(admin): clear unsaved state when the user actually discards edits（仅 `js/admin.js`）。Edge Function 未改动，**无需重新部署**。
+- 测试文件 `_tests/github-auth.test.cjs` 自 2026-10-18 未再改动（11 个用例），它假定认证模块只要页面加载就注册 `onAuthStateChange`；
+- `js/sw.js` 在 **2026-10-24 23:43** 被改成按需启动 Supabase：`js/sw.js:1466-1477` 的 `startGithub()` 只在 `callbackPage || window.SW.path === "/admin/" || supabaseSessionHint()` 时启动，`supabaseSessionHint()`（`js/sw.js:1005-1012`）读的是 `SUPABASE_SDK.storeKey`（`js/sw.js:977`，值为 `sw-github-auth` + `BASE` 里的斜杠换成横线）。夹具只写 `localStorage` 的 `sw-auth`，也不传 `/admin/` 路径，于是走 `sharedAuth.ready = Promise.resolve({ deferred: true })`，`onAuthStateChange`（`js/sw.js:1284`）永不注册；
+- 反证：把 `git show HEAD:js/sw.js`（分支里的旧版、无这次重写）放进 `tmp-verify/swtest/js/` 用同一份测试跑 → **0 通过 / 11 失败**，说明失败来自工作区那版 `js/sw.js` 与测试夹具的错配，与碎碎念改动无关；
+- 试过在夹具里补 `stored.set("sw-github-auth", JSON.stringify({ access_token: "test" }))`：仍有 9 项失败（异步启动时机与 `[data-auth-callback-status]` 断言不匹配），需要连夹具的 `flush()` 一起改，属于站点改造所有者的决定范围，本轮不动。
 
 ## 关键现状与边界
 
