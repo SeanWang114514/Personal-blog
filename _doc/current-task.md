@@ -6,7 +6,7 @@
 ✓ Node 语法检查、13 项 Node 测试、10 项 Deno 测试与 Jekyll 构建通过
 ✓ 浏览器确认管理员列表可读，定位线上 Edge Function 尚未包含 read action
 ✓ 编写下个 Agent 任务清单与完整接手提示词
-● 审核相关文件并推送 GitHub 功能分支 `codex/admin-editor-handoff-20261024`
+✓ 审核相关文件并推送 GitHub 功能分支 `codex/admin-editor-handoff-20261024`（提交 `8f15039`）
 ○ 下个 Agent 部署/验证 Supabase Edge Function，并完成真实浏览器回归
 
 ✓ 定位头像、公告、碎碎念贴合原因：侧栏内部容器缺少布局间距

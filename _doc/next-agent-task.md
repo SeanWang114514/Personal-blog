@@ -15,12 +15,12 @@
 
 ## 接下来
 
-- [x] 已创建隔离分支 `codex/admin-editor-handoff-20261024`；待完成暂存审核、提交和推送。
+- [x] 已创建、提交并推送隔离分支 `codex/admin-editor-handoff-20261024`（提交 `8f15039`）。
 - [ ] 用真实 Supabase 管理员会话再次验证打开文章、正文完整载入、编辑后离开提示、源码切换和格式操作；不保存生产文章。
 - [ ] 检查旧文章中的表格、图片、代码块与自定义 HTML/SVG 块在可视化编辑和 Markdown 往返时是否保留。
 - [ ] 用桌面和手机视口检查全宽编辑工作区、工具栏、字段和保存栏，无横向溢出。
 - [ ] 将包含 `read` 动作的 `blog-admin` Edge Function 部署到 Supabase 项目 `sjhcqdicvahlqlpnupas`，再从浏览器确认文章读取成功。部署前确认 Supabase CLI 登录的是正确项目，并保留现有 `GITHUB_CONTENT_TOKEN` Secret；不要输出或复制任何 Secret。
-- [ ] 完成回归后再决定是否建立 PR / 合并到 `main`，避免未验证的改动自动发布到 GitHub Pages。
+- [ ] 完成回归后再决定是否建立 PR / 合并到 `main`，避免未验证的改动自动发布到 GitHub Pages。可用 PR 入口：`https://github.com/SeanWang114514/Personal-blog/pull/new/codex/admin-editor-handoff-20261024`
 
 ## 关键现状与边界
 
