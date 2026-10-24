@@ -10,7 +10,7 @@
 - [x] `node --test _tests/content-motion.test.cjs _tests/github-auth.test.cjs`：13 项通过。
 - [x] `npm exec --yes --package=deno -- deno check supabase/functions/blog-admin/index.ts` 通过（隔离 `DENO_DIR` 全量复跑 0 诊断，阴性对照正确报错）。
 - [x] `npm exec --yes --package=deno -- deno test --allow-env _tests/admin-edge.test.ts`：10 项通过。
-- [x] `bundle exec jekyll build --config _config.yml` 通过（exit 0，0 warning / 0 error）。
+- `bundle exec jekyll build --config _config.yml`：exit 0（0.902s，0 warning / 0 error）。
 - [x] 本地浏览器读取到管理员身份和 6 篇已发布文章；点击文章后，线上函数回复“未知操作”（已复现：`HTTP 400 {"error":"未知操作。"}`）。
 - [x] 用真实管理员会话验证了新建草稿、6 个元数据字段、正文写入与脏标记、发布态切换（草稿/已发布文案与提示联动）、未保存离开 confirm（取消保留、确认回列表）。
 - [x] 用真实文章做了 Markdown ↔ 所见即所得往返：表格、代码围栏、`<!--more-->`、`<details>` 自定义 HTML 块、内联 `<svg>` 均保留（`exactEqual=true`）。
@@ -25,15 +25,17 @@
 - [x] **D4 表单校验静默失败**（原「建议」项）：捕获阶段监听 `invalid`，写状态栏「请先补全“X”再保存。」（`datetime-local` 追加时间格式示例），字段加 `aria-invalid="true"` 与红色边框，输入时移除。
 - [x] **D5 `http://` 链接被静默丢弃**：`safeUrl` 由 `/^https:\/\//` 放宽为 `/^https?:\/\//i`（`javascript:`、`data:` 仍拒绝）。真实命中 `_posts/2026-09-05-ppocrv6-desktop.markdown:326` 的 Clipper2 链接。
 - [x] **D6 下划线被过度转义**：`escapeMarkdown` 不再转义 `_`，避免 `PP-OCRv5_mobile` 被写成 `PP-OCRv5\_mobile`。
+- [x] **D7 保存后正文尾部换行丢失**：`richHtmlToMarkdown` 末尾 `trim()` 去掉了仓库文件本来就有的结尾换行，每次保存都产生末尾空行 diff；改为 `.replace(/\n+$/, "") + "\n"`。
 
 ## Markdown 往返回归数据（修复后实测）
 
 - 单元素夹具 9 例（引用块、多段引用、加粗含通配符 code、嵌套无序/有序列表、含 code 表格、自定义 HTML 块、XSS 行内脚本、普通强调）：**8/9 完全 EXACT**；唯一差异是 3 空格缩进的有序嵌套列表归一化为 2 空格（等价 Markdown，非缺陷）。9 例富文本区 `script` 节点均为 0。
-- 真实文章正文往返（剥离 front matter 后）：
-  - `_posts/2026-09-30-weasel-vmenu-suite.markdown`（15546 字符 / 228 行）：2 处差异，仅末尾空行。
-  - `_posts/2026-09-19-note-studio.markdown`（30070 字符 / 441 行）：11 处差异，全部是表格分隔行 `|------|------|` → `| --- | --- |` 的等价归一化与空行。
-  - `_posts/2026-09-05-ppocrv6-desktop.markdown`（19880 字符）：8 处差异，同为表格分隔行归一化与空行；Clipper2 的 `http://` 链接已保留。
-  - 结论：正文文字、代码、自定义 HTML/SVG 块零丢失，剩余差异是可读性等价的分隔行格式归一化。
+- 真实文章正文（剥离 front matter、CRLF 归一后与仓库原文件逐行比对，忽略空行与表格分隔行宽度）：
+  - `_posts/2026-09-30-weasel-vmenu-suite.markdown`（176 行有效内容 / 15546 字符）：**逐行完全一致**。
+  - `_posts/2026-09-19-note-studio.markdown`（367 行有效内容 / 30070 字符）：**逐行完全一致**。
+  - `_posts/2026-09-05-ppocrv6-desktop.markdown`（264 行有效内容 / 19880 字符）：**逐行完全一致**。
+  - 仍存在的格式差异（渲染等价）：①原始 HTML 块（如 `<p style=...>` 图注）前后的空行位置会重排；②表格分隔行 `|------|------|` 归一化为 `| --- | --- |`；③正文末尾统一为单个换行——本轮已把序列化尾部的 `trim()` 改为 `.replace(/\n+$/, "") + "\n"`，与仓库文件尾部一致。
+  - 结论：文字、代码、表格、引用、列表、自定义 HTML/SVG 块零丢失；保存只会产生空白行与分隔行宽度的格式 diff。
 
 ## 真实文章进入编辑器（拦截 read 的本地验证）
 

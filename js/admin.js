@@ -253,7 +253,7 @@
     return Array.from(richBody.childNodes).map(function (child) {
       if (child.nodeType === 3) return child.nodeValue.trim() ? escapeMarkdown(child.nodeValue.trim()) + "\n\n" : "";
       return child.nodeType === 1 ? serializeBlock(child) : "";
-    }).join("").replace(/\n{3,}/g, "\n\n").trim();
+    }).join("").replace(/\n{3,}/g, "\n\n").replace(/\n+$/, "") + "\n";
   }
   function editorData() {
     return {
