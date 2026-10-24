@@ -35,6 +35,21 @@
   - `_posts/2026-09-05-ppocrv6-desktop.markdown`（19880 字符）：8 处差异，同为表格分隔行归一化与空行；Clipper2 的 `http://` 链接已保留。
   - 结论：正文文字、代码、自定义 HTML/SVG 块零丢失，剩余差异是可读性等价的分隔行格式归一化。
 
+## 真实文章进入编辑器（拦截 read 的本地验证）
+
+用 `Page.addScriptToEvaluateOnNewDocument` 拦截 `blog-admin` 的 `list`/`read`，返回 `_posts/2026-09-19-note-studio.markdown` 的真实 Markdown（30070 字符），点击列表项后实测：
+
+- 状态栏：“已载入《Note Studio：把 PDF 改字、OCR 和语音识别装进一个本地工作台》，正文共 30070 个字符。”；标题与日期字段与仓库一致；编辑器打开且未隐藏。
+- 富文本结构：`h2`×10、`h3`×9、`table`×3（20 行）、`blockquote`×1、`pre`×1、`code`×33、`ul`×9、`ol`×2、`a`×17、`script`×0。
+- 溢出：1440 宽下富文本区 `scrollWidth === clientWidth === 1150`；390 宽下 `356 === 356`，页面 `scrollWidth === innerWidth === 390`，无横向滚动。
+- 只有 `list`、`read` 两次请求被发出，没有触发 `save`/`publish`（生产内容未被改动）。
+
+## 合并顺序（重要）
+
+本分支的 `admin.html` 用 `layout: default`，所需样式与脚本由未提交的整站改造注入：`_includes/head.html:67`（`community.css`）与 `_includes/footer.html:113`（`page.url == '/admin/'` 时加载 `js/admin.js`）。分支 HEAD 里这两行不存在，**单独检出并合并时 `/admin/` 页面没有样式和脚本**。
+
+因此正确顺序是：先合并/上传整站改造（含上述两处接线），再合并本分支的编辑器文件；或在本分支另加一个极小的接线提交。不要先合并本分支再指望后台可用。
+
 ## 本轮追加的自动化复跑（修复后）
 
 - `node --check js/admin.js` 通过。
