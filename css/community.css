@@ -23,6 +23,7 @@
 .community__button--danger { color: #c34545; }
 .community button:disabled, .admin button:disabled { cursor: default; opacity: 0.5; }
 .community__status, .admin__status { min-height: 1.5rem; font-size: 0.8125rem; color: var(--content-meta); }
+.admin__status.is-error { color: #d94f4f; font-weight: 600; }
 .community__comment { display: flex; align-items: flex-start; gap: 0.75rem; padding: 1.25rem 0; border-bottom: 1px solid var(--line-divider); }
 .community__avatar { display: block; width: 2rem !important; height: 2rem !important; aspect-ratio: 1; flex: 0 0 2rem; border-radius: 50%; object-fit: cover; margin: 0 !important; }
 .community__content { min-width: 0; flex: 1; }
@@ -51,7 +52,7 @@
 .admin__post-row strong { display: block; font-size: 0.8125rem; line-height: 1.6; font-weight: 600; }
 .admin__post-row small { color: var(--content-meta); font-size: 0.75rem; }
 .admin__editor { width: min(100%, 96rem); margin-inline: auto; padding-bottom: 2rem; }
-.admin__editor label { display: block; margin: 0.75rem 0 0.375rem; font-size: 0.8125rem; font-weight: 600; }
+.admin__editor label { display: block; margin: 0.5rem 0 0.3rem; font-size: 0.8125rem; font-weight: 600; }
 .admin__fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1rem; }
 .admin__fields > div { min-width: 0; }
 .admin__editor input[aria-invalid="true"], .admin__editor textarea[aria-invalid="true"] { border-color: #d94f4f; outline-color: #d94f4f; }
@@ -90,11 +91,11 @@
 .admin__format-button:hover, .admin__format-button:focus-visible { background: var(--btn-plain-bg-hover); color: var(--primary-deep); }
 .admin__format-button:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
 .admin__tool-divider { width: 1px; height: 1.5rem; margin-inline: 0.2rem; background: var(--line-divider); }
-.admin__body-heading { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; margin-top: 1rem; }
-.admin__body-heading label { margin: 0.75rem 0 0.375rem; }
+.admin__body-heading { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; margin-top: 0.75rem; }
+.admin__body-heading label { margin: 0.5rem 0 0.3rem; }
 .admin__body-heading > span { color: var(--content-meta); font-size: 0.75rem; }
 .admin__markdown-tools { position: sticky; top: calc(var(--ff-navbar-h, 4rem) + 0.5rem); z-index: 4; width: fit-content; max-width: 100%; box-sizing: border-box; align-items: center; gap: 0.3rem; padding: 0.35rem; border: 1px solid var(--line-divider); border-radius: 6px; background: color-mix(in srgb, var(--card-bg) 85%, transparent); backdrop-filter: blur(14px); }
-.admin__rich-body { width: min(100%, 72rem); min-height: 66vh; box-sizing: border-box; margin: 0 auto; padding: clamp(1.25rem, 4vw, 3.5rem); border: 1px solid var(--line-color); border-radius: 6px; background: var(--card-bg); color: var(--deep-text); font-size: 1rem; line-height: 1.9; overflow-wrap: anywhere; }
+.admin__rich-body { width: 100%; max-width: none; min-height: clamp(30rem, 68vh, 60rem); box-sizing: border-box; margin: 0; padding-block: clamp(1.5rem, 2.5vw, 2.5rem); padding-inline: max(clamp(1.25rem, 3vw, 3rem), calc((100% - 72rem) / 2)); border: 1px solid var(--line-color); border-radius: 6px; background: var(--card-bg); color: var(--deep-text); font-size: 1rem; line-height: 1.9; overflow-wrap: anywhere; }
 .admin__rich-body:focus-visible { outline: 2px solid color-mix(in srgb, var(--primary) 60%, transparent); outline-offset: 2px; }
 .admin__rich-body > :first-child { margin-top: 0; }
 .admin__rich-body > :last-child { margin-bottom: 0; }
@@ -115,14 +116,19 @@
 .admin__rich-body details.admin__html-block summary { padding: 0.65rem 0.8rem; color: var(--content-meta); cursor: pointer; font-size: 0.8rem; }
 .admin__rich-body details.admin__html-block textarea { min-height: 12rem; margin: 0; border: 0; border-top: 1px solid var(--line-divider); border-radius: 0; background: transparent; font-family: ui-monospace, Consolas, monospace; font-size: 0.75rem; }
 .admin__rich-body .admin__more-marker { margin-block: 1rem; padding-block: 0.5rem; border-block: 1px dashed var(--line-color); color: var(--content-meta); font-size: 0.75rem; text-align: center; }
-.admin__source-text { width: min(100%, 72rem) !important; min-height: 66vh !important; margin-inline: auto; font-family: ui-monospace, Consolas, monospace !important; font-size: 0.8125rem !important; line-height: 1.8 !important; tab-size: 2; }
+.admin__source-text { width: 100% !important; max-width: none; min-height: clamp(30rem, 68vh, 60rem) !important; margin-inline: 0; padding-inline: max(1.25rem, calc((100% - 74rem) / 2)) !important; font-family: ui-monospace, Consolas, monospace !important; font-size: 0.8125rem !important; line-height: 1.8 !important; tab-size: 2; }
 .admin__source-toggle[aria-pressed="true"] { background: var(--btn-regular-bg); color: var(--primary-deep); }
 .admin__table-wrap { max-width: 100%; overflow-x: auto; }
 .admin__table-wrap table { width: 100%; border-collapse: collapse; }
 .admin__table-wrap th, .admin__table-wrap td { padding: 0.5rem 0.65rem; border: 1px solid var(--line-color); }
 .admin__savebar { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--line-divider); }
 .admin__savebar > span { max-width: 38rem; color: var(--content-meta); font-size: 0.75rem; }
+body.ff-admin-page #wallpaper-wrapper { display: none; }
+body.ff-admin-page .content-panel { margin-top: 0; padding-top: calc(var(--ff-navbar-h, 3.5rem) + 1rem); }
 body.ff-admin-page .content-panel__inner { max-width: none; padding-inline: clamp(1rem, 3vw, 3rem); }
+body.ff-admin-page .admin__topline { margin-bottom: 0.35rem; }
+body.ff-admin-page .admin__tabs { margin-bottom: 0.25rem; }
+@media (min-width: 1100px) { .admin__fields { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 body.ff-admin-page #main-grid { grid-template-columns: minmax(0, 1fr); padding-inline: 0; }
 body.ff-admin-page #left-sidebar-wrapper, body.ff-admin-page #right-sidebar-wrapper, body.ff-admin-page #mobile-bottom-sidebar { display: none; }
 body.ff-admin-page #content-column { max-width: none; margin: 0; }

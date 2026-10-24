@@ -37,6 +37,7 @@
     busy = true;
     app.setAttribute("aria-busy", "true");
     status.textContent = "正在处理…";
+    status.classList.remove("is-error");
     var controls = Array.from(app.querySelectorAll("button, input, textarea, select, [contenteditable='true']")).map(function (el) {
       var state = { element: el, disabled: el.disabled, contentEditable: el.getAttribute("contenteditable") };
       if ("disabled" in el) el.disabled = true;
@@ -44,7 +45,12 @@
       return state;
     });
     try { await work(); }
-    catch (error) { status.textContent = error.message || "操作失败，请稍后重试。"; }
+    catch (error) {
+      var message = error.message || "操作失败，请稍后重试。";
+      if (/未知操作|unknown action/i.test(message)) message = "线上内容服务仍是旧版本，缺少文章读取接口（read）。请在项目目录执行 supabase functions deploy blog-admin --project-ref sjhcqdicvahlqlpnupas --use-api，完成后再刷新本页；在此之前无法读取已发布文章的正文。";
+      status.textContent = message;
+      status.classList.add("is-error");
+    }
     finally {
       busy = false;
       app.removeAttribute("aria-busy");

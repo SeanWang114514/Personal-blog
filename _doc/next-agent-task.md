@@ -71,6 +71,26 @@
 - [ ] 部署后回到浏览器复测：点开任意已发布文章 → 正文非空、标题/日期/分类/标签/封面与仓库一致 → 再跑一遍 Node 测试、Deno check/test、Jekyll 构建并记录结果。
 - [ ] 与用户确认「整站 Firefly 改造」的上传范围后再决定是否把未提交站点文件并入分支；未确认前不合并 `main`、不发布。
 
+## 追加轮次二：正文纸面尺寸与失败提示（D8 / D9）
+
+用户反馈两件事：①后台点已发布文章没有反应；②新建文章时正文“白纸”过小。排查与处理如下。
+
+- **①的根因是部署落后，不是前端 bug**：点列表项走 `js/admin.js:310-322` → `api.adminRequest({action:"read"})`；线上函数返回“未知操作。”，异常被 `js/admin.js:47` 写成状态栏文本，编辑器因此不打开，看起来像“点了没反应”。未登录探测线上函数（`list`/`read`/`save`/`nope` 四种 action）全部返回 401「请先登录。」，说明鉴权在 action 分发之前，**无法用无凭证请求判断线上是否已有 read**；唯一确定来源仍是登录后的“未知操作。”。
+- **D9 修复**：`js/admin.js` 的 `operation()` 捕获到“未知操作 / unknown action”时改写为可执行提示（直接给出 `supabase functions deploy blog-admin --project-ref sjhcqdicvahlqlpnupas --use-api`），并给状态栏加 `.is-error` 红色样式，不再只显示一行 server 原文。
+- **D8 修复（纸面过小）**：`.admin__rich-body` 由 `width: min(100%, 72rem)`（固定 1152px）改为铺满编辑器宽度 + `padding-inline: max(clamp(1.25rem,3vw,3rem), calc((100% - 72rem)/2))`，即纸面变宽而正文行宽仍锁在 72rem 便于阅读；`min-height` 由 `66vh` 改为 `clamp(30rem, 68vh, 60rem)`；源码框 `.admin__source-text` 同样铺满（行宽 74rem）。另外在 `body.ff-admin-page` 下隐藏装饰性 `#wallpaper-wrapper` 并给 `.content-panel` 补 `padding-top: calc(var(--ff-navbar-h) + 1rem)`，腾出 200 余像素；`.admin__fields` 在 ≥1100px 改为三列，字段区高度 282px → 178px。
+- **实测（无注入，直接量真实页面）**：
+
+  | 视口 | 改前纸面 | 改后纸面 | 纸面起始 y | 字段列数 | 横向滚动 |
+  | --- | --- | --- | --- | --- | --- |
+  | 1440×900 | 1152×594 | 1354×612 | 977 → 736 | 3 | 无（docW 1440） |
+  | 1920×1080 | 1152×713 | 1536×734 | 1031 → 736 | 3 | 无 |
+  | 1024×768 | 1152×…（溢出容器） | 963×… | — | 2 | 无 |
+  | 390×844 | 358×608 | 358×608 | 1197 | 1 | 无（docW 390） |
+
+- 视觉复核（vision.js）：全页无背景横幅、字段三列、纸面接近页面宽度、无遮挡/错位/溢出；390 宽单列、工具栏可见、无横向滚动与文字重叠。
+- **部署前置条件已进一步收窄**：`npx --yes supabase --version` 返回 `2.122.0`，即 CLI 可通过 npx 取到，本机只缺登录态（`~/.supabase` 只有 telemetry.json，环境变量无 `SUPABASE_ACCESS_TOKEN`）。用户二选一即可解锁部署：终端跑 `npx supabase login`，或到 Dashboard → Account → Access Tokens 生成后 `SUPABASE_ACCESS_TOKEN=sbp_xxx npx supabase functions deploy blog-admin --project-ref sjhcqdicvahlqlpnupas --use-api`（仍要保留 `GITHUB_CONTENT_TOKEN`，不要打印任何 Secret）。
+- **探测方法教训**：复制 `tmp-verify/cprof2` 已不再携带管理员登录态（localStorage 无 `sw-github-auth-*`），点列表得到的只是 gate「请使用管理员 GitHub 账号登录」。纯布局验证请用 `tmp-verify/audit27.mjs` / `audit28.mjs` 的做法：解锁 `[data-admin-gate]`、`[data-admin-workspace]`、`form[data-admin-editor]` 的 hidden 并注入示例正文后量取几何值，不依赖登录。
+
 ## 关键现状与边界
 
 - 本地仓库：`D:\VibeCoding\个人blog优化\dst-blog`，远端 `SeanWang114514/Personal-blog`，当前分支 `codex/admin-editor-handoff-20261024`。提交顺序：代码 `8f15039` → 文档 `10c189a` / `79d0c7a` → 验证记录 `b543ea8` → **缺陷修复 `13b89b1`（本轮，已推送）**。工作区仍有 73 条未提交的整站改造文件未动。
