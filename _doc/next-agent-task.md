@@ -27,7 +27,7 @@
 - 本地仓库：`D:\VibeCoding\个人blog优化\dst-blog`，远端 `SeanWang114514/Personal-blog`，当前分支 `codex/admin-editor-handoff-20261024`。
 - 本地服务地址：`http://127.0.0.1:4000/Personal-blog/admin/`。如果旧服务未运行，使用 `bundle exec jekyll serve --host 127.0.0.1 --port 4000`。
 - 本地 Edge Function 源码已支持 `{ action: "read", path: "_posts/..." }`；线上服务目前不识别该 action，所以本地构建通过不等于线上编辑可用。
-- GitHub 功能分支目前只推送了 9 个编辑器、Edge Function、测试和交接文档文件（提交 `8f15039`、`5b8d0e5`）；完整 Firefly 版站点的其他依赖仍是本地未提交改动，未上传。远端分支单独检出时不是完整可部署站点，不要直接合并该分支或据此发布。
+- GitHub 功能分支目前只推送了 9 个编辑器、Edge Function、测试和交接文档文件（最新提交 `10c189a`；代码提交 `8f15039`）；完整 Firefly 版站点的其他依赖仍是本地未提交改动，未上传。远端分支单独检出时不是完整可部署站点，不要直接合并该分支或据此发布。
 - GitHub Pages 部署只会发布 GitHub 仓库分支中的静态站点；它不会自动部署 Supabase Edge Function。
 - 此工作区已有许多网站整体改造的未提交改动，它们组成当前 Firefly 版站点依赖；先厘清这些改动的归属并与用户确认后，再决定是否一起上传。不要用 reset、checkout、clean 等操作清除现有工作。
 - 不要提交 `_config_auth.yml`、本机 Supabase 凭据、OAuth Client Secret、服务端 Token 或任何真实用户会话数据。

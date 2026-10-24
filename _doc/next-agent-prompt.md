@@ -8,7 +8,7 @@
 - GitHub：`SeanWang114514/Personal-blog`
 - 本地后台：`http://127.0.0.1:4000/Personal-blog/admin/`
 - Supabase 项目 ref：`sjhcqdicvahlqlpnupas`
-- 已推送分支：`codex/admin-editor-handoff-20261024`（提交 `8f15039`、`5b8d0e5`）
+- 已推送分支：`codex/admin-editor-handoff-20261024`（最新提交 `10c189a`，代码提交 `8f15039`）
 
 ## 已有实现
 
