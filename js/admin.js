@@ -72,17 +72,18 @@
       output += '<img src="' + escapeHTML(match[2]) + '" alt="' + escapeHTML(match[1]) + '"' + (match[3] ? ' title="' + escapeHTML(match[3]) + '"' : '') + ' loading="lazy" decoding="async">';
       cursor = match.index + match[0].length;
     }
-    var text = output + escapeHTML(value.slice(cursor));
-    text = text.replace(/`([^`]+)`/g, "<code>$1</code>");
-    text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
-    text = text.replace(/~~([^~]+)~~/g, "<del>$1</del>");
+    var text = output + escapeHTML(value.slice(cursor)), codeSpans = [];
+    text = text.replace(/`([^`]+)`/g, function (_, code) { codeSpans.push(code); return "\uE000" + (codeSpans.length - 1) + "\uE001"; });
+    text = text.replace(/\*\*([\s\S]+?)\*\*/g, "<strong>$1</strong>");
+    text = text.replace(/~~([\s\S]+?)~~/g, "<del>$1</del>");
     text = text.replace(/(^|[^*])\*([^*]+)\*(?!\*)/g, "$1<em>$2</em>");
-    return text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/(?!\/)[^\s)]*)\)/g, '<a href="$2" rel="noopener noreferrer">$1</a>');
+    text = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/(?!\/)[^\s)]*)\)/g, '<a href="$2" rel="noopener noreferrer">$1</a>');
+    return text.replace(/\uE000(\d+)\uE001/g, function (_, index) { return "<code>" + codeSpans[Number(index)] + "</code>"; });
   }
   function renderMarkdown(value) {
-    var lines = value.replace(/\r\n?/g, "\n").split("\n"), output = [], paragraph = [], list = "", code = false, codeLanguage = "", codeLines = [];
+    var lines = value.replace(/\r\n?/g, "\n").split("\n"), output = [], paragraph = [], listStack = [], code = false, codeLanguage = "", codeLines = [];
     function flushParagraph() { if (paragraph.length) output.push("<p>" + paragraph.map(renderInline).join("<br>") + "</p>"); paragraph = []; }
-    function flushList() { if (list) { output.push("</" + list + ">"); list = ""; } }
+    function flushList() { while (listStack.length) { var level = listStack.pop(); output.push("</li></" + level.tag + ">"); } }
     function cells(line) { return line.trim().replace(/^\|/, "").replace(/\|$/, "").split(/(?<!\\)\|/).map(function (cell) { return cell.replace(/\\\|/g, "|").trim(); }); }
     function tableSeparator(line) { var columns = cells(line); return columns.length > 0 && columns.every(function (cell) { return /^:?-{3,}:?$/.test(cell); }); }
     function renderTable(header, separator, rows) {
@@ -113,11 +114,25 @@
       }
       else if (heading) { flushList(); var level = heading[1].length; output.push("<h" + level + ">" + renderInline(heading[2]) + "</h" + level + ">"); }
       else if (bullet || number) {
-        var nextList = bullet ? "ul" : "ol";
-        if (list && list !== nextList) flushList();
-        if (!list) { list = nextList; output.push("<" + list + ">"); }
-        output.push("<li>" + renderInline((bullet || number)[1]) + "</li>");
-      } else if (/^\s*>/.test(line)) { flushList(); output.push("<blockquote>" + renderInline(line.replace(/^\s*>\s?/, "")) + "</blockquote>"); }
+        var kind = bullet ? "ul" : "ol", itemText = (bullet || number)[1];
+        var indent = /^\s*/.exec(line)[0].replace(/\t/g, "  ").length;
+        while (listStack.length && listStack[listStack.length - 1].indent > indent) { var deeper = listStack.pop(); output.push("</li></" + deeper.tag + ">"); }
+        var top = listStack[listStack.length - 1];
+        if (!top || indent > top.indent) { output.push("<" + kind + "><li>" + renderInline(itemText)); listStack.push({ tag: kind, indent: indent }); }
+        else if (top.tag !== kind) { output.push("</li></" + top.tag + ">"); listStack.pop(); output.push("<" + kind + "><li>" + renderInline(itemText)); listStack.push({ tag: kind, indent: indent }); }
+        else output.push("</li><li>" + renderInline(itemText));
+      } else if (/^\s*>/.test(line)) {
+        flushList();
+        var quoteLines = [line.replace(/^\s*>\s?/, "")];
+        while (lineIndex + 1 < lines.length && /^\s*>/.test(lines[lineIndex + 1])) quoteLines.push(lines[++lineIndex].replace(/^\s*>\s?/, ""));
+        var quoteBlocks = [], quoteParagraph = [];
+        quoteLines.forEach(function (quoteLine) {
+          if (quoteLine.trim()) quoteParagraph.push(quoteLine);
+          else if (quoteParagraph.length) { quoteBlocks.push(quoteParagraph); quoteParagraph = []; }
+        });
+        if (quoteParagraph.length) quoteBlocks.push(quoteParagraph);
+        output.push("<blockquote>" + quoteBlocks.map(function (block) { return "<p>" + block.map(renderInline).join("<br>") + "</p>"; }).join("") + "</blockquote>");
+      }
       else if (/^\s*([-*_]\s*){3,}$/.test(line)) { flushList(); output.push("<hr>"); }
       else if (line.trim()) { flushList(); paragraph.push(line); }
       else flushList();
@@ -128,7 +143,7 @@
   }
   var htmlBlockTags = new Set(["div", "section", "figure", "table", "details", "svg", "p", "ul", "ol", "blockquote", "hr"]);
   function safeUrl(value) {
-    return /^https:\/\/[^\s<>"']+$/i.test(value) || /^#[-\w]+$/.test(value) || /^\/(?!\/)[^\s<>"']*$/.test(value) ? value : "";
+    return /^https?:\/\/[^\s<>"']+$/i.test(value) || /^#[-\w]+$/.test(value) || /^\/(?!\/)[^\s<>"']*$/.test(value) ? value : "";
   }
   function cleanPastedNode(sourceNode, target) {
     if (sourceNode.nodeType === 3) { target.appendChild(document.createTextNode(sourceNode.nodeValue || "")); return; }
@@ -185,7 +200,7 @@
     });
     return template.innerHTML;
   }
-  function escapeMarkdown(value) { return value.replace(/\\/g, "\\\\").replace(/([`*_{}\[\]!])/g, "\\$1"); }
+  function escapeMarkdown(value) { return value.replace(/\\/g, "\\\\").replace(/([`*{}\[\]!])/g, "\\$1"); }
   function serializeInline(element) {
     if (element.nodeType === 3) return escapeMarkdown(element.nodeValue || "");
     if (element.nodeType !== 1) return "";
@@ -217,7 +232,17 @@
     if (/^h[1-6]$/.test(tag)) return "#".repeat(Number(tag[1])) + " " + Array.from(element.childNodes).map(serializeInline).join("").trim() + "\n\n";
     if (tag === "p" || (tag === "div" && !element.querySelector(":scope > p, :scope > div, :scope > ul, :scope > ol, :scope > table, :scope > pre, :scope > blockquote"))) return Array.from(element.childNodes).map(serializeInline).join("").trim() + "\n\n";
     if (tag === "ul" || tag === "ol") return serializeList(element, 0) + "\n";
-    if (tag === "blockquote") return (element.innerText || element.textContent || "").split("\n").map(function (line) { return "> " + line; }).join("\n") + "\n\n";
+    if (tag === "blockquote") {
+      var quoteParts = [];
+      Array.from(element.childNodes).forEach(function (child) {
+        if (child.nodeType === 3) { var text = (child.nodeValue || "").trim(); if (text) quoteParts.push(escapeMarkdown(text)); return; }
+        if (child.nodeType !== 1) return;
+        var childTag = child.localName.toLowerCase();
+        if (childTag === "p" || childTag === "div" || /^h[1-6]$/.test(childTag)) quoteParts.push(Array.from(child.childNodes).map(serializeInline).join("").trim());
+        else quoteParts.push(serializeBlock(child).trim());
+      });
+      return quoteParts.filter(function (part) { return part; }).join("\n\n").split("\n").map(function (line) { return line ? "> " + line : ">"; }).join("\n") + "\n\n";
+    }
     if (tag === "pre") { var code = element.querySelector("code"), language = code && Array.from(code.classList).map(function (name) { return /^language-[\w+-]+$/.test(name) ? name.slice(9) : ""; }).filter(Boolean)[0] || ""; return "```" + language + "\n" + (code || element).textContent.replace(/\n+$/, "") + "\n```\n\n"; }
     if (tag === "table") return serializeTable(element);
     if (tag === "hr") return "---\n\n";
@@ -614,6 +639,16 @@
     if (event.key !== "Tab") return;
     event.preventDefault();
     document.execCommand("insertText", false, "  ");
+  });
+  var requiredFieldLabels = { "admin-post-path": "文件名", "admin-post-title": "文章标题", "admin-post-date": "发布时间" };
+  editor.addEventListener("invalid", function (event) {
+    var label = requiredFieldLabels[event.target.id];
+    if (!label) return;
+    event.target.setAttribute("aria-invalid", "true");
+    status.textContent = "请先补全“" + label + "”再保存。" + (event.target.type === "datetime-local" ? "日期需要包含时间，例如 2026-10-24 08:00。" : "");
+  }, true);
+  editor.addEventListener("input", function (event) {
+    if (event.target && event.target.hasAttribute && event.target.hasAttribute("aria-invalid")) event.target.removeAttribute("aria-invalid");
   });
   editor.addEventListener("submit", function (event) {
     event.preventDefault();

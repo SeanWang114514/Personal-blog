@@ -1,6 +1,6 @@
 # 下个 Agent 任务清单
 
-更新时间：2026-10-24（浏览器端全面验证完成，仅剩线上部署）
+更新时间：2026-10-24（浏览器端验证 + Markdown 往返缺陷 D1–D6 修复完成，仅剩线上部署）
 
 ## 已完成
 
@@ -17,22 +17,42 @@
 - [x] 桌面/手机视口检查：1920/1440/1280/1024/768/430/390 全部无页面级横向滚动；移动端工具栏折 2 行、按钮最小 36×36、保存按钮滚动可达。
 - [x] 冲突提示验证（mock 409）：状态栏显示“仓库内容已变化或文件已存在，请刷新后重试。”，编辑器不关闭、正文与脏标记保留。
 
-## 新发现的缺陷（未修复，待确认）
+## 缺陷（D1–D6 已在本轮修复并回归验证）
 
-- [ ] **D1 块引用内行内格式被静默丢弃**：`js/admin.js:220` blockquote 分支用 `element.innerText` 序列化，引用里的 `code`/`strong`/`a` 全部被拍平。复现：`> 按 \`v\` 出菜单，**粗体**，[链接](https://example.com/x)。` → 回写为纯文本。
-- [ ] **D2 加粗包住含 `*` 的行内代码时被解析错并转义**：`renderMarkdown` 的强调解析未保护 code span。复现：`官方规则**只复制顶层 \`*.yaml\`、\`*.txt\`**，不带其他。` → 富文本出现 `<code><em>.yaml</em></code>` 且回写为 `\*\*...``。**真实文章命中**：`_posts/2026-09-30-weasel-vmenu-suite.markdown:170`。
-- [ ] **D3 嵌套列表被拍平**：`renderMarkdown` 列表解析不处理缩进层级，二级列表退化为同级 `<li>`。
-- [ ] （建议）保存按钮依赖表单原生校验，`#admin-post-date` 为 `type="datetime-local" required`；值非法时浏览器静默拦截提交、无提示。建议在 `js/admin.js:618` 的 submit 前加显式校验文案。
+- [x] **D1 块引用内行内格式被静默丢弃**：blockquote 渲染改为合并连续 `>` 行成单个 `<blockquote>`（空 `>` 行分段），序列化不再用 `element.innerText`，改为逐子节点还原（文本节点→escapeMarkdown、`p`/`div`/`h1-6`→serializeInline、其它→serializeBlock），每行加 `> ` 前缀、空行输出 `>`。
+- [x] **D2 加粗包住含 `*` 的行内代码时被解析错并转义**：code span 先抽成 `\uE000<n>\uE001` 占位符，强调解析完成后再还原；bold/删除线改用非贪婪 `[\s\S]+?`。
+- [x] **D3 嵌套列表被拍平**：`listStack` 按缩进维护层级（tab 记 2 空格），支持嵌套、同级续写与列表类型切换。
+- [x] **D4 表单校验静默失败**（原「建议」项）：捕获阶段监听 `invalid`，写状态栏「请先补全“X”再保存。」（`datetime-local` 追加时间格式示例），字段加 `aria-invalid="true"` 与红色边框，输入时移除。
+- [x] **D5 `http://` 链接被静默丢弃**：`safeUrl` 由 `/^https:\/\//` 放宽为 `/^https?:\/\//i`（`javascript:`、`data:` 仍拒绝）。真实命中 `_posts/2026-09-05-ppocrv6-desktop.markdown:326` 的 Clipper2 链接。
+- [x] **D6 下划线被过度转义**：`escapeMarkdown` 不再转义 `_`，避免 `PP-OCRv5_mobile` 被写成 `PP-OCRv5\_mobile`。
+
+## Markdown 往返回归数据（修复后实测）
+
+- 单元素夹具 9 例（引用块、多段引用、加粗含通配符 code、嵌套无序/有序列表、含 code 表格、自定义 HTML 块、XSS 行内脚本、普通强调）：**8/9 完全 EXACT**；唯一差异是 3 空格缩进的有序嵌套列表归一化为 2 空格（等价 Markdown，非缺陷）。9 例富文本区 `script` 节点均为 0。
+- 真实文章正文往返（剥离 front matter 后）：
+  - `_posts/2026-09-30-weasel-vmenu-suite.markdown`（15546 字符 / 228 行）：2 处差异，仅末尾空行。
+  - `_posts/2026-09-19-note-studio.markdown`（30070 字符 / 441 行）：11 处差异，全部是表格分隔行 `|------|------|` → `| --- | --- |` 的等价归一化与空行。
+  - `_posts/2026-09-05-ppocrv6-desktop.markdown`（19880 字符）：8 处差异，同为表格分隔行归一化与空行；Clipper2 的 `http://` 链接已保留。
+  - 结论：正文文字、代码、自定义 HTML/SVG 块零丢失，剩余差异是可读性等价的分隔行格式归一化。
+
+## 本轮追加的自动化复跑（修复后）
+
+- `node --check js/admin.js` 通过。
+- `node --test _tests/content-motion.test.cjs _tests/github-auth.test.cjs`：13 项通过（136ms）。
+- `npm exec --yes --package=deno -- deno check supabase/functions/blog-admin/index.ts`：0 诊断。
+- `npm exec --yes --package=deno -- deno test --allow-env _tests/admin-edge.test.ts`：10 项通过（48ms）。
+- `bundle exec jekyll build --config _config.yml`：exit 0，1.283s。
 
 ## 接下来
 
-- [x] 已创建、提交并推送隔离分支 `codex/admin-editor-handoff-20261024`（代码提交 `8f15039`，文档提交 `10c189a`，当前 HEAD `79d0c7a`）。
+- [x] 隔离分支 `codex/admin-editor-handoff-20261024` 已创建并推送（见下方「关键现状与边界」的提交记录）。
+- [x] 编辑器 Markdown 往返缺陷 D1–D6 已修复，回归数据见上；代码提交与文档提交已在同一分支。
+- [x] **Draft PR 已创建**：https://github.com/SeanWang114514/Personal-blog/pull/2 （未合并，等站点范围确认）。
 - [ ] **部署 `blog-admin` Edge Function（唯一硬阻塞）**：本机没有 `supabase` CLI、也没有 access token，需要仓库所有者执行 `supabase login` 后运行
       `supabase functions deploy blog-admin --project-ref sjhcqdicvahlqlpnupas --use-api`
       部署前确认登录的是项目 `sjhcqdicvahlqlpnupas`，保留现有 `GITHUB_CONTENT_TOKEN` Secret（有效期至 2027-01-16），不要输出或复制任何 Secret。
 - [ ] 部署后回到浏览器复测：点开任意已发布文章 → 正文非空、标题/日期/分类/标签/封面与仓库一致 → 再跑一遍 Node 测试、Deno check/test、Jekyll 构建并记录结果。
-- [ ] 决定是否在本轮追加修复 D1–D3（都在 `js/admin.js`，可同一分支追加提交）。
-- [ ] 完成上述后建立 **Draft PR**（本机 `gh` 已登录 `SeanWang114514`，仓库暂无任何 PR），不要直接合并 `main`。
+- [ ] 与用户确认「整站 Firefly 改造」的上传范围后再决定是否把未提交站点文件并入分支；未确认前不合并 `main`、不发布。
 
 ## 关键现状与边界
 
