@@ -182,9 +182,35 @@
 - 反证：把 `git show HEAD:js/sw.js`（分支里的旧版、无这次重写）放进 `tmp-verify/swtest/js/` 用同一份测试跑 → **0 通过 / 11 失败**，说明失败来自工作区那版 `js/sw.js` 与测试夹具的错配，与碎碎念改动无关；
 - 试过在夹具里补 `stored.set("sw-github-auth", JSON.stringify({ access_token: "test" }))`：仍有 9 项失败（异步启动时机与 `[data-auth-callback-status]` 断言不匹配），需要连夹具的 `flush()` 一起改，属于站点改造所有者的决定范围，本轮不动。
 
+## 追加轮次：本地端到端（真实 Edge Function 代码）验证
+
+目的：部署被本机 Supabase 登录态阻塞时，仍用**真实的 `handle()`** 验证「读真实文章正文 / 冲突不覆盖 / 保存按钮状态」，而不是只靠 stub 假数据。
+
+- 载体 `tmp-verify/local-edge.ts`（工作区根，不在仓库内）：`import { handle } from "../dst-blog/supabase/functions/blog-admin/index.ts"`，用全局 `fetch` 拦截函数依赖的两层外部服务：
+  - `https://fake.supabase.co/auth/v1/user` → 固定管理员用户；`/rest/v1/rpc/blog_is_admin` → `true`；
+  - `https://api.github.com/repos/SeanWang114514/Personal-blog/contents/...` → 内存仓库（GET 文件/目录、PUT、DELETE；`sha` 不匹配返回 409/422，与真实 GitHub 行为一致）。种子取自真实 `_posts/2026-09-30-weasel-vmenu-suite.markdown`、`2026-09-05-ppocrv6-desktop.markdown`、`2026-09-19-note-studio.markdown` 与 `_config.yml`，**全程不写磁盘**（对真实仓库零风险）。
+  - `Deno.serve` 监听 `127.0.0.1:8787` 把请求转给 `handle`；另挂 `/__control`：`reset` / `bump`（模拟他人先提交，让 sha 变化）/ `dump`（可带 `needles` 做子串存在性检查）。
+  - 启动命令：`npm exec --yes --package=deno -- deno run --allow-net --allow-env --allow-read tmp-verify/local-edge.ts`
+- 前端侧 `tmp-verify/probe47.mjs` + `probe47.expr.js`：只把 `window.BlogCommunity.adminRequest` 指向 `http://127.0.0.1:8787`（请求体仍由真实 `js/admin.js` 构造），其余点击/输入/DOM 事件全真。两个必须的开关：`js/admin.js:492` 的 `refresh()` 里有 `if (!auth.isAdmin) return;`，无会话时要设 `window.BlogCommunity.auth.isAdmin = true`；gate 需要手动去掉 `hidden`。
+
+| 场景 | 实测结果 |
+| --- | --- |
+| 列表 | `{action:"list"}` → 3 篇，首行「Rime VMenu 全家桶…2026-09-30 · 已发布」，状态「已读取 3 篇文章。」 |
+| 打开已发布文章 | `read` 返回**真实正文 15547 字符**、富文本 53 个块；标题、日期（`2026-09-30T08:00`）、`published=true` 均正确；状态「已载入《…》，正文共 15547 个字符。」 |
+| 按钮状态（已发布） | 「保存并更新」，hint「保存后会提交到仓库并触发网站构建」，dirty「已与仓库同步」 |
+| 编辑之后 | dirty 变「有未保存修改」，保存按钮可用 |
+| **冲突**（`/__control bump` 让别人先提交） | 状态「仓库内容已变化或文件已存在，请刷新后重试。」+ `is-error`；编辑器**不关闭**、本地编辑仍在；服务器内容**未被覆盖**（`contentLength`/`head` 不变、sha 已变） |
+| 刷新后重新保存 | 「文章已提交，GitHub Actions 将自动构建并发布。」，dirty 回到「已与仓库同步」；落库内容仍含原文关键片段（`VMenu`、`剪贴板历史`、`## `、`layout:` 全部命中） |
+| 新建文章 | 初始「保存草稿」/「新建草稿」/`published=false`/文件名可编辑；填写后仍「保存草稿」，hint「草稿会保存在仓库中，不会出现在公开文章列表」 |
+| 保存草稿 | 状态「草稿已保存到仓库，不会出现在公开文章列表。」；落库文件含 `published: false`；列表新行「探针草稿文章2026-10-25 · 草稿」 |
+
+- 结论：**「已发布文章能读到真实 Markdown 正文」「冲突时明确提示刷新且不覆盖新版本」「保存/发布按钮状态符合草稿/已发布」这三条验收，已在真实 handler 代码上连通真实前端验证通过**；剩余缺口是碎碎念 action 尚未部署，以及当前没有管理员会话完成线上只读复验。
+- 线上只读探针 `tmp-verify/probe48.mjs` + `probe48.expr.js`（用真实 `adminRequest`，只发 `list` / `read` / `moments`，不写任何内容）：有管理员会话时输出 `verdict`（`read-ok` / `stale-deployment` / `read-failed`）与 moments 是否可用。**2026-10-25 11:40 实测**：`gate.hidden=false`（「请使用管理员 GitHub 账号登录」）、`isAdmin=false` → `result: 未登录管理员，跳过线上探测`。部署完成后跑同一条命令即可补上线上证据。
+- 本轮提交只改 `_doc/next-agent-task.md`，无代码改动，Edge Function 无需因本轮文档更新重新部署。
+
 ## 关键现状与边界
 
-- 本地仓库：`D:\VibeCoding\个人blog优化\dst-blog`，远端 `SeanWang114514/Personal-blog`，当前分支 `codex/admin-editor-handoff-20261024`。提交顺序：代码 `8f15039` → 文档 `10c189a` / `79d0c7a` → 验证记录 `b543ea8` → 缺陷修复 `cd09c64` → 编辑区尺寸与失败提示 `e6bf07e` → 封面相对路径与 front matter 折行 `9334108` → 放弃修改后未复位 `dirty` `50bdea7` → **碎碎念后台 `41ce306`（已推送）**。工作区仍有 88 条未提交的整站改造文件未动。
+- 本地仓库：`D:\VibeCoding\个人blog优化\dst-blog`，远端 `SeanWang114514/Personal-blog`，当前分支 `codex/admin-editor-handoff-20261024`。提交顺序：代码 `8f15039` → 文档 `10c189a` / `79d0c7a` → 验证记录 `b543ea8` → 缺陷修复 `cd09c64` → 编辑区尺寸与失败提示 `e6bf07e` → 封面相对路径与 front matter 折行 `9334108` → 放弃修改后未复位 `dirty` `50bdea7` → **碎碎念后台 `41ce306`（已推送）** → 本地 E2E 验证记录（仅文档）。工作区仍有 92 条未提交的整站改造文件未动。
 - 本地服务地址：`http://127.0.0.1:4000/Personal-blog/admin/`。当前已有 `bundle exec jekyll serve` 在跑（PID 23564，`ruby.exe`）；**不要另起第二个实例**，需要重启时先结束 20476/23564 进程树。
 - **带管理员登录态的自动化方法**：把本机真实 Chrome profile 的 `Local Storage`、`IndexedDB`、`Cookies` 三个目录复制到 `tmp-verify/cprofReal/Default/`，用该副本启动 headless Chrome；打开 `/admin/` 后**必须等约 11–12 秒**（状态栏先显示“正在处理…”，随后才出结果）。每次跑脚本前用 `cp -r tmp-verify/cprofReal tmp-verify/cprofXXX` 复制副本并换端口，跑完 kill Chrome。
 - 线上 Edge Function 已部署并支持 `{ action: "read", path: "_posts/..." }`（VERSION 4，2026-10-24 15:01 UTC）；此前“未知操作”的症状已消失，线上读取与仓库正文逐行一致。**碎碎念三个 action 尚未部署**，需重新登录后执行 `supabase functions deploy blog-admin --project-ref sjhcqdicvahlqlpnupas --use-api` 并复验。
