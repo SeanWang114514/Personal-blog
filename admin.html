@@ -1,0 +1,112 @@
+---
+layout: default
+title: 管理后台
+description: 文章、分类与评论
+permalink: /admin/
+sidebar: false
+robots: noindex
+---
+<div class="admin section-tight" data-admin>
+  <script type="application/json" data-admin-site-settings>{"wallpapers":{{ site.firefly.wallpaper.images | jsonify }},"playlist":{{ site.firefly.music.playlist | jsonify }}}</script>
+  <div class="admin__gate" data-admin-gate>
+    <h2 data-admin-gate-title>正在验证管理员身份…</h2>
+    <p data-admin-gate-message></p>
+    <button class="community__button community__button--primary" type="button" data-admin-login hidden><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"></use></svg>使用 GitHub 登录</button>
+  </div>
+  <div data-admin-workspace hidden>
+    <div class="admin__topline"><span class="auth-admin-badge">管理员</span><span data-admin-account></span><a href="https://github.com/SeanWang114514/Personal-blog/actions" target="_blank" rel="noopener noreferrer">发布状态 ↗</a></div>
+    <div class="admin__tabs" role="tablist" aria-label="后台栏目">
+        <button type="button" role="tab" id="admin-tab-posts" aria-controls="admin-posts" aria-selected="true" data-admin-tab="posts"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-book"></use></svg>文章</button>
+        <button type="button" role="tab" id="admin-tab-moments" aria-controls="admin-moments" aria-selected="false" tabindex="-1" data-admin-tab="moments"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-coffee"></use></svg>碎碎念</button>
+        <button type="button" role="tab" id="admin-tab-taxonomy" aria-controls="admin-taxonomy" aria-selected="false" tabindex="-1" data-admin-tab="taxonomy"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-tag"></use></svg>标签与分类</button>
+        <button type="button" role="tab" id="admin-tab-appearance" aria-controls="admin-appearance" aria-selected="false" tabindex="-1" data-admin-tab="appearance"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-image"></use></svg>背景与音乐</button>
+        <button type="button" role="tab" id="admin-tab-comments" aria-controls="admin-comments" aria-selected="false" tabindex="-1" data-admin-tab="comments"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-message"></use></svg>评论</button>
+    </div>
+    <p class="admin__status" data-admin-status role="status" aria-live="polite"></p>
+    <section id="admin-posts" role="tabpanel" aria-labelledby="admin-tab-posts" data-admin-panel="posts">
+      <div class="admin__toolbar">
+        <button class="community__button" type="button" data-admin-new><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-pen"></use></svg>新建文章</button>
+        <label class="community__button admin__file"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-file"></use></svg>导入 Markdown<input type="file" accept=".md,.markdown" data-admin-import></label>
+        <button class="community__button" type="button" data-admin-refresh title="刷新文章列表"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-refresh"></use></svg><span class="sr-only">刷新文章列表</span></button>
+      </div>
+      <div class="admin__post-list" data-admin-post-list aria-label="文章列表"></div>
+      <form class="admin__editor" data-admin-editor hidden>
+          <div class="admin__editor-heading">
+            <div class="admin__editor-heading-main"><button class="community__button" type="button" data-admin-back-to-list title="返回文章列表"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11"/></svg><span>文章列表</span></button><div><span class="eyebrow">EDITOR</span><h2 data-editor-heading>新建文章</h2></div></div>
+            <div class="admin__editor-state"><span data-admin-dirty-state aria-live="polite">新建草稿</span><label class="admin__publish-state" for="admin-post-published"><span>状态</span><select id="admin-post-published" name="published"><option value="false">草稿</option><option value="true">已发布</option></select></label></div>
+          </div>
+          <label class="admin__path-label" for="admin-post-path">文件名</label><input id="admin-post-path" name="path" required placeholder="2026-10-18-my-post.markdown" autocomplete="off">
+          <div class="admin__fields">
+            <div><label for="admin-post-title">文章标题</label><input id="admin-post-title" name="title" maxlength="200" required></div>
+            <div><label for="admin-post-date">发布时间</label><input id="admin-post-date" name="date" type="datetime-local" required></div>
+            <div><label for="admin-post-subtitle">副标题</label><input id="admin-post-subtitle" name="subtitle" maxlength="300"></div>
+            <div><label for="admin-post-cover">封面图片地址</label><input id="admin-post-cover" name="headerImage" placeholder="img/example.webp 或 https://…"></div>
+            <div><label for="admin-post-categories">分类</label><input id="admin-post-categories" name="categories" placeholder="多个分类用逗号分隔"></div>
+            <div><label for="admin-post-tags">标签</label><input id="admin-post-tags" name="tags" placeholder="多个标签用逗号分隔"></div>
+          </div>
+          <div class="admin__body-heading"><label for="admin-post-rich-body">正文</label><span data-admin-editor-mode>所见即所得</span></div>
+          <div class="admin__markdown-tools" role="toolbar" aria-label="正文格式工具">
+            <button class="admin__format-button" type="button" data-md-action="undo" title="撤销" aria-label="撤销"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h9a7 7 0 0 1 0 14h-1"/></svg></button>
+            <button class="admin__format-button" type="button" data-md-action="redo" title="重做" aria-label="重做"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 14 5-5-5-5m5 5h-9a7 7 0 0 0 0 14h1"/></svg></button>
+            <span class="admin__tool-divider" aria-hidden="true"></span>
+            <button class="admin__format-button" type="button" data-md-action="bold" title="加粗" aria-label="加粗"><strong>B</strong></button>
+            <button class="admin__format-button" type="button" data-md-action="italic" title="斜体" aria-label="斜体"><em>I</em></button>
+            <span class="admin__tool-divider" aria-hidden="true"></span>
+            <button class="admin__format-button" type="button" data-md-action="heading" title="插入二级标题" aria-label="插入二级标题">H2</button>
+            <button class="admin__format-button" type="button" data-md-action="quote" title="插入引用" aria-label="插入引用"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-message"></use></svg></button>
+            <button class="admin__format-button" type="button" data-md-action="list" title="插入无序列表" aria-label="插入无序列表"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h12M9 12h12M9 18h12"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg></button>
+            <button class="admin__format-button" type="button" data-md-action="ordered-list" title="插入有序列表" aria-label="插入有序列表">1.</button>
+            <button class="admin__format-button" type="button" data-md-action="link" title="插入链接" aria-label="插入链接"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-link"></use></svg></button>
+            <button class="admin__format-button" type="button" data-md-action="code" title="插入行内代码" aria-label="插入行内代码"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-code"></use></svg></button>
+            <button class="admin__format-button" type="button" data-md-action="codeblock" title="插入代码块" aria-label="插入代码块">{ }</button>
+            <button class="admin__format-button" type="button" data-md-action="table" title="插入表格" aria-label="插入表格"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10M15 10v10"/></svg></button>
+            <button class="admin__format-button" type="button" data-md-action="image" title="插入图片" aria-label="插入图片"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-image"></use></svg></button>
+            <span class="admin__tool-divider" aria-hidden="true"></span>
+            <button class="admin__format-button admin__source-toggle" type="button" data-admin-toggle-source aria-pressed="false" title="切换 Markdown 源码" aria-label="切换 Markdown 源码"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-code"></use></svg></button>
+          </div>
+          <div id="admin-post-rich-body" class="admin__rich-body" data-admin-rich-body contenteditable="true" role="textbox" aria-multiline="true" aria-label="文章正文" spellcheck="true"></div>
+          <textarea id="admin-post-body" class="admin__source-text" name="body" rows="24" spellcheck="true" placeholder="Markdown 源码"></textarea>
+          <div class="admin__savebar"><span data-editor-save-hint>新文章默认保存为草稿</span><div class="admin__toolbar"><button class="community__button" type="button" data-admin-download><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-download"></use></svg>导出</button><button class="community__button community__button--danger" type="button" data-admin-delete disabled><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-close"></use></svg>删除</button><button class="community__button community__button--primary" type="submit" data-admin-save><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-send"></use></svg><span data-admin-save-label>保存草稿</span></button></div></div>
+      </form>
+    </section>
+    <section id="admin-moments" role="tabpanel" aria-labelledby="admin-tab-moments" data-admin-panel="moments" hidden>
+      <p>碎碎念写进仓库的 <code>_data/moments.yml</code>：一句话也行，提交后网站重新构建时出现在碎碎念页和首页。内容是纯文本，换行会保留，不解析 Markdown。</p>
+      <form class="admin__moment-form" data-admin-moment-form>
+        <div class="admin__fields">
+          <div><label for="admin-moment-date">日期</label><input id="admin-moment-date" name="date" type="date" required></div>
+          <div><label for="admin-moment-tags">标签</label><input id="admin-moment-tags" name="tags" maxlength="140" placeholder="多个标签用逗号分隔，最多 5 个"></div>
+          <div><label for="admin-moment-location">地点</label><input id="admin-moment-location" name="location" maxlength="60" placeholder="可留空"></div>
+          <div class="admin__moment-pin"><label for="admin-moment-pinned"><input id="admin-moment-pinned" name="pinned" type="checkbox"> 置顶这条</label></div>
+        </div>
+        <label class="admin__moment-label" for="admin-moment-content">内容</label>
+        <textarea id="admin-moment-content" class="admin__moment-text" name="content" rows="4" maxlength="2000" required placeholder="今天…（支持换行）"></textarea>
+        <div class="admin__toolbar">
+          <button class="community__button community__button--primary" type="submit" data-admin-moment-submit><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-send"></use></svg><span data-admin-moment-submit-label>写入碎碎念</span></button>
+          <button class="community__button" type="button" data-admin-moment-cancel hidden>取消编辑</button>
+          <button class="community__button" type="button" data-admin-moment-reload><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-refresh"></use></svg><span class="sr-only">刷新碎碎念</span></button>
+        </div>
+      </form>
+      <div class="admin__moment-list" data-admin-moment-list aria-label="碎碎念列表"></div>
+    </section>
+    <section id="admin-taxonomy" role="tabpanel" aria-labelledby="admin-tab-taxonomy" data-admin-panel="taxonomy" hidden><div class="admin__taxonomies" data-admin-taxonomies></div></section>
+    <section id="admin-appearance" role="tabpanel" aria-labelledby="admin-tab-appearance" data-admin-panel="appearance" hidden>
+      <p>选择现有背景、上传新图片或调整音乐列表；保存后会更新站点配置并触发网站重新构建。上传文件保存在博客媒体库。</p>
+      <div class="admin__settings-section">
+        <div class="admin__settings-heading"><div><h2>首页与内页背景</h2><p>至少保留一张。图片建议使用 AVIF、WebP、JPG 或 PNG。</p></div>
+          <label class="community__button admin__file"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-upload"></use></svg>上传背景<input type="file" accept="image/avif,image/webp,image/jpeg,image/png" data-admin-upload="image"></label>
+        </div>
+        <div class="admin__asset-grid" data-admin-wallpapers></div>
+        <div class="admin__asset-picker"><label for="admin-image-library">已上传图片</label><select id="admin-image-library" data-admin-image-library></select><button class="community__button" type="button" data-admin-add-image>加入背景列表</button></div>
+      </div>
+      <div class="admin__settings-section">
+        <div class="admin__settings-heading"><div><h2>音乐集</h2><p>上传 MP3、M4A、OGG 或 WAV；单个文件最大 25 MB。</p></div>
+          <label class="community__button admin__file"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-upload"></use></svg>上传音乐<input type="file" accept="audio/mpeg,audio/mp4,audio/ogg,audio/wav" data-admin-upload="audio"></label>
+        </div>
+        <div class="admin__track-list" data-admin-playlist></div>
+        <div class="admin__asset-picker"><label for="admin-audio-library">已上传音乐</label><select id="admin-audio-library" data-admin-audio-library></select><button class="community__button" type="button" data-admin-add-audio>加入音乐集</button></div>
+      </div>
+      <div class="admin__toolbar"><button class="community__button community__button--primary" type="button" data-admin-save-settings>保存背景与音乐</button><button class="community__button" type="button" data-admin-refresh-assets>刷新媒体库</button></div>
+    </section>
+    <section id="admin-comments" role="tabpanel" aria-labelledby="admin-tab-comments" data-admin-panel="comments" hidden><div data-admin-comment-list></div><button class="community__button" type="button" data-admin-comment-more hidden>加载更多</button></section>
+  </div>
+</div>
